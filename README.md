@@ -1,28 +1,9 @@
-# GridVision
+# GridVision — Smart Energy Analytics & AI Copilot
 
-Smart Energy Analytics & AI Copilot for electricity consumption analysis.
+**Status:** Initial setup
 
-## Project Status
-
-🚧 Under Development
-
-## Planned Features
-
-- Electricity demand forecasting
-- Consumption anomaly detection
-- Consumer segmentation
-- Explainable AI
-- RAG-powered Energy Operations Copilot
-
-## Tech Stack
-
-- Python
-- FastAPI
-- React
-- TypeScript
-- Machine Learning
-- RAG
-
-## Team
-
-Capstone Project — 2026
+| Layer | Stack |
+|-------|-------|
+| Frontend | React + TypeScript + Vite |
+| Backend | Python + FastAPI |
+| ML / AI | Under development |
