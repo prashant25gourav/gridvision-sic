@@ -89,3 +89,28 @@ The following research and methodological parameters are intentionally uncommitt
 - Exact volatility metrics and extreme-error thresholds
 - Cluster alignment algorithm (Hungarian vs Centroid distance)
 - Final ML API and RAG tool contracts
+
+---
+
+## 📚 Project Documentation
+
+### Locked Master References (do not modify)
+
+All project specifications are finalized and locked in `docs/gridvision_master_files/`:
+
+| File | Contents |
+|---|---|
+| `GridVision_FINAL_MASTER_PLAN_v4.docx` | Research question, methodology, dataset, calibration design, statistical design (highest authority) |
+| `GridVision_AI_HANDOFF_CONTEXT_LOCKED.md` | Portable project context for any teammate or AI tool |
+| `GridVision_IMPLEMENTATION_BLUEPRINT_v2.md` | Technical architecture, repository structure, data/artifact contracts, module contracts |
+| `GridVision_TEAM_EXECUTION_CONTRACT.md` | Team ownership, dependencies, handoffs, Git workflow, integration gates |
+
+### Live Project Status
+
+Current execution state is tracked in `docs/current_status/`:
+
+| File | Purpose |
+|---|---|
+| `PROJECT_STATE.md` | What the repository actually contains right now |
+| `TASKS.md` | The team's live execution task list |
+| `DECISIONS.md` | Implementation decisions made during execution |

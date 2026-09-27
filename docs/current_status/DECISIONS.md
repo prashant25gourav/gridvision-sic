@@ -1,0 +1,124 @@
+# GridVision — Decision Log (LIVE)
+
+> **Purpose:** Records implementation decisions that arise during actual repository execution.
+> This is NOT a copy of the locked methodology from the master files.
+>
+> The current methodology and project decisions are governed by the locked master files:
+> - `docs/gridvision_master_files/GridVision_FINAL_MASTER_PLAN_v4.docx`
+> - `docs/gridvision_master_files/GridVision_AI_HANDOFF_CONTEXT_LOCKED.md`
+> - `docs/gridvision_master_files/GridVision_IMPLEMENTATION_BLUEPRINT_v2.md`
+> - `docs/gridvision_master_files/GridVision_TEAM_EXECUTION_CONTRACT.md`
+
+**Last Updated:** 2026-09-27
+
+---
+
+## Decision Template
+
+Use this format for each new decision:
+
+```
+## DEC-XXX — Short Title
+
+Date:
+Status: OPEN | DECIDED | SUPERSEDED
+Decision:
+Reason:
+Affected files/modules:
+Impact:
+Approved by:
+Source:
+```
+
+---
+
+## Recorded Decisions
+
+### DEC-001 — Frontend UI Shell Built Before Pipeline Implementation
+
+Date: Prior to 2026-09-27 (pre-existing in repository)
+Status: DECIDED
+Decision: Build a complete frontend UI shell with mock data before any ML pipeline or real backend endpoints exist.
+Reason: P4 can work independently from Day 1 against mocked artifacts matching the Blueprint §F schemas, without blocking on P1/P2. This is explicitly supported by the Team Execution Contract §4 ("Mocked development and production integration are explicitly different phases").
+Affected files/modules: `frontend/src/views/`, `frontend/src/mock/mockData.ts`, `frontend/src/components/`
+Impact: Frontend exists but renders only illustrative mock data. Must be re-validated against real artifacts when available.
+Approved by: Consistent with Team Execution Contract §4
+Source: Team Execution Contract §2 (P4 row), §4 (dependency graph)
+
+### DEC-002 — Backend Skeleton Uses Simplified Routing Structure
+
+Date: Prior to 2026-09-27 (pre-existing in repository)
+Status: DECIDED
+Decision: Backend uses `app/api/v1/endpoints/` structure instead of `app/routers/` as described in Blueprint v2 §B. Only a `system.py` endpoint exists; the domain endpoints (`forecast`, `segment`, `instability`, `anomaly`, `chat`) have not been created yet.
+Reason: Scaffolding decision — the current structure is a starting point. The Blueprint §B routing structure (`routers/{forecast,segment,instability,anomaly,chat}.py`) will need to be implemented when real API endpoints are built.
+Affected files/modules: `backend/app/api/v1/`
+Impact: Minor structural difference from Blueprint §B. Will need alignment when implementing real endpoints.
+Approved by: P4 (scaffolding decision, consistent with mock-first development)
+Source: Implementation Blueprint v2 §B vs. actual repository structure
+
+### DEC-003 — Dataset Inspector Placed in `ml/` Instead of `pipeline/`
+
+Date: Prior to 2026-09-27 (pre-existing in repository)
+Status: DECIDED
+Decision: The `inspect_dataset.py` utility was placed in `ml/` rather than `pipeline/ingestion/` or a separate `scripts/` directory.
+Reason: The inspector is a standalone diagnostic tool, not part of the production pipeline. `ml/` serves as a general-purpose space for ML-related utilities.
+Affected files/modules: `ml/inspect_dataset.py`
+Impact: No impact on pipeline architecture. The Blueprint v2 §B `pipeline/` directory does not yet exist and will be created separately when implementation begins.
+Approved by: Developer who created the scaffold
+Source: Repository observation
+
+### DEC-004 — Master Document Ownership Reconciliation (Issue 1)
+
+Date: 2026-09-27 (Pre-Day 1 Reconciliation)
+Status: DECIDED
+Decision: Reconcile role ownership across master documents to match authoritative v4 / handoff role structure:
+- **P1**: ingestion, QC, sampling, common-calendar windows, per-household calibration assignment, behavioral features, K selection / K-Means, cluster alignment / Hungarian matching, instability, volatility.
+- **P2**: calibration forecaster, global forecaster, per-cluster forecaster (capstone-only, isolated), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation.
+- **P3**: anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability.
+- **P4**: backend (FastAPI), frontend (React), RAG / Copilot (FAISS + chat), integrating all artifacts into the app.
+Reason: Ownership conflicts between Team Execution Contract and v4/Blueprint risked duplicated work, unowned modules, incompatible artifacts, and integration failure.
+Affected files/modules: `GridVision_TEAM_EXECUTION_CONTRACT.md` (§1, §2, §3, §4, §8, §9, §10, §12), `GridVision_IMPLEMENTATION_BLUEPRINT_v2.md` (§B, §D.2, §D.3)
+Impact: Eliminates teammate overlap; provides single unambiguous owner for each pipeline stage and artifact.
+Approved by: Governing pre-Day 1 reconciliation pass per v4 hierarchy
+Source: GridVision_FINAL_MASTER_PLAN_v4.docx §15
+
+### DEC-005 — Acyclic Extreme-Failure Threshold Dependency Sequence (Issue 2)
+
+Date: 2026-09-27 (Pre-Day 1 Reconciliation)
+Status: DECIDED
+Decision: The extreme-failure threshold is computed strictly from the pooled calibration standardized-error distribution and fixed BEFORE research-table outcomes are labelled. The execution order is acyclic:
+1. Calibration forecasts → 2. Calibration residuals → 3. Calibration standardized-error distribution → 4. Fixed extreme-failure threshold → 5. Analysis/holdout forecast errors → 6. Standardized errors → 7. Extreme-failure labels → 8. Research table → 9. Statistical analysis.
+Reason: The research table contains the outcome `is_extreme_failure` generated by the threshold. Making the research table a prerequisite for threshold computation was a circular dependency that could produce implementation deadlock or accidental post-hoc threshold construction.
+Affected files/modules: `GridVision_TEAM_EXECUTION_CONTRACT.md` (§2 row 40, §3 flow, §4 dependency graph), `GridVision_IMPLEMENTATION_BLUEPRINT_v2.md` (§A.2 diagram, §C.9, §D.7, §E)
+Impact: Prevents deadlocks; guarantees zero leakage from analysis/holdout data into threshold selection.
+Approved by: Governing pre-Day 1 reconciliation pass
+Source: v4 §4.3, §8.4; Handoff §6
+
+### DEC-006 — Window-Usability Criteria Clarification (Issue 3)
+
+Date: 2026-09-27 (Pre-Day 1 Reconciliation)
+Status: DECIDED
+Decision: Window usability is determined by the locked ≥95% expected-slot and ≤3-consecutive-day gap criteria. Households qualify for the analysis pool based on their number of usable windows (≥6 usable windows). A >7-day gap does not by itself imply whole-household exclusion unless the locked qualification rule requires it.
+Reason: Overly strong "42 households excluded because of >7-day gaps" wording could cause an agent to physically drop those households prior to window usability checks, silently distorting the sample and invalidating comparability with v4.
+Affected files/modules: `GridVision_TEAM_EXECUTION_CONTRACT.md` (§2 row 27), `GridVision_AI_HANDOFF_CONTEXT_LOCKED.md` (§7 step 2), `docs/current_status/TASKS.md` (P1 preprocessing)
+Impact: Population and sample selection faithfully follow v4 without unauthorized upfront filtering.
+Approved by: Governing pre-Day 1 reconciliation pass
+Source: v4 §4 confirmed counts and window-completeness rules
+
+### DEC-007 — Holdout Immediate Calendar Predecessor Eligibility Rule (Issue 4)
+
+Date: 2026-09-27 (Pre-Day 1 Reconciliation)
+Status: DECIDED
+Decision: Each household's final usable window is its holdout target. It may ONLY be evaluated if its immediately preceding calendar window (`w_pred = calendar_predecessor(w_target)`) is usable and provides valid forecast context. Never substitute an earlier non-adjacent usable window. If the immediate calendar predecessor is unavailable or unusable, the holdout evaluation for that household is marked ineligible rather than constructing a non-adjacent forecast pair.
+Reason: GridVision explicitly uses adjacent calendar-window forecasting. Allowing non-adjacent substitution (e.g., W12 → W14 when W13 is unusable) violates the prospective temporal forecasting design and creates evaluation invalidity.
+Affected files/modules: `GridVision_IMPLEMENTATION_BLUEPRINT_v2.md` (§C.9, §D.7, §E), `GridVision_TEAM_EXECUTION_CONTRACT.md` (§2 row 42, §8 G5/G7, §10)
+Impact: Strict evaluation validity on the holdout window; zero invalid non-adjacent forecast pairs.
+Approved by: Governing pre-Day 1 reconciliation pass
+Source: Derived rule consistent with v4 temporal adjacency principles
+
+---
+
+## Pending / Open Items
+
+1. **UI reliability-indicator bucketing thresholds** (display-only, cosmetic — needs a one-line team confirmation it is never cited in the write-up).
+2. All 4 master files are now completely reconciled and aligned with v4 authoritative methodology ahead of Day 1 execution.
