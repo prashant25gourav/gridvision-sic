@@ -17,34 +17,34 @@
 
 ### Days 1–2: Setup
 
-- [ ] Download raw LCL dataset and place in `data/raw/`
-- [ ] Implement `pipeline/ingestion/to_parquet.py` — convert `hhblock_dataset/block_*.csv` to Parquet (flat-rate subsample only)
-  - Produces: `data/interim/*.parquet`
+- [x] Download raw LCL dataset and place in `data/raw/` (linked full 10.27 GB via junction)
+- [x] Implement `pipeline/ingestion/to_parquet.py` — convert `hhblock_dataset/block_*.csv` to Parquet (flat-rate subsample only)
+  - Produces: `data/interim/blocks/block_*.parquet` (112 blocks, 2.77M rows)
   - Consumer: QC
-  - Gate: G1 — row/household counts match v4 §3 verified numbers (4,443 flat-rate, 5,566 total)
-- [ ] Implement `pipeline/ingestion/metadata.py` — load and join `informations_households.csv`
+  - Gate: G1 — row/household counts match v4 §3 verified numbers (4,443 flat-rate metadata, 4,438 evaluated in blocks, 0 negatives)
+- [x] Implement `pipeline/ingestion/metadata.py` — load and join `informations_households.csv`
   - Produces: household metadata with tariff/ACORN fields
-- [ ] Implement `pipeline/sampling/stratified_sample.py` — draw fixed 500–800 HH sample
+- [x] Implement `pipeline/sampling/stratified_sample.py` — draw fixed 500–800 HH sample
   - Depends on: QC pass
-  - Produces: `households_sampled.parquet`
+  - Produces: `households_sampled.parquet` (620 HH, seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U)
   - Constraint: fixed random seed, stratified by `Acorn_grouped`, ACORN-U minimum floor
   - Consumer: everyone
 
 ### Days 3–4: Preprocessing
 
-- [ ] Implement `pipeline/quality/checks.py` — data quality validation
+- [x] Implement `pipeline/quality/checks.py` — data quality validation
   - Checks: 0 negatives; window usability determined by locked ≥95% expected-slot and ≤3-consecutive-day gap criteria (qualifying pool requires ≥6 usable windows; a >7-day gap does not by itself imply whole-household exclusion)
   - Produces: `data_quality_report.json`, filtered household set
-  - Gate: G1
-- [ ] Implement `pipeline/quality/report.py` — quality report generation
-- [ ] Implement `pipeline/windows/calendar.py` — 14 fixed common-calendar windows
-  - Produces: window date boundaries
-- [ ] Implement `pipeline/windows/eligibility.py` — per household-window usability
+  - Gate: G1 (PASSED: 4,252 qualifying households, 2,974 with >=10 usable windows, median 10.0)
+- [x] Implement `pipeline/quality/report.py` — quality report generation
+- [x] Implement `pipeline/windows/calendar.py` — 14 fixed common-calendar windows
+  - Produces: window date boundaries (W01 to W14, 56 days each)
+- [x] Implement `pipeline/windows/eligibility.py` — per household-window usability
   - Rule: ≥95% half-hourly slots, no gap >3 consecutive days
-  - Produces: `window_eligibility.parquet`
-- [ ] Implement `pipeline/windows/calibration_select.py` — per-household calibration assignment
+  - Produces: `window_eligibility.parquet` (14 rows/HH)
+- [x] Implement `pipeline/windows/calibration_select.py` — per-household calibration assignment
   - Produces: `calibration_assignment.parquet`
-  - Constraint: each HH's own first 2 usable windows; `n_analysis_windows ≥ 4`
+  - Constraint: each HH's own first 2 usable windows; `n_analysis_windows ≥ 4` (PASSED for all 620 sampled HHs)
   - Consumer: P2 (calibration forecast)
 
 ### Days 5–6: Feature Engineering & K Selection

@@ -1,0 +1,41 @@
+{
+  "dataset": {
+    "total_raw_households": 5566,
+    "flat_rate_households_metadata": 4443,
+    "dynamic_tou_households": 1123,
+    "flat_rate_households_evaluated": 4438,
+    "negative_readings_observed": 0
+  },
+  "windows": {
+    "total_calendar_windows": 14,
+    "window_length_days": 56,
+    "expected_half_hours_per_window": 2688,
+    "min_slot_fill_pct": 0.95,
+    "max_consecutive_gap_days": 3.0
+  },
+  "qualifying_pool": {
+    "min_usable_windows_threshold": 6,
+    "qualifying_households_count": 4252,
+    "qualifying_households_expected": 4252,
+    "households_with_ge_10_usable_windows": 2974,
+    "households_with_ge_10_usable_windows_expected": 2974,
+    "median_usable_windows": 10.0,
+    "median_usable_windows_expected": 10.0,
+    "gate_g1_passed": true
+  },
+  "sampling": {
+    "target_sample_size": 620,
+    "random_seed": 42,
+    "strata_counts": {
+      "Affluent": 237,
+      "Adversity": 211,
+      "Comfortable": 167,
+      "ACORN-U": 5
+    }
+  },
+  "calibration": {
+    "total_assigned_households": 620,
+    "min_analysis_windows_observed": 4,
+    "calibration_isolation_verified": true
+  }
+}

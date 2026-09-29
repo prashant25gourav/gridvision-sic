@@ -77,47 +77,50 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 | Connection to real backend data | NOT STARTED | All views use mock data only |
 | Recharts integration | NOT STARTED | Current charts are pure SVG; Blueprint specifies Recharts |
 
-#### ML / Pipeline (`ml/`)
+#### ML / Pipeline (`pipeline/`)
 
 | Component | Status | Notes |
 |---|---|---|
 | `inspect_dataset.py` | IMPLEMENTED | Read-only diagnostic utility for inspecting raw CSV/Parquet files |
-| `pipeline/` directory | NOT STARTED | Does not exist in repository |
-| Ingestion (`to_parquet.py`) | NOT STARTED | — |
-| Data quality checks | NOT STARTED | — |
-| Sampling | NOT STARTED | — |
-| Window construction | NOT STARTED | — |
-| Calibration assignment | NOT STARTED | — |
-| Behavioral features | NOT STARTED | — |
-| K selection | NOT STARTED | — |
+| `pipeline/` directory | IMPLEMENTED | Core pipeline structure created per Blueprint v2 §B |
+| Config loader (`pipeline/config.py`) | IMPLEMENTED | Loads YAML config, resolves project root and artifact directories |
+| Ingestion (`to_parquet.py`) | IMPLEMENTED | Converted all 112 raw blocks (2.77M rows) to flat-rate Parquet (`data/interim/blocks/`) |
+| Metadata (`metadata.py`) | IMPLEMENTED | Loads `informations_households.csv`, verified 4,443 flat-rate households, 0 negatives |
+| Data quality checks (`checks.py`, `report.py`) | IMPLEMENTED | Validated 95% slot completeness, <=3-day gaps, 0 negatives. Gate G1 PASSED. |
+| Calendar windows (`calendar.py`) | IMPLEMENTED | 14 contiguous 56-day common-calendar windows (W01–W14) |
+| Window eligibility (`eligibility.py`) | IMPLEMENTED | Evaluated 4,438 flat-rate households; 4,252 qualifying (>=6 usable), 2,974 with >=10 |
+| Sampling (`stratified_sample.py`) | IMPLEMENTED | Stratified sample of 620 HHs drawn (seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U) |
+| Calibration assignment (`calibration_select.py`) | IMPLEMENTED | Per-household own first-2-usable calibration pair; all 620 HHs have n_analysis_windows >= 4 |
+| Behavioral features | NOT STARTED | Next: 8 features on ALL usable windows |
+| K selection | NOT STARTED | Silhouette sweep on calibration features |
 | Clustering (K-Means) | NOT STARTED | — |
 | Alignment (Hungarian) | NOT STARTED | — |
 | Instability / volatility metrics | NOT STARTED | — |
-| Calibration forecasting | NOT STARTED | — |
-| Global forecasting | NOT STARTED | — |
-| Per-cluster forecasting | NOT STARTED | — |
-| Error standardization | NOT STARTED | — |
-| Research table construction | NOT STARTED | — |
-| Extreme-failure labeling | NOT STARTED | — |
-| Statistical model | NOT STARTED | — |
-| Holdout evaluation | NOT STARTED | — |
-| Anomaly detection (Isolation Forest) | NOT STARTED | — |
-| SHAP explainability | NOT STARTED | — |
+| Calibration forecasting | NOT STARTED | Assigned to P2 |
+| Global forecasting | NOT STARTED | Assigned to P2 |
+| Per-cluster forecasting | NOT STARTED | Assigned to P2 (capstone only) |
+| Error standardization | NOT STARTED | Assigned to P2 |
+| Research table construction | NOT STARTED | Assigned to P2 |
+| Extreme-failure labeling | NOT STARTED | Assigned to P2 |
+| Statistical model | NOT STARTED | Assigned to P2 |
+| Holdout evaluation | NOT STARTED | Assigned to P2 |
+| Anomaly detection (Isolation Forest) | NOT STARTED | Assigned to P3 |
+| SHAP explainability | NOT STARTED | Assigned to P3 |
 
 #### Data (`data/`)
 
 | Component | Status | Notes |
 |---|---|---|
-| `data/raw/` | EMPTY | `.gitkeep` placeholder only; no raw LCL data present |
-| `data/processed/` | EMPTY | `.gitkeep` placeholder only |
-| `data/interim/` | NOT STARTED | Does not exist (specified in Blueprint v2 §B) |
-| `data/artifacts/` | NOT STARTED | Does not exist (specified in Blueprint v2 §B) |
+| `data/raw/` | LINKED | Windows junction to 10.27 GB raw dataset (`hhblock_dataset/block_*.csv`) |
+| `data/interim/` | IMPLEMENTED | 112 converted flat-rate Parquet blocks in `data/interim/blocks/` |
+| `data/artifacts/` | IMPLEMENTED | `run_initial` contains 5 core artifacts + `data_quality_report.json`; `latest` junction active |
+| `data/processed/` | EMPTY | Reserved for final unified tables |
 
 #### Tests (`tests/`)
 
 | Component | Status | Notes |
 |---|---|---|
-| `tests/` directory | NOT STARTED | Does not exist in repository |
+| `tests/` directory | IMPLEMENTED | 21/21 passing tests covering metadata, calendar, quality, sampling, calibration, contracts |
 
 #### Configuration
 
@@ -125,8 +128,8 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 |---|---|---|
 | `.env.example` (root) | IMPLEMENTED | Basic env template (project name, API prefix, CORS, host/port) |
 | `frontend/.env.example` | IMPLEMENTED | Contains `VITE_API_URL` |
-| `.gitignore` | IMPLEMENTED | Covers Python, Node, IDE, Jupyter, OS files |
-| `config/pipeline.yaml` | NOT STARTED | Does not exist (specified in Blueprint v2 §B) |
+| `.gitignore` | IMPLEMENTED | Updated to ignore raw, interim, caches, and `data/artifacts/latest` junction |
+| `config/pipeline.yaml` | IMPLEMENTED | Locked parameter configuration per Master Plan v4 |
 | `Makefile` | NOT STARTED | Does not exist (specified in Blueprint v2 §K) |
 
 #### Documentation

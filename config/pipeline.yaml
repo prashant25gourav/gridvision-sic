@@ -1,0 +1,87 @@
+# GridVision Pipeline Configuration
+# Locked specifications from Master Plan v4 and Implementation Blueprint v2
+
+project:
+  name: "GridVision"
+  version: "1.0.0"
+  random_seed: 42
+
+paths:
+  raw_dir: "data/raw"
+  hhblock_dir: "data/raw/hhblock_dataset"
+  metadata_path: "data/raw/informations_households.csv"
+  interim_dir: "data/interim"
+  processed_dir: "data/processed"
+  artifacts_dir: "data/artifacts"
+
+data_quality:
+  tariff: "Std" # Flat-rate households only
+  min_usable_windows: 6 # Qualification threshold for analysis pool
+  expected_half_hours_per_window: 2688 # 56 days * 48 half-hours
+  min_slot_fill_pct: 0.95 # >= 95% slot completeness
+  max_consecutive_gap_days: 3 # No single gap > 3 consecutive days
+  max_consecutive_gap_half_hours: 144 # 3 days * 48 slots
+
+sampling:
+  target_sample_size: 620 # Target within locked range 500-800
+  stratify_column: "Acorn_grouped"
+  acorn_u_min_floor: 5
+  seed: 42
+
+windows:
+  window_length_days: 56
+  total_windows: 14
+  schedule:
+    - id: "W01"
+      start: "2011-11-24"
+      end: "2012-01-18"
+    - id: "W02"
+      start: "2012-01-19"
+      end: "2012-03-14"
+    - id: "W03"
+      start: "2012-03-15"
+      end: "2012-05-09"
+    - id: "W04"
+      start: "2012-05-10"
+      end: "2012-07-04"
+    - id: "W05"
+      start: "2012-07-05"
+      end: "2012-08-29"
+    - id: "W06"
+      start: "2012-08-30"
+      end: "2012-10-24"
+    - id: "W07"
+      start: "2012-10-25"
+      end: "2012-12-19"
+    - id: "W08"
+      start: "2012-12-20"
+      end: "2013-02-13"
+    - id: "W09"
+      start: "2013-02-14"
+      end: "2013-04-10"
+    - id: "W10"
+      start: "2013-04-11"
+      end: "2013-06-05"
+    - id: "W11"
+      start: "2013-06-06"
+      end: "2013-07-31"
+    - id: "W12"
+      start: "2013-08-01"
+      end: "2013-09-25"
+    - id: "W13"
+      start: "2013-09-26"
+      end: "2013-11-20"
+    - id: "W14"
+      start: "2013-11-21"
+      end: "2014-01-15"
+
+clustering:
+  k_min: 3
+  k_max: 8
+  random_state: 42
+  n_init: 10
+
+research:
+  extreme_failure_percentile: 95
+  fallback_percentile: 90
+  mad_floor_factor: 0.05
