@@ -91,11 +91,11 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 | Window eligibility (`eligibility.py`) | IMPLEMENTED | Evaluated 4,438 flat-rate households; 4,252 qualifying (>=6 usable), 2,974 with >=10 |
 | Sampling (`stratified_sample.py`) | IMPLEMENTED | Stratified sample of 620 HHs drawn (seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U) |
 | Calibration assignment (`calibration_select.py`) | IMPLEMENTED | Per-household own first-2-usable calibration pair; all 620 HHs have n_analysis_windows >= 4 |
-| Behavioral features | NOT STARTED | Next: 8 features on ALL usable windows |
-| K selection | NOT STARTED | Silhouette sweep on calibration features |
-| Clustering (K-Means) | NOT STARTED | — |
-| Alignment (Hungarian) | NOT STARTED | — |
-| Instability / volatility metrics | NOT STARTED | — |
+| Behavioral features (`behavioral.py`) | IMPLEMENTED | 8 features on ALL 6,198 usable windows across 620 HHs, 0 NaNs |
+| K selection (`k_selection.py`) | IMPLEMENTED | Silhouette sweep on 1,240 calibration samples; optimal K=4 (silhouette=0.4021) |
+| Clustering (K-Means, `kmeans_fit.py`) | IMPLEMENTED | K-Means (K=4, seed=42) per window; assigned roles: 4,338 analysis, 1,240 cal, 620 holdout |
+| Alignment (Hungarian, `alignment.py`) | IMPLEMENTED | Chained Hungarian alignment per household starting from cal_w1; output 6,198 rows |
+| Instability / volatility metrics (`metrics.py`) | IMPLEMENTED | Persistence, instability, volatility CV; 4,338 Analysis rows; first row trans=2 (Gate G3 PASSED) |
 | Calibration forecasting | NOT STARTED | Assigned to P2 |
 | Global forecasting | NOT STARTED | Assigned to P2 |
 | Per-cluster forecasting | NOT STARTED | Assigned to P2 (capstone only) |
@@ -146,22 +146,27 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 
 | Role | Scope | Current State |
 |---|---|---|
-| **P1** — Data / Research Pipeline Lead | Ingestion, QC, sampling, common-calendar windows, per-household calibration assignment, behavioral features, K selection / K-Means, cluster alignment / Hungarian matching, instability, volatility | NOT STARTED |
-| **P2** — Forecasting / Statistics | Calibration forecaster, global forecaster, per-cluster forecaster (capstone-only), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation | NOT STARTED |
-| **P3** — Anomaly / Explainability | Anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability | NOT STARTED |
-| **P4** — Backend / Frontend / RAG | FastAPI backend, React frontend, RAG / Copilot (FAISS + chat), integrating all artifacts into the app | SCAFFOLDING — UI shell and backend skeleton exist |
+| **P1** — Data / Research Pipeline Lead | Ingestion, QC, sampling, common-calendar windows, per-household calibration assignment, behavioral features, K selection / K-Means, cluster alignment / Hungarian matching, instability, volatility | COMPLETE — Milestones M0, M1, M2 & Gates G1, G3 PASSED (Days 1–10 deliverables implemented & verified) |
+| **P2** — Forecasting / Statistics | Calibration forecaster, global forecaster, per-cluster forecaster (capstone-only), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation | READY — Unblocked by P1 artifacts (`calibration_assignment`, `behavioral_features`, `cluster_assignments`, `instability_volatility`) |
+| **P3** — Anomaly / Explainability | Anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability | READY — Unblocked by P1 artifacts |
+| **P4** — Backend / Frontend / RAG | FastAPI backend, React frontend, RAG / Copilot (FAISS + chat), integrating all artifacts into the app | SCAFFOLDING — UI shell and backend skeleton exist; artifacts ready to connect |
 
 ---
 
 ## D. CURRENT PHASE
 
-**Phase: Ready for Day 1 Execution**
+**Phase: Days 5–10 Complete (P1 Deliverables Ready for Downstream Handoff)**
 
-The repository contains scaffolding (frontend UI shell, backend skeleton, dataset inspector).
-The master files are locked, verified, and reconciled across all four documents.
-Living status files (`PROJECT_STATE.md`, `TASKS.md`, `DECISIONS.md`) and agent skills are fully established.
-No implementation of the ML/research pipeline or application endpoints has begun.
-The project is ready to enter Day 1 of the 20-day execution schedule.
+P1 core data and research pipeline modules and artifacts are fully built, tested, and validated:
+- Raw dataset linked and ingested to Parquet (112 blocks, 2.77M rows, 0 negatives).
+- Window eligibility evaluated (4,252 qualifying households, exact match with v4 §3).
+- Stratified sample drawn (620 households, seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U).
+- Per-household calibration assigned (own first-2 usable windows; all 620 have n_analysis >= 4).
+- Behavioral features computed across all 6,198 usable windows (0 NaNs).
+- Silhouette sweep completed on calibration features fixing optimal K=4 (silhouette=0.4021).
+- K-Means clustered per window and Hungarian aligned per household sequence.
+- Instability and volatility metrics computed for all 4,338 Analysis windows (transition 1->2 recorded).
+- Full test suite passes: 29/29 tests.
 
 ---
 

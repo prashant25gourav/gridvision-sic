@@ -49,42 +49,42 @@
 
 ### Days 5–6: Feature Engineering & K Selection
 
-- [ ] Implement `pipeline/features/behavioral.py` — behavioral feature pipeline
+- [x] Implement `pipeline/features/behavioral.py` — behavioral feature pipeline
   - Features: mean load, peak load, peak-to-average ratio, std dev, ramp-rate stats, day/night ratio, weekday/weekend contrast, peak timing
   - Scope: ALL usable windows including calibration pair
-  - Produces: `behavioral_features.parquet`
+  - Produces: `behavioral_features.parquet` (6,198 rows, 0 NaNs)
   - Constraint: no NaNs; computed from that window's own readings only
   - Consumer: P1 (clustering), P2 (global/cluster forecasting), P3 (anomaly)
 
-- [ ] Implement `pipeline/clustering/k_selection.py` — silhouette sweep (k=3..8) on pooled calibration-window features
+- [x] Implement `pipeline/clustering/k_selection.py` — silhouette sweep (k=3..8) on pooled calibration-window features
   - Depends on: `behavioral_features.parquet`
-  - Produces: fixed K in `config/pipeline.yaml`
-  - Constraint: only calibration-window features used
+  - Produces: fixed K=4 in `config/pipeline.yaml` (silhouette=0.4021)
+  - Constraint: only calibration-window features used (1,240 calibration observations)
   - Gate: G3 (partial)
 
 ### Day 7: First Clustering Pass
 
-- [ ] Implement `pipeline/clustering/kmeans_fit.py` — K-Means on every usable window (including calibration pair)
+- [x] Implement `pipeline/clustering/kmeans_fit.py` — K-Means on every usable window (including calibration pair)
   - Depends on: K selection, `behavioral_features.parquet`
   - Produces: `cluster_assignments.parquet` (raw)
   - Gate: G3
 
 ### Days 8–9: Alignment (CRITICAL PATH)
 
-- [ ] Implement `pipeline/clustering/alignment.py` — Hungarian alignment across household's full usable-window sequence
+- [x] Implement `pipeline/clustering/alignment.py` — Hungarian alignment across household's full usable-window sequence
   - Depends on: raw `cluster_assignments.parquet`
-  - Produces: `cluster_assignments.parquet` (aligned)
+  - Produces: `cluster_assignments.parquet` (aligned; 6,198 rows across 620 HHs)
   - Constraint: chain starts at calibration_1; P2 available to pair with P1 if this slips
   - Gate: G3
 
 ### Day 10: Instability & Volatility
 
-- [ ] Implement `pipeline/instability/metrics.py` — persistence, instability, volatility (CV)
+- [x] Implement `pipeline/instability/metrics.py` — persistence, instability, volatility (CV)
   - Depends on: aligned `cluster_assignments.parquet`
-  - Produces: `instability_volatility.parquet` (Analysis windows only)
-  - Constraint: first Analysis-window row has `n_transitions_observed == 2`; includes Cal-W1→Cal-W2 transition
+  - Produces: `instability_volatility.parquet` (Analysis windows only; 4,338 rows)
+  - Constraint: first Analysis-window row has `n_transitions_observed == 2`; includes Cal-W1→Cal-W2 transition (PASSED)
   - Consumer: P2 (research table)
-  - Gate: G3
+  - Gate: G3 (PASSED)
 
 ---
 
