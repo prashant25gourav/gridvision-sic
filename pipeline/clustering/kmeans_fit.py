@@ -112,9 +112,20 @@ def fit_kmeans_per_window(
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
 
-        km = KMeans(n_clusters=k, random_state=random_state, n_init=10)
-        raw_labels = km.fit_predict(X_scaled)
-        centroids = km.cluster_centers_  # shape: (k, 8)
+        k_eff = min(k, len(X))
+        if k_eff < k:
+            logger.warning(f"Window {w_id} has only {len(X)} samples (< K={k}). Using k_eff={k_eff}.")
+            km = KMeans(n_clusters=k_eff, random_state=random_state, n_init=10)
+            raw_labels = km.fit_predict(X_scaled)
+            centroids = np.zeros((k, X_scaled.shape[1]), dtype=float)
+            centroids[:k_eff] = km.cluster_centers_
+            for pad_idx in range(k_eff, k):
+                centroids[pad_idx] = km.cluster_centers_[pad_idx % k_eff]
+        else:
+            km = KMeans(n_clusters=k, random_state=random_state, n_init=10)
+            raw_labels = km.fit_predict(X_scaled)
+            centroids = km.cluster_centers_  # shape: (k, 8)
+
         centroids_dict[w_id] = centroids
 
         # Calculate Euclidean distance to assigned cluster centroid
