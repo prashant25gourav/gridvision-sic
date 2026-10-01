@@ -1,0 +1,32 @@
+{
+  "selected_k": 4,
+  "best_silhouette_score": 0.4021,
+  "silhouette_sweep": {
+    "3": 0.389,
+    "4": 0.4021,
+    "5": 0.2833,
+    "6": 0.2336,
+    "7": 0.1856,
+    "8": 0.205
+  },
+  "inertia_sweep": {
+    "3": 5814.65,
+    "4": 4474.32,
+    "5": 3599.49,
+    "6": 3166.28,
+    "7": 2907.52,
+    "8": 2681.69
+  },
+  "calibration_samples_count": 1240,
+  "random_state": 42,
+  "feature_columns": [
+    "mean_load",
+    "peak_load",
+    "peak_to_average_ratio",
+    "std_load",
+    "ramp_rate_mean",
+    "day_night_ratio",
+    "weekday_weekend_contrast",
+    "peak_timing"
+  ]
+}

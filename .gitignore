@@ -25,3 +25,16 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Data directories (large files generated locally)
+data/raw/
+data/interim/
+data/processed/
+data/models/
+data/predictions/
+data/artifacts/latest
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/

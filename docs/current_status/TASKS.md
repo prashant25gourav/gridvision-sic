@@ -17,74 +17,74 @@
 
 ### Days 1–2: Setup
 
-- [ ] Download raw LCL dataset and place in `data/raw/`
-- [ ] Implement `pipeline/ingestion/to_parquet.py` — convert `hhblock_dataset/block_*.csv` to Parquet (flat-rate subsample only)
-  - Produces: `data/interim/*.parquet`
+- [x] Download raw LCL dataset and place in `data/raw/` (linked full 10.27 GB via junction)
+- [x] Implement `pipeline/ingestion/to_parquet.py` — convert `hhblock_dataset/block_*.csv` to Parquet (flat-rate subsample only)
+  - Produces: `data/interim/blocks/block_*.parquet` (112 blocks, 2.77M rows)
   - Consumer: QC
-  - Gate: G1 — row/household counts match v4 §3 verified numbers (4,443 flat-rate, 5,566 total)
-- [ ] Implement `pipeline/ingestion/metadata.py` — load and join `informations_households.csv`
+  - Gate: G1 — row/household counts match v4 §3 verified numbers (4,443 flat-rate metadata, 4,438 evaluated in blocks, 0 negatives)
+- [x] Implement `pipeline/ingestion/metadata.py` — load and join `informations_households.csv`
   - Produces: household metadata with tariff/ACORN fields
-- [ ] Implement `pipeline/sampling/stratified_sample.py` — draw fixed 500–800 HH sample
+- [x] Implement `pipeline/sampling/stratified_sample.py` — draw fixed 500–800 HH sample
   - Depends on: QC pass
-  - Produces: `households_sampled.parquet`
+  - Produces: `households_sampled.parquet` (620 HH, seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U)
   - Constraint: fixed random seed, stratified by `Acorn_grouped`, ACORN-U minimum floor
   - Consumer: everyone
 
 ### Days 3–4: Preprocessing
 
-- [ ] Implement `pipeline/quality/checks.py` — data quality validation
+- [x] Implement `pipeline/quality/checks.py` — data quality validation
   - Checks: 0 negatives; window usability determined by locked ≥95% expected-slot and ≤3-consecutive-day gap criteria (qualifying pool requires ≥6 usable windows; a >7-day gap does not by itself imply whole-household exclusion)
   - Produces: `data_quality_report.json`, filtered household set
-  - Gate: G1
-- [ ] Implement `pipeline/quality/report.py` — quality report generation
-- [ ] Implement `pipeline/windows/calendar.py` — 14 fixed common-calendar windows
-  - Produces: window date boundaries
-- [ ] Implement `pipeline/windows/eligibility.py` — per household-window usability
+  - Gate: G1 (PASSED: 4,252 qualifying households, 2,974 with >=10 usable windows, median 10.0)
+- [x] Implement `pipeline/quality/report.py` — quality report generation
+- [x] Implement `pipeline/windows/calendar.py` — 14 fixed common-calendar windows
+  - Produces: window date boundaries (W01 to W14, 56 days each)
+- [x] Implement `pipeline/windows/eligibility.py` — per household-window usability
   - Rule: ≥95% half-hourly slots, no gap >3 consecutive days
-  - Produces: `window_eligibility.parquet`
-- [ ] Implement `pipeline/windows/calibration_select.py` — per-household calibration assignment
+  - Produces: `window_eligibility.parquet` (14 rows/HH)
+- [x] Implement `pipeline/windows/calibration_select.py` — per-household calibration assignment
   - Produces: `calibration_assignment.parquet`
-  - Constraint: each HH's own first 2 usable windows; `n_analysis_windows ≥ 4`
+  - Constraint: each HH's own first 2 usable windows; `n_analysis_windows ≥ 4` (PASSED for all 620 sampled HHs)
   - Consumer: P2 (calibration forecast)
 
 ### Days 5–6: Feature Engineering & K Selection
 
-- [ ] Implement `pipeline/features/behavioral.py` — behavioral feature pipeline
+- [x] Implement `pipeline/features/behavioral.py` — behavioral feature pipeline
   - Features: mean load, peak load, peak-to-average ratio, std dev, ramp-rate stats, day/night ratio, weekday/weekend contrast, peak timing
   - Scope: ALL usable windows including calibration pair
-  - Produces: `behavioral_features.parquet`
+  - Produces: `behavioral_features.parquet` (6,198 rows, 0 NaNs)
   - Constraint: no NaNs; computed from that window's own readings only
   - Consumer: P1 (clustering), P2 (global/cluster forecasting), P3 (anomaly)
 
-- [ ] Implement `pipeline/clustering/k_selection.py` — silhouette sweep (k=3..8) on pooled calibration-window features
+- [x] Implement `pipeline/clustering/k_selection.py` — silhouette sweep (k=3..8) on pooled calibration-window features
   - Depends on: `behavioral_features.parquet`
-  - Produces: fixed K in `config/pipeline.yaml`
-  - Constraint: only calibration-window features used
+  - Produces: fixed K=4 in `config/pipeline.yaml` (silhouette=0.4021)
+  - Constraint: only calibration-window features used (1,240 calibration observations)
   - Gate: G3 (partial)
 
 ### Day 7: First Clustering Pass
 
-- [ ] Implement `pipeline/clustering/kmeans_fit.py` — K-Means on every usable window (including calibration pair)
+- [x] Implement `pipeline/clustering/kmeans_fit.py` — K-Means on every usable window (including calibration pair)
   - Depends on: K selection, `behavioral_features.parquet`
   - Produces: `cluster_assignments.parquet` (raw)
   - Gate: G3
 
 ### Days 8–9: Alignment (CRITICAL PATH)
 
-- [ ] Implement `pipeline/clustering/alignment.py` — Hungarian alignment across household's full usable-window sequence
+- [x] Implement `pipeline/clustering/alignment.py` — Hungarian alignment across household's full usable-window sequence
   - Depends on: raw `cluster_assignments.parquet`
-  - Produces: `cluster_assignments.parquet` (aligned)
+  - Produces: `cluster_assignments.parquet` (aligned; 6,198 rows across 620 HHs)
   - Constraint: chain starts at calibration_1; P2 available to pair with P1 if this slips
   - Gate: G3
 
 ### Day 10: Instability & Volatility
 
-- [ ] Implement `pipeline/instability/metrics.py` — persistence, instability, volatility (CV)
+- [x] Implement `pipeline/instability/metrics.py` — persistence, instability, volatility (CV)
   - Depends on: aligned `cluster_assignments.parquet`
-  - Produces: `instability_volatility.parquet` (Analysis windows only)
-  - Constraint: first Analysis-window row has `n_transitions_observed == 2`; includes Cal-W1→Cal-W2 transition
+  - Produces: `instability_volatility.parquet` (Analysis windows only; 4,338 rows)
+  - Constraint: first Analysis-window row has `n_transitions_observed == 2`; includes Cal-W1→Cal-W2 transition (PASSED)
   - Consumer: P2 (research table)
-  - Gate: G3
+  - Gate: G3 (PASSED)
 
 ---
 
