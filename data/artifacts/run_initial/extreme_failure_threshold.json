@@ -1,0 +1,12 @@
+{
+  "threshold_std_error_95th": 2.5804,
+  "fallback_90th": 2.0605,
+  "primary_percentile": 95.0,
+  "fallback_percentile": 90.0,
+  "n_calibration_errors": 620,
+  "calibration_std_error_mean": 1.55536,
+  "calibration_std_error_std": 5.69133,
+  "calibration_std_error_min": -0.31085,
+  "calibration_std_error_max": 124.43192,
+  "description": "Fixed extreme-failure threshold derived strictly from pooled calibration standardized errors."
+}
