@@ -41,6 +41,13 @@ from pipeline.clustering.kmeans_fit import fit_kmeans_per_window
 from pipeline.clustering.alignment import align_all_cluster_assignments
 from pipeline.instability.metrics import compute_instability_and_volatility
 from pipeline.quality.report import generate_quality_report
+from pipeline.forecasting.calibration_forecast import run_calibration_forecaster
+from pipeline.research.extreme_failure import derive_extreme_failure_threshold
+from pipeline.forecasting.global_forecaster import run_global_forecaster
+from pipeline.forecasting.cluster_forecaster import run_cluster_forecaster
+from pipeline.research.build_research_table import build_research_table
+from pipeline.research.statistical_model import fit_statistical_models
+from pipeline.research.holdout_eval import evaluate_holdout
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("GridVisionPipeline")
@@ -101,14 +108,17 @@ def run_pipeline(
     skip_ingestion: bool = True,
     sample_size: Optional[int] = None,
     seed: int = 42,
+    include_p2: bool = False,
 ) -> Path:
-    """Execute the full P1 pipeline sequence deterministically.
+    """Execute the full P1 and optional P2 pipeline sequence deterministically.
     
     Args:
         pilot: If True, runs on 50-household pilot subset.
         skip_ingestion: If True, uses existing interim Parquet blocks if present.
         sample_size: Target household sample size (defaults to 50 for pilot, 620 for full).
         seed: Random seed for sampling and clustering (default 42).
+        include_p2: If True, runs P2 calibration, global & per-cluster forecasting,
+                    research table assembly, statistical modeling, and holdout evaluation.
         
     Returns:
         Path to the generated run directory.
@@ -229,7 +239,79 @@ def run_pipeline(
     qc_report_path = run_dir / "data_quality_report.json"
     generate_quality_report(artifacts_dir=run_dir, output_path=qc_report_path)
 
-    # 12. Run Manifest
+    # Optional P2 Stages
+    if include_p2:
+        logger.info("--- Beginning P2 Forecasting and Statistical Research Pipeline ---")
+
+        # 12. Calibration Forecaster
+        logger.info("Stage 11: Running per-household calibration forecaster...")
+        run_calibration_forecaster(
+            calibration_assignment_df=cal_df,
+            interim_dir=interim_blocks_dir,
+            output_dir=run_dir,
+            random_state=seed,
+        )
+
+        # 13. Extreme Failure Threshold
+        logger.info("Stage 12: Deriving extreme-failure threshold from calibration residuals...")
+        threshold_res = derive_extreme_failure_threshold(
+            residuals_df=pd.read_parquet(run_dir / "calibration_residuals.parquet"),
+            summary_df=pd.read_parquet(run_dir / "calibration_summary.parquet"),
+            output_path=run_dir / "extreme_failure_threshold.json",
+        )
+
+        # 14. Global Forecaster
+        logger.info("Stage 13: Running pooled global forecaster across calendar transitions...")
+        run_global_forecaster(
+            sampled_households_df=sampled_df,
+            eligibility_df=elig_df,
+            behavioral_features_df=features_df,
+            interim_dir=interim_blocks_dir,
+            output_dir=run_dir,
+            random_state=seed,
+        )
+
+        # 15. Per-Cluster Forecaster
+        logger.info("Stage 14: Running per-cluster forecaster across calendar transitions...")
+        run_cluster_forecaster(
+            sampled_households_df=sampled_df,
+            eligibility_df=elig_df,
+            behavioral_features_df=features_df,
+            cluster_assignments_df=aligned_df,
+            interim_dir=interim_blocks_dir,
+            output_dir=run_dir,
+            random_state=seed,
+        )
+
+        # 16. Research Table Assembly
+        logger.info("Stage 15: Assembling research table and labeling outcomes...")
+        res_table = build_research_table(
+            instability_volatility_df=metrics_df,
+            forecast_global_summary_df=pd.read_parquet(run_dir / "forecast_global_summary.parquet"),
+            calibration_summary_df=pd.read_parquet(run_dir / "calibration_summary.parquet"),
+            threshold_config=threshold_res,
+            calibration_assignment_df=cal_df,
+            eligibility_df=elig_df,
+            sampled_households_df=sampled_df,
+            output_dir=run_dir,
+        )
+
+        # 17. Statistical Model
+        logger.info("Stage 16: Fitting cluster-robust logistic regression (H1/H0)...")
+        stat_res = fit_statistical_models(
+            research_table_df=res_table,
+            output_dir=run_dir,
+        )
+
+        # 18. Holdout Evaluation
+        logger.info("Stage 17: Forward-only holdout evaluation (Day 19 protocol)...")
+        evaluate_holdout(
+            research_table_df=res_table,
+            statistical_results=stat_res,
+            output_dir=run_dir,
+        )
+
+    # Run Manifest
     manifest = {
         "run_id": run_dir.name,
         "timestamp": datetime.now().isoformat(),
@@ -240,6 +322,7 @@ def run_pipeline(
             "sample_size": sample_size,
             "random_seed": seed,
             "optimal_k": optimal_k,
+            "include_p2": include_p2,
         },
         "artifacts": {
             f.name: {
@@ -255,7 +338,7 @@ def run_pipeline(
         json.dump(manifest, f, indent=2)
     logger.info(f"Saved run manifest to {manifest_path}")
 
-    # 13. Update latest link
+    # Update latest link
     update_latest_link(run_dir)
 
     logger.info(f"=== GridVision Pipeline Completed Successfully in {run_dir.name} ===")
@@ -263,11 +346,12 @@ def run_pipeline(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="GridVision P1 Pipeline Runner")
+    parser = argparse.ArgumentParser(description="GridVision Pipeline Runner")
     parser.add_argument("--pilot", action="store_true", help="Run 50-household pilot gate subset")
     parser.add_argument("--sample-size", type=int, default=None, help="Household sample size")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--full-ingestion", action="store_true", help="Force re-converting all raw CSVs")
+    parser.add_argument("--include-p2", action="store_true", help="Execute P2 forecasting, research table, and statistics")
     args = parser.parse_args()
 
     out_run = run_pipeline(
@@ -275,5 +359,6 @@ if __name__ == "__main__":
         skip_ingestion=not args.full_ingestion,
         sample_size=args.sample_size,
         seed=args.seed,
+        include_p2=args.include_p2,
     )
     print(f"\nPipeline finished. Outputs saved in: {out_run}")

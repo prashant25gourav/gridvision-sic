@@ -95,3 +95,130 @@ def test_cross_artifact_household_consistency(artifacts_dir):
 
     assert sampled_ids == cal_ids
     assert sampled_ids.issubset(elig_ids)
+
+
+def test_forecast_global_artifact(artifacts_dir):
+    """Verify forecast_global.parquet schema and Gate G5 leakage check."""
+    path = artifacts_dir / "forecast_global.parquet"
+    assert path.exists()
+
+    df = pd.read_parquet(path)
+    expected_cols = [
+        "household_id",
+        "window_id",
+        "slot_index",
+        "day",
+        "half_hour",
+        "actual",
+        "predicted",
+        "trained_up_to_window",
+    ]
+    for col in expected_cols:
+        assert col in df.columns
+
+    # Gate G5 leakage check: trained_up_to_window < window_id
+    assert (df["trained_up_to_window"] < df["window_id"]).all()
+    assert (df["predicted"] >= 0.0).all()
+
+
+def test_research_table_artifact(artifacts_dir):
+    """Verify research_table.parquet schema, adjacency, and holdout constraints."""
+    from pipeline.windows.calendar import calendar_successor
+
+    path = artifacts_dir / "research_table.parquet"
+    assert path.exists()
+
+    df = pd.read_parquet(path)
+    expected_cols = [
+        "household_id",
+        "window_w",
+        "window_w_plus_1",
+        "instability",
+        "volatility_cv",
+        "ae",
+        "std_error",
+        "is_extreme_failure",
+        "acorn_grouped",
+        "is_holdout",
+    ]
+    for col in expected_cols:
+        assert col in df.columns
+
+    # No nulls anywhere in the table
+    assert df.isnull().sum().sum() == 0
+
+    # Adjacency check: window_w_plus_1 must be the literal calendar successor of window_w
+    for _, row in df.iterrows():
+        assert calendar_successor(row["window_w"]) == row["window_w_plus_1"]
+
+    # At most 1 holdout row per household
+    holdout_counts = df[df["is_holdout"]].groupby("household_id").size()
+    assert (holdout_counts == 1).all()
+
+    # Analysis rows and holdout rows both present
+    assert (df["is_holdout"] == False).sum() > 3000
+    assert (df["is_holdout"] == True).sum() >= 600
+
+
+def test_statistical_results_artifact(artifacts_dir):
+    """Verify statistical_results.json schema, G6 gate check, and H1/H0 verdict."""
+    import json
+    path = artifacts_dir / "statistical_results.json"
+    assert path.exists()
+
+    with open(path, "r", encoding="utf-8") as f:
+        res = json.load(f)
+
+    assert "sample" in res
+    assert "gate_g6_check" in res
+    assert "hypothesis_h1_result" in res
+    assert "nested_model_comparison_h3" in res
+    assert "primary_model" in res
+    assert "restricted_model" in res
+
+    assert res["gate_g6_check"]["gate_status"] == "PASSED"
+    assert res["sample"]["n_observations"] > 3000
+    assert res["sample"]["cov_type"] == "cluster"
+    assert res["sample"]["cluster_variable"] == "household_id"
+    assert res["hypothesis_h1_result"]["verdict"] in ["SUPPORTED", "NOT_SUPPORTED"]
+
+
+def test_holdout_results_artifact(artifacts_dir):
+    """Verify holdout_results.json schema and Gate G7 forward-only protocol."""
+    import json
+    path = artifacts_dir / "holdout_results.json"
+    assert path.exists()
+
+    with open(path, "r", encoding="utf-8") as f:
+        res = json.load(f)
+
+    assert res["holdout_protocol"]["forward_only"] is True
+    assert res["holdout_protocol"]["refit_performed"] is False
+    assert res["status"] == "COMPLETED"
+    assert res["sample"]["eligible_holdout_evaluated"] >= 600
+
+
+def test_forecast_percluster_artifact(artifacts_dir):
+    """Verify forecast_percluster.parquet schema and cluster_id column."""
+    path = artifacts_dir / "forecast_percluster.parquet"
+    assert path.exists()
+
+    df = pd.read_parquet(path)
+    expected_cols = [
+        "household_id",
+        "window_id",
+        "slot_index",
+        "day",
+        "half_hour",
+        "actual",
+        "predicted",
+        "cluster_id",
+        "trained_up_to_window",
+    ]
+    for col in expected_cols:
+        assert col in df.columns
+
+    assert (df["trained_up_to_window"] < df["window_id"]).all()
+    assert (df["predicted"] >= 0.0).all()
+
+

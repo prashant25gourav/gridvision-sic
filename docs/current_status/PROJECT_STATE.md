@@ -96,14 +96,14 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 | Clustering (K-Means, `kmeans_fit.py`) | IMPLEMENTED | K-Means (K=4, seed=42) per window; assigned roles: 4,338 analysis, 1,240 cal, 620 holdout |
 | Alignment (Hungarian, `alignment.py`) | IMPLEMENTED | Chained Hungarian alignment per household starting from cal_w1; output 6,198 rows |
 | Instability / volatility metrics (`metrics.py`) | IMPLEMENTED | Persistence, instability, volatility CV; 4,338 Analysis rows; first row trans=2 (Gate G3 PASSED) |
-| Calibration forecasting | NOT STARTED | Assigned to P2 |
-| Global forecasting | NOT STARTED | Assigned to P2 |
-| Per-cluster forecasting | NOT STARTED | Assigned to P2 (capstone only) |
-| Error standardization | NOT STARTED | Assigned to P2 |
-| Research table construction | NOT STARTED | Assigned to P2 |
-| Extreme-failure labeling | NOT STARTED | Assigned to P2 |
-| Statistical model | NOT STARTED | Assigned to P2 |
-| Holdout evaluation | NOT STARTED | Assigned to P2 |
+| Calibration forecasting (`calibration_forecast.py`) | IMPLEMENTED | Per-household GBDT forecaster on Cal-W1 predicting Cal-W2; 1,666,560 residuals, 620 summary rows (Gate G2 PASSED) |
+| Extreme-failure threshold (`extreme_failure.py`) | IMPLEMENTED | 95th pct threshold = 2.5804 (fallback 90th = 2.0605) pre-fixed strictly from calibration StdErrors (Gate G6) |
+| Global forecasting (`global_forecaster.py`) | IMPLEMENTED | Pooled GBDT retrained per calendar window; 14,824,320 half-hourly predictions, 5,515 summary rows (Gate G4 & G5 PASSED) |
+| Per-cluster forecasting (`cluster_forecaster.py`) | IMPLEMENTED | Separate GBDT trained per behavioral cluster for UI comparison; 14,824,320 rows (capstone only, isolated from research table) |
+| Error standardization (`error_standardization.py`) | IMPLEMENTED | Standardized error with MAD effective floor (factor 0.05) and threshold labeling |
+| Research table construction (`build_research_table.py`) | IMPLEMENTED | Joined instability at w, global forecast AE at w+1, calibration summary, and fixed threshold; 4,294 rows (3,682 Analysis, 612 Holdout) |
+| Statistical model (`statistical_model.py`) | IMPLEMENTED | Cluster-robust logistic regression on 3,682 Analysis rows; Volatility OR=7.3997 (p<0.001), Instability OR=1.1519 (p=0.5364); H0 supported (Gate G6 PASSED) |
+| Holdout evaluation (`holdout_eval.py`) | IMPLEMENTED | Forward-only scoring of fixed model on 612 eligible holdouts (0 fit calls); ROC-AUC=0.7010, PR-AUC=0.5375 (Gate G7 PASSED) |
 | Anomaly detection (Isolation Forest) | NOT STARTED | Assigned to P3 |
 | SHAP explainability | NOT STARTED | Assigned to P3 |
 
@@ -113,14 +113,14 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 |---|---|---|
 | `data/raw/` | LINKED | Windows junction to 10.27 GB raw dataset (`hhblock_dataset/block_*.csv`) |
 | `data/interim/` | IMPLEMENTED | 112 converted flat-rate Parquet blocks in `data/interim/blocks/` |
-| `data/artifacts/` | IMPLEMENTED | `run_initial` contains 5 core artifacts + `data_quality_report.json`; `latest` junction active |
+| `data/artifacts/` | IMPLEMENTED | `run_initial` contains all 20 artifacts + `run_manifest.json`; `latest` junction active |
 | `data/processed/` | EMPTY | Reserved for final unified tables |
 
 #### Tests (`tests/`)
 
 | Component | Status | Notes |
 |---|---|---|
-| `tests/` directory | IMPLEMENTED | 21/21 passing tests covering metadata, calendar, quality, sampling, calibration, contracts |
+| `tests/` directory | IMPLEMENTED | 44/44 passing tests covering all P1 & P2 modules, Gate G1-G7 checks, isolation, and schema contracts |
 
 #### Configuration
 

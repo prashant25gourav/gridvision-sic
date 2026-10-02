@@ -1,0 +1,95 @@
+{
+  "run_id": "run_initial",
+  "timestamp": "2026-10-02T14:24:12.920157+00:00",
+  "git_commit": "b464601587d95c172cb61341fe70f75c12a8b8bf",
+  "config_sha256": "8d52d2cd6dbfa559774b2ed79b8a00998f283e421628ca30b70a25a0032dbfb0",
+  "parameters": {
+    "pilot": false,
+    "sample_size": 620,
+    "random_seed": 42,
+    "optimal_k": 4,
+    "include_p2": true
+  },
+  "artifacts": {
+    "behavioral_features.parquet": {
+      "size_bytes": 375106,
+      "rows": 6198
+    },
+    "calibration_assignment.parquet": {
+      "size_bytes": 9411,
+      "rows": 620
+    },
+    "calibration_assignment_pilot.parquet": {
+      "size_bytes": 4785,
+      "rows": 50
+    },
+    "calibration_residuals.parquet": {
+      "size_bytes": 8878880,
+      "rows": 1666560
+    },
+    "calibration_summary.parquet": {
+      "size_bytes": 24346,
+      "rows": 620
+    },
+    "cluster_assignments.parquet": {
+      "size_bytes": 70291,
+      "rows": 6198
+    },
+    "data_quality_report.json": {
+      "size_bytes": 1158,
+      "rows": null
+    },
+    "extreme_failure_threshold.json": {
+      "size_bytes": 448,
+      "rows": null
+    },
+    "forecast_global.parquet": {
+      "size_bytes": 36404831,
+      "rows": 14824320
+    },
+    "forecast_global_summary.parquet": {
+      "size_bytes": 57467,
+      "rows": 5515
+    },
+    "forecast_percluster.parquet": {
+      "size_bytes": 36151493,
+      "rows": 14824320
+    },
+    "forecast_percluster_summary.parquet": {
+      "size_bytes": 60813,
+      "rows": 5515
+    },
+    "holdout_results.json": {
+      "size_bytes": 859,
+      "rows": null
+    },
+    "households_pilot.parquet": {
+      "size_bytes": 3426,
+      "rows": 50
+    },
+    "households_sampled.parquet": {
+      "size_bytes": 7520,
+      "rows": 620
+    },
+    "instability_volatility.parquet": {
+      "size_bytes": 60615,
+      "rows": 4338
+    },
+    "k_selection_results.json": {
+      "size_bytes": 609,
+      "rows": null
+    },
+    "research_table.parquet": {
+      "size_bytes": 136658,
+      "rows": 4294
+    },
+    "statistical_results.json": {
+      "size_bytes": 3231,
+      "rows": null
+    },
+    "window_eligibility.parquet": {
+      "size_bytes": 108969,
+      "rows": 62132
+    }
+  }
+}
