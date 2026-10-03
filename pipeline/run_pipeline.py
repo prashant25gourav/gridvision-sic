@@ -48,6 +48,10 @@ from pipeline.forecasting.cluster_forecaster import run_cluster_forecaster
 from pipeline.research.build_research_table import build_research_table
 from pipeline.research.statistical_model import fit_statistical_models
 from pipeline.research.holdout_eval import evaluate_holdout
+from pipeline.anomaly.isolation_forest import detect_behavioral_anomalies
+from pipeline.anomaly.synthetic_injection import evaluate_synthetic_benchmark
+from pipeline.explainability.shap_forecaster import generate_shap_explanations
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("GridVisionPipeline")
@@ -109,8 +113,9 @@ def run_pipeline(
     sample_size: Optional[int] = None,
     seed: int = 42,
     include_p2: bool = False,
+    include_p3: bool = False,
 ) -> Path:
-    """Execute the full P1 and optional P2 pipeline sequence deterministically.
+    """Execute the full P1, optional P2, and optional P3 pipeline sequence deterministically.
     
     Args:
         pilot: If True, runs on 50-household pilot subset.
@@ -119,6 +124,8 @@ def run_pipeline(
         seed: Random seed for sampling and clustering (default 42).
         include_p2: If True, runs P2 calibration, global & per-cluster forecasting,
                     research table assembly, statistical modeling, and holdout evaluation.
+        include_p3: If True, runs P3 unsupervised anomaly detection, synthetic benchmark,
+                    and TreeSHAP feature attributions on the global forecaster.
         
     Returns:
         Path to the generated run directory.
@@ -311,6 +318,39 @@ def run_pipeline(
             output_dir=run_dir,
         )
 
+    # Optional P3 Stages
+    if include_p3:
+        logger.info("--- Beginning P3 Anomaly Detection & SHAP Explainability Pipeline ---")
+
+        # 19. Unsupervised Anomaly Detection
+        logger.info("Stage 18: Running Isolation Forest anomaly detection with statistical explanations...")
+        detect_behavioral_anomalies(
+            behavioral_features_df=features_df,
+            output_dir=run_dir,
+            random_state=seed,
+        )
+
+        # 20. Synthetic Anomaly Benchmark
+        logger.info("Stage 19: Running synthetic anomaly injection benchmark...")
+        evaluate_synthetic_benchmark(
+            behavioral_features_df=features_df,
+            output_dir=run_dir,
+            random_state=seed,
+        )
+
+        # 21. TreeSHAP Explainability (scoped to global forecaster)
+        global_fc_path = run_dir / "forecast_global.parquet"
+        if global_fc_path.exists():
+            logger.info("Stage 20: Generating TreeSHAP attributions on global forecaster...")
+            generate_shap_explanations(
+                forecast_global_df=pd.read_parquet(global_fc_path),
+                behavioral_features_df=features_df,
+                output_dir=run_dir,
+                random_state=seed,
+            )
+        else:
+            logger.warning("forecast_global.parquet not found in run directory; skipping SHAP explanations.")
+
     # Run Manifest
     manifest = {
         "run_id": run_dir.name,
@@ -323,6 +363,7 @@ def run_pipeline(
             "random_seed": seed,
             "optimal_k": optimal_k,
             "include_p2": include_p2,
+            "include_p3": include_p3,
         },
         "artifacts": {
             f.name: {
@@ -352,6 +393,7 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--full-ingestion", action="store_true", help="Force re-converting all raw CSVs")
     parser.add_argument("--include-p2", action="store_true", help="Execute P2 forecasting, research table, and statistics")
+    parser.add_argument("--include-p3", action="store_true", help="Execute P3 anomaly detection and SHAP explainability")
     args = parser.parse_args()
 
     out_run = run_pipeline(
@@ -360,5 +402,7 @@ if __name__ == "__main__":
         sample_size=args.sample_size,
         seed=args.seed,
         include_p2=args.include_p2,
+        include_p3=args.include_p3,
     )
     print(f"\nPipeline finished. Outputs saved in: {out_run}")
+
