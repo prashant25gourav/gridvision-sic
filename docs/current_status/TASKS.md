@@ -194,16 +194,17 @@
 
 ### Days 9–12: Wire Real Data
 
-- [ ] Implement backend API endpoints matching Blueprint v2 §F:
-  - [ ] `GET /overview`
-  - [ ] `GET /household/{household_id}/forecast`
-  - [ ] `GET /household/{household_id}/segment`
-  - [ ] `GET /household/{household_id}/instability`
-  - [ ] `GET /household/{household_id}/anomaly`
-  - [ ] `POST /chat`
-- [ ] Implement `backend/app/services/artifact_loader.py` — reads from `data/artifacts/latest`
-- [ ] Replace frontend mock data with real API calls
-- [ ] Implement proper error/loading/empty states
+- [x] Implement backend API endpoints matching Blueprint v2 §F:
+  - [x] `GET /overview`
+  - [x] `GET /household/{household_id}/forecast`
+  - [x] `GET /household/{household_id}/segment`
+  - [x] `GET /household/{household_id}/instability`
+  - [x] `GET /household/{household_id}/anomaly`
+  - [x] `GET /households` (portfolio list for explorer)
+  - [x] `POST /chat`
+- [x] Implement `backend/app/services/artifact_loader.py` — cached in-memory and PyArrow filtered querying from `data/artifacts/latest`
+- [x] Replace frontend mock data with real API calls (`frontend/src/services/api.ts`)
+- [x] Implement proper error/loading/empty states across all 4 React views
 
 ### Day 12: Deployment Skeleton
 
@@ -212,12 +213,12 @@
 
 ### Day 18: RAG + Integration
 
-- [ ] Create RAG knowledge base (5–10 markdown documents)
-- [ ] Implement `backend/app/services/rag/index.py` — FAISS index
-- [ ] Implement `backend/app/services/rag/retriever.py` — top-k cosine similarity retrieval
-- [ ] Implement `backend/app/services/rag/tools.py` — tool-calling (get_forecast, get_segment, get_instability, get_anomaly)
-- [ ] Implement grounding enforcement (numeric traceability check)
-- [ ] Wire all screens to real pipeline outputs
+- [x] Create RAG knowledge base (5 domain markdown documents in `backend/app/services/rag/knowledge_base/`)
+- [x] Implement `backend/app/services/rag/retriever.py` — top-k cosine similarity retrieval over passage chunks
+- [x] Implement `backend/app/services/rag/tools.py` — tool-calling (`get_forecast`, `get_segment`, `get_instability`, `get_anomaly`)
+- [x] Implement grounding enforcement (`backend/app/services/rag/grounding.py` — strict numeric traceability check)
+- [x] Wire all screens to real pipeline outputs (Overview, Household Explorer, Trajectory, and Copilot)
+
 
 ---
 

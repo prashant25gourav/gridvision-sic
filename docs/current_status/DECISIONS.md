@@ -116,9 +116,34 @@ Impact: Strict evaluation validity on the holdout window; zero invalid non-adjac
 Approved by: Governing pre-Day 1 reconciliation pass
 Source: Derived rule consistent with v4 temporal adjacency principles
 
+### DEC-008 — UI Reliability-Indicator Cosmetic Bucketing Thresholds
+
+Date: 2026-10-03 (P4 Implementation)
+Status: DECIDED
+Decision: Implement display-only cosmetic reliability indicator bucketing based on household longitudinal instability score:
+- **Stable**: Instability ≤ 0.25 (high behavioral consistency)
+- **Moderate**: 0.25 < Instability ≤ 0.60 (moderate cluster mobility)
+- **Elevated Risk**: Instability > 0.60 (frequent cluster switching)
+Reason: Settles OPEN-1 from Blueprint v2 Revision Log and Team Execution Contract §Remaining OPEN Items. This is a display-layer classification for the operational dashboard and is explicitly confirmed to never be cited as an empirical finding in the research write-up.
+Affected files/modules: `backend/app/services/artifact_loader.py`, `backend/app/api/v1/endpoints/household.py`, `frontend/src/views/`
+Impact: Consistent three-tier color badges and status indicators across all dashboard screens and Copilot responses.
+Approved by: Person 4 / Development Team
+Source: Blueprint v2 Revision Log §Remaining OPEN Items, §F.4
+
+### DEC-009 — Local RAG Retriever Using TF-IDF and Cosine Similarity
+
+Date: 2026-10-03 (P4 Implementation)
+Status: DECIDED
+Decision: The RAG Copilot retriever indexes knowledge base markdown passages using local TF-IDF vectorization (`scikit-learn`) and cosine similarity, paired with deterministic Python tool-calling and strict numeric traceability checks.
+Reason: Guarantees 100% offline, reproducible execution without mandating external cloud API keys, network access, or heavy GPU sentence-transformer dependencies, while strictly adhering to Blueprint v2 §H and Handoff §11.
+Affected files/modules: `backend/app/services/rag/retriever.py`, `backend/app/services/rag/grounding.py`, `backend/app/services/rag/agent.py`
+Impact: Sub-millisecond response latency, robust numeric verification, and zero cloud API dependency.
+Approved by: Person 4 / Development Team
+Source: Blueprint v2 §H, Handoff §11
+
 ---
 
 ## Pending / Open Items
 
-1. **UI reliability-indicator bucketing thresholds** (display-only, cosmetic — needs a one-line team confirmation it is never cited in the write-up).
-2. All 4 master files are now completely reconciled and aligned with v4 authoritative methodology ahead of Day 1 execution.
+1. **Literature novelty verification search** (non-blocking for implementation, required before submitting final capstone research paper per Master Plan v4 §23 / Handoff §22).
+

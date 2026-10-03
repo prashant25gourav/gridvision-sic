@@ -35,5 +35,7 @@ def health():
     return {"status": "ok"}
 
 
-# Include modular v1 API router
+# Include modular v1 API router under /api/v1 and directly at root for Blueprint v2 compatibility
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router)
+
