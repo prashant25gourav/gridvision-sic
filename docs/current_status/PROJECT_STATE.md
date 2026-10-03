@@ -104,8 +104,9 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 | Research table construction (`build_research_table.py`) | IMPLEMENTED | Joined instability at w, global forecast AE at w+1, calibration summary, and fixed threshold; 4,294 rows (3,682 Analysis, 612 Holdout) |
 | Statistical model (`statistical_model.py`) | IMPLEMENTED | Cluster-robust logistic regression on 3,682 Analysis rows; Volatility OR=7.3997 (p<0.001), Instability OR=1.1519 (p=0.5364); H0 supported (Gate G6 PASSED) |
 | Holdout evaluation (`holdout_eval.py`) | IMPLEMENTED | Forward-only scoring of fixed model on 612 eligible holdouts (0 fit calls); ROC-AUC=0.7010, PR-AUC=0.5375 (Gate G7 PASSED) |
-| Anomaly detection (Isolation Forest) | NOT STARTED | Assigned to P3 |
-| SHAP explainability | NOT STARTED | Assigned to P3 |
+| Anomaly detection (`isolation_forest.py`, `explain.py`) | IMPLEMENTED | Unsupervised Isolation Forest (contamination=0.05, seed=42) on 8 behavioral features with plain-language z-score feature-based explanations (NOT SHAP); produces `anomaly_flags.parquet` (6,198 rows, 310 anomalies) |
+| Synthetic anomaly benchmark (`synthetic_injection.py`) | IMPLEMENTED | Injects 4 realistic perturbation patterns; produces `anomaly_benchmark.json` (Precision=0.5383, Recall=0.9850, F1=0.6961, ROC-AUC=0.9330) |
+| SHAP explainability (`shap_forecaster.py`) | IMPLEMENTED | TreeSHAP feature attributions strictly scoped to global forecaster; produces `shap_explanations.parquet` (352,960 explained forecast points across 620 households) |
 
 #### Data (`data/`)
 
@@ -113,14 +114,14 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 |---|---|---|
 | `data/raw/` | LINKED | Windows junction to 10.27 GB raw dataset (`hhblock_dataset/block_*.csv`) |
 | `data/interim/` | IMPLEMENTED | 112 converted flat-rate Parquet blocks in `data/interim/blocks/` |
-| `data/artifacts/` | IMPLEMENTED | `run_initial` contains all 20 artifacts + `run_manifest.json`; `latest` junction active |
+| `data/artifacts/` | IMPLEMENTED | `run_initial` contains all 23 artifacts + `run_manifest.json`; `latest` junction active |
 | `data/processed/` | EMPTY | Reserved for final unified tables |
 
 #### Tests (`tests/`)
 
 | Component | Status | Notes |
 |---|---|---|
-| `tests/` directory | IMPLEMENTED | 44/44 passing tests covering all P1 & P2 modules, Gate G1-G7 checks, isolation, and schema contracts |
+| `tests/` directory | IMPLEMENTED | 49/49 passing tests covering all P1, P2, and P3 modules, Gates G1-G7 checks, isolation, TreeSHAP, and schema contracts |
 
 #### Configuration
 
@@ -138,7 +139,7 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 |---|---|---|
 | `README.md` | IMPLEMENTED | Documents the current scaffold; references "masterplan" but does not point to `docs/gridvision_master_files/` or `docs/current_status/` |
 | `docs/gridvision_master_files/` | LOCKED | All 4 master files present |
-| `docs/current_status/` | IN PROGRESS | Being populated by this initialization task |
+| `docs/current_status/` | LIVE | Updated reflecting P1, P2, and P3 complete status |
 
 ---
 
@@ -147,18 +148,18 @@ The repository contains a UI shell and backend skeleton. No ML pipeline, no rese
 | Role | Scope | Current State |
 |---|---|---|
 | **P1** — Data / Research Pipeline Lead | Ingestion, QC, sampling, common-calendar windows, per-household calibration assignment, behavioral features, K selection / K-Means, cluster alignment / Hungarian matching, instability, volatility | COMPLETE — Milestones M0, M1, M2 & Gates G1, G3 PASSED (Days 1–10 deliverables implemented & verified) |
-| **P2** — Forecasting / Statistics | Calibration forecaster, global forecaster, per-cluster forecaster (capstone-only), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation | READY — Unblocked by P1 artifacts (`calibration_assignment`, `behavioral_features`, `cluster_assignments`, `instability_volatility`) |
-| **P3** — Anomaly / Explainability | Anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability | READY — Unblocked by P1 artifacts |
-| **P4** — Backend / Frontend / RAG | FastAPI backend, React frontend, RAG / Copilot (FAISS + chat), integrating all artifacts into the app | SCAFFOLDING — UI shell and backend skeleton exist; artifacts ready to connect |
+| **P2** — Forecasting / Statistics | Calibration forecaster, global forecaster, per-cluster forecaster (capstone-only), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation | COMPLETE — Milestones M3, M4, M5, M6, M7 & Gates G2, G4, G5, G6, G7 PASSED (Days 5–14, 19 deliverables implemented & verified) |
+| **P3** — Anomaly / Explainability | Anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability | COMPLETE — Milestone M9 (Days 16–17 deliverables implemented & verified: `anomaly_flags.parquet`, `anomaly_benchmark.json`, `shap_explanations.parquet`) |
+| **P4** — Backend / Frontend / RAG | FastAPI backend, React frontend, RAG / Copilot (FAISS + chat), integrating all artifacts into the app | READY — UI shell and backend skeleton exist; 23 real artifacts in `data/artifacts/latest` ready to wire |
 
 ---
 
 ## D. CURRENT PHASE
 
-**Phase: Days 5–10 Complete (P1 Deliverables Ready for Downstream Handoff)**
+**Phase: Days 16–17 Complete (P1, P2, and P3 Pipeline Complete — Ready for P4 Integration)**
 
-P1 core data and research pipeline modules and artifacts are fully built, tested, and validated:
-- Raw dataset linked and ingested to Parquet (112 blocks, 2.77M rows, 0 negatives).
+All data, research, forecasting, statistical, anomaly detection, and SHAP explainability modules are fully built, tested, and validated:
+- Raw dataset ingested to Parquet (112 blocks, 2.77M rows, 0 negatives).
 - Window eligibility evaluated (4,252 qualifying households, exact match with v4 §3).
 - Stratified sample drawn (620 households, seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U).
 - Per-household calibration assigned (own first-2 usable windows; all 620 have n_analysis >= 4).
@@ -166,9 +167,16 @@ P1 core data and research pipeline modules and artifacts are fully built, tested
 - Silhouette sweep completed on calibration features fixing optimal K=4 (silhouette=0.4021).
 - K-Means clustered per window and Hungarian aligned per household sequence.
 - Instability and volatility metrics computed for all 4,338 Analysis windows (transition 1->2 recorded).
-- Full test suite passes: 29/29 tests.
+- Calibration forecaster, extreme-failure threshold (2.5804), global & cluster forecasters trained.
+- Primary research experiment completed: cluster-robust logistic regression supports H0 (instability adds no significant predictive power over volatility, p=0.5364).
+- Forward-only holdout evaluation completed (ROC-AUC = 0.7010).
+- Isolation Forest anomaly detection (5.00% contamination, 310 anomalies flagged) with feature-based z-score explanations.
+- Synthetic anomaly injection benchmark: 98.50% recall, 0.9330 ROC-AUC.
+- TreeSHAP feature attributions on global forecaster across 352,960 forecast instances.
+- Full test suite passes: 49/49 tests.
 
 ---
+
 
 ## E. COMPLETED
 
