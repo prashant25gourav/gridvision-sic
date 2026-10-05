@@ -21,10 +21,12 @@ import shap
 from sklearn.ensemble import HistGradientBoostingRegressor
 
 from pipeline.config import get_project_root, get_artifacts_dir
-from pipeline.forecasting.global_forecaster import FEATURE_COLS
 from pipeline.windows.calendar import get_calendar_windows
 
 logger = logging.getLogger(__name__)
+
+# Scoped explainability features per Blueprint v2 §C.15 / Master Plan v4 §10
+SHAP_FEATURE_COLS = ["half_hour", "day_of_week", "is_weekend", "mean_load", "peak_load", "std_load"]
 
 
 def compute_shap_explanations_for_transition(
@@ -87,7 +89,7 @@ def compute_shap_explanations_for_transition(
             min(len(target_preds), 2500), random_state=random_state
         ).reset_index(drop=True)
 
-    X_explain = sample_df[FEATURE_COLS].values
+    X_explain = sample_df[SHAP_FEATURE_COLS].values
     y_target = sample_df["actual"].values
 
     # Train a surrogate model matching global forecaster specifications
@@ -129,14 +131,14 @@ def compute_shap_explanations_for_transition(
 
     shap_df["base_value"] = round(base_val, 5)
 
-    shap_col_names = [f"shap_{col}" for col in FEATURE_COLS]
+    shap_col_names = [f"shap_{col}" for col in SHAP_FEATURE_COLS]
     for idx, col_name in enumerate(shap_col_names):
         shap_df[col_name] = np.round(shap_vals[:, idx], 5)
 
     # Identify the top positive or absolute contributing feature for each prediction
     abs_shap = np.abs(shap_vals)
     top_indices = np.argmax(abs_shap, axis=1)
-    shap_df["top_feature"] = [FEATURE_COLS[i] for i in top_indices]
+    shap_df["top_feature"] = [SHAP_FEATURE_COLS[i] for i in top_indices]
 
     return shap_df
 
@@ -212,7 +214,7 @@ def generate_shap_explanations(
         f"SHAP Explanations Complete:\n"
         f"  Total Explained Forecast Points: {len(complete_shap_df):,}\n"
         f"  Unique Households: {complete_shap_df['household_id'].nunique():,}\n"
-        f"  Features Explained: {FEATURE_COLS}\n"
+        f"  Features Explained: {SHAP_FEATURE_COLS}\n"
         f"  Top Feature Breakdown: {complete_shap_df['top_feature'].value_counts().to_dict()}\n"
         f"  Saved to: {out_file}"
     )

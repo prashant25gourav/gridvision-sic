@@ -141,9 +141,71 @@ Impact: Sub-millisecond response latency, robust numeric verification, and zero 
 Approved by: Person 4 / Development Team
 Source: Blueprint v2 §H, Handoff §11
 
+### DEC-010 — Holdout Evaluation Governance Guard & Archive Protocol (Issue 3)
+
+Date: 2026-10-04
+Status: DECIDED
+Decision: Prior to any pipeline re-execution following the lag feature enhancement, preserve the original single forward-pass holdout evaluation by copying `data/artifacts/run_initial/` to `data/artifacts/run_initial_PRE_LAG_FIX_ARCHIVED/`. Implement a `--skip-holdout` flag in `pipeline/run_pipeline.py`. Rerun only through the research-table and statistical-model stages on Analysis-period data. Do not execute a second live holdout evaluation until explicit team sign-off confirms the methodology is final.
+Reason: Master Plan v4 §4.5 and Team Execution Contract §8 treat touching the holdout window a second time as a BLOCKED incident requiring formal escalation rather than a routine rerun. Archiving preserves the original auditable evaluation while allowing necessary model improvements on Analysis data.
+Affected files/modules: `pipeline/run_pipeline.py`, `data/artifacts/run_initial_PRE_LAG_FIX_ARCHIVED/`
+Impact: Holdout sanctity is preserved; original Gate G7 results remain permanently auditable.
+Approved by: Development Team / Lead Auditor
+Source: Master Plan v4 §4.5, Team Execution Contract §8/§11
+
+### DEC-011 — Physical Absence of 5 Metadata Households in Raw Block Telemetry (Issue 5)
+
+Date: 2026-10-04
+Status: DECIDED
+Decision: Document that exactly 5 flat-rate households present in `informations_households.csv` (`MAC001150`, `MAC005556`, `MAC005559`, `MAC005560`, `MAC005563`) are 100% physically absent from all 112 raw CSV block files (`data/raw/hhblock_dataset/block_*.csv`). The 4,443 assertion in `pipeline/ingestion/metadata.py` remains locked as the authoritative metadata-level count; the 4,438 count in `pipeline/windows/eligibility.py` reflects physical telemetry availability.
+Reason: Full sweep of all raw block CSVs confirmed the gap is a physical omission in the source UK Power Networks dataset, not a parsing or join bug. With only 5 missing IDs (0.11% of the population), there is zero downstream impact on qualifying pool size (4,252) or stratified sampling.
+Affected files/modules: `pipeline/ingestion/metadata.py`, `pipeline/windows/eligibility.py`, `docs/current_status/DECISIONS.md`
+Impact: Clarifies discrepancy between metadata population (4,443) and telemetry population (4,438) without loosening metadata integrity checks.
+Approved by: Development Team
+Source: UK Power Networks Low Carbon London dataset structure audit
+
+### DEC-012 — Deliberate Isolation Forest Contamination Parameter (Issue 6)
+
+Date: 2026-10-04
+Status: DECIDED
+Decision: Maintain `contamination=0.05` in `pipeline/anomaly/isolation_forest.py` as an explicit, deliberate design choice.
+Reason: Master Plan v4 §10 does not mandate an algorithmic contamination hyperparameter. In utility smart grid operations, a 5% tail budget represents the industry-standard baseline for unsupervised operational screening (flagging the top ~5% behavioral outliers for review) without requiring supervised fault ground-truth labels.
+Affected files/modules: `pipeline/anomaly/isolation_forest.py`
+Impact: Operational consistency across 6,198 usable household windows with 310 flagged events (~5.00%).
+Approved by: Development Team / Person 3
+Source: Master Plan v4 §10, Blueprint v2 §C.7
+
+### DEC-013 — ACORN-U Stratification Floor Increased to 15 (Issue 4)
+
+Date: 2026-10-04
+Status: DECIDED
+Decision: Increase `sampling.acorn_u_min_floor` in `config/pipeline.yaml` from 5 to 15.
+Reason: In the qualifying pool of 4,252 households, proportional allocation for ACORN-U (36 / 4,252 × 620 ≈ 5.25 → rounds to 5) already yielded 5, rendering the previous floor of 5 a non-binding no-op. Raising the floor to 15 guarantees adequate demographic representation of unclassified households in the 620-household sample (Affluent: 233, Adversity: 207, Comfortable: 165, ACORN-U: 15; total = 620), fulfilling the intent of Master Plan v4 §3.6.
+Affected files/modules: `config/pipeline.yaml`, `pipeline/sampling/stratified_sample.py`, `tests/test_sampling_and_calibration.py`, `tests/test_artifacts_contract.py`
+Impact: Statistically protected ACORN-U representation with seed=42 deterministic reproducibility.
+Approved by: Development Team
+Source: Master Plan v4 §3.6
+
+### DEC-014 — Restoration of Locked Lag Features in Global Forecaster (Issue 1)
+
+Date: 2026-10-04
+Status: DECIDED
+Decision: Restore the locked lag feature specification in `pipeline/forecasting/global_forecaster.py` per Master Plan v4 §7 ("Lag + calendar features, pooled across households"):
+- `lag_halfhour_mean`: Household's mean load for that half-hour slot across window $w$.
+- `lag_dow_halfhour_mean`: Household's mean load for that (day_of_week, half-hour) slot across window $w$.
+- `lag_last_week`: Household's actual load for that (day_of_week, half-hour) slot in the final week (days 49-55) of window $w$.
+- `lag_recent_7d_mean`: Household's mean consumption over the final 7 days of window $w$.
+- `lag_recent_48h_mean`: Household's mean consumption over the final 48 hours of window $w$.
+All lag features are computed strictly from readings at or before window $w$ (zero future leakage into window $w+1$).
+Reason: Previous implementation used only static scalar window summaries (`mean_load`, `peak_load`, `std_load`), leaving the model structurally weaker than per-household calibration and causing an inflated extreme-failure rate of 24.25% vs v4's expected ~5%. Adding lag features restores the locked input specification and allows the global forecaster to beat the seasonal-naive baseline.
+Affected files/modules: `pipeline/forecasting/global_forecaster.py`, `tests/test_global_forecaster.py`
+Impact: Drastic error reduction, beats seasonal-naive baseline, and restores nominal extreme-failure distribution.
+Approved by: Development Team / Person 2
+Source: Master Plan v4 §7, Blueprint v2 §D.5
+
 ---
 
 ## Pending / Open Items
 
 1. **Literature novelty verification search** (non-blocking for implementation, required before submitting final capstone research paper per Master Plan v4 §23 / Handoff §22).
+2. **Team sign-off on Day 19 Holdout re-execution** following lag feature integration (DEC-010).
 

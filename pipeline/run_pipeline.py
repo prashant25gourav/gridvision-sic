@@ -114,6 +114,7 @@ def run_pipeline(
     seed: int = 42,
     include_p2: bool = False,
     include_p3: bool = False,
+    skip_holdout: bool = False,
 ) -> Path:
     """Execute the full P1, optional P2, and optional P3 pipeline sequence deterministically.
     
@@ -278,6 +279,24 @@ def run_pipeline(
             random_state=seed,
         )
 
+        # 14b. Seasonal-Naive Baseline Comparison (v4 §8.7 / Definition of Done)
+        logger.info("Stage 13b: Evaluating global forecaster vs seasonal-naive baseline...")
+        from pipeline.forecasting.baseline_naive import run_full_baseline_comparison
+        from pipeline.ingestion.metadata import get_flat_rate_metadata
+        flat_meta_df = get_flat_rate_metadata()
+        hh_to_blk = dict(zip(flat_meta_df["LCLid"], flat_meta_df["file"]))
+        baseline_comp = run_full_baseline_comparison(
+            forecast_global_df=pd.read_parquet(run_dir / "forecast_global.parquet"),
+            interim_dir=interim_blocks_dir,
+            hh_to_block=hh_to_blk,
+            output_path=run_dir / "baseline_comparison.json",
+        )
+        logger.info(
+            f"Baseline comparison: Global Forecaster MAE = {baseline_comp['global_forecaster']['mean_mae']:.4f} "
+            f"vs Naive = {baseline_comp['baseline_naive']['mean_mae']:.4f} "
+            f"(Global beats naive: {baseline_comp['comparison']['global_beats_naive_mae']})"
+        )
+
         # 15. Per-Cluster Forecaster
         logger.info("Stage 14: Running per-cluster forecaster across calendar transitions...")
         run_cluster_forecaster(
@@ -310,13 +329,24 @@ def run_pipeline(
             output_dir=run_dir,
         )
 
-        # 18. Holdout Evaluation
-        logger.info("Stage 17: Forward-only holdout evaluation (Day 19 protocol)...")
-        evaluate_holdout(
-            research_table_df=res_table,
-            statistical_results=stat_res,
-            output_dir=run_dir,
-        )
+        # 18. Holdout Evaluation (Governance Guard: Issue 3 / DEC-010)
+        if not skip_holdout:
+            logger.info("Stage 17: Forward-only holdout evaluation (Day 19 protocol)...")
+            evaluate_holdout(
+                research_table_df=res_table,
+                statistical_results=stat_res,
+                output_dir=run_dir,
+            )
+        else:
+            logger.warning(
+                "Stage 17: SKIPPED holdout evaluation per governance protocol (Issue 3 / DEC-010). "
+                "Preserving archived holdout results from run_initial_PRE_LAG_FIX_ARCHIVED."
+            )
+            archived_holdout = root / "data" / "artifacts" / "run_initial_PRE_LAG_FIX_ARCHIVED" / "holdout_results.json"
+            if archived_holdout.exists():
+                import shutil
+                shutil.copy2(archived_holdout, run_dir / "holdout_results.json")
+                logger.info(f"Copied archived holdout results to {run_dir / 'holdout_results.json'}")
 
     # Optional P3 Stages
     if include_p3:
@@ -394,6 +424,7 @@ if __name__ == "__main__":
     parser.add_argument("--full-ingestion", action="store_true", help="Force re-converting all raw CSVs")
     parser.add_argument("--include-p2", action="store_true", help="Execute P2 forecasting, research table, and statistics")
     parser.add_argument("--include-p3", action="store_true", help="Execute P3 anomaly detection and SHAP explainability")
+    parser.add_argument("--skip-holdout", action="store_true", help="Skip holdout evaluation to preserve single-evaluation governance")
     args = parser.parse_args()
 
     out_run = run_pipeline(
@@ -403,6 +434,7 @@ if __name__ == "__main__":
         seed=args.seed,
         include_p2=args.include_p2,
         include_p3=args.include_p3,
+        skip_holdout=args.skip_holdout,
     )
     print(f"\nPipeline finished. Outputs saved in: {out_run}")
 

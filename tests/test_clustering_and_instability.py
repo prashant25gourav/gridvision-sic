@@ -36,7 +36,7 @@ def test_instability_first_analysis_transition_count():
         pytest.skip("instability_volatility.parquet not yet generated")
 
     df = pd.read_parquet(iv_path)
-    assert len(df) == 4338  # exact analysis windows count
+    assert len(df) == 4331  # exact analysis windows count for N=620 with ACORN-U floor 15
 
     first_rows = df.groupby("household_id").first()
     # Contract constraint: first Analysis window must observe 2 transitions (Cal1->Cal2, Cal2->Analysis1)
@@ -61,7 +61,7 @@ def test_cluster_assignments_artifact_contract():
         pytest.skip("cluster_assignments.parquet not yet generated")
 
     df = pd.read_parquet(ca_path)
-    assert len(df) == 6198
+    assert len(df) == 6191  # exact usable windows count for N=620 with ACORN-U floor 15
 
     expected_cols = [
         "household_id", "window_id", "window_role",

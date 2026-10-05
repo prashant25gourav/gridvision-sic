@@ -33,6 +33,7 @@ data/processed/
 data/models/
 data/predictions/
 data/artifacts/latest
+data/artifacts/run_*/
 
 # Testing & Coverage
 .pytest_cache/

@@ -25,7 +25,7 @@ data_quality:
 sampling:
   target_sample_size: 620 # Target within locked range 500-800
   stratify_column: "Acorn_grouped"
-  acorn_u_min_floor: 5
+  acorn_u_min_floor: 15
   seed: 42
 
 windows:

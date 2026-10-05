@@ -50,12 +50,12 @@ def test_households_sampled_artifact(artifacts_dir):
     assert (df["sample_seed"] == 42).all()
     assert (df["n_usable_windows"] >= 6).all()
 
-    # Strata breakdown
+    # Strata breakdown (with ACORN-U protected floor = 15 per Issue 4 / DEC-013)
     counts = df["acorn_grouped"].value_counts().to_dict()
-    assert counts.get("Affluent") == 237
-    assert counts.get("Adversity") == 211
-    assert counts.get("Comfortable") == 167
-    assert counts.get("ACORN-U") == 5
+    assert counts.get("Affluent") == 233
+    assert counts.get("Adversity") == 207
+    assert counts.get("Comfortable") == 165
+    assert counts.get("ACORN-U") == 15
 
 
 def test_calibration_assignment_artifact(artifacts_dir):

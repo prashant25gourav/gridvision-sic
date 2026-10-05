@@ -6,7 +6,7 @@
 > **Do not confuse this with the master files.** The master files define what GridVision IS.
 > This file defines what has ACTUALLY BEEN BUILT and what the current execution state is.
 
-**Last Updated:** 2026-10-03
+**Last Updated:** 2026-10-04 (Post-Lag Fix & Verification Pass)
 
 ---
 
@@ -278,6 +278,11 @@ No items are currently blocked. All technical and research pipeline stages are f
 |---|---|---|---|
 | DEC-008 | UI reliability-indicator cosmetic bucketing thresholds (instability <=0.25 stable, 0.25-0.60 moderate, >0.60 elevated_risk) | DECIDED | Blueprint v2 Revision Log §Remaining OPEN Items; DECISIONS.md |
 | DEC-009 | Local RAG retriever using TF-IDF and cosine similarity for fully offline, zero-external-dependency execution | DECIDED | Blueprint v2 §H; DECISIONS.md |
+| DEC-010 | Holdout evaluation governance guard & archive protocol (skip holdout on model rerun) | DECIDED | Master Plan v4 §4.5, Contract §8; DECISIONS.md |
+| DEC-011 | Physical absence of 5 metadata households in raw block CSVs documented | DECIDED | UKPN dataset structure audit; DECISIONS.md |
+| DEC-012 | Deliberate Isolation Forest contamination=0.05 parameter (industry tail budget) | DECIDED | Master Plan v4 §10, Blueprint v2 §C.7; DECISIONS.md |
+| DEC-013 | ACORN-U minimum stratification floor raised from 5 to 15 (proportional was no-op) | DECIDED | Master Plan v4 §3.6; DECISIONS.md |
+| DEC-014 | Global forecaster lag features addition strictly derived from window <= w | DECIDED | Master Plan v4 §7; DECISIONS.md |
 | OPEN-2 | Literature novelty verification search documentation (non-blocking for implementation, blocks novelty claims in paper) | OPEN | Master Plan v4 §23; Handoff §22 |
 
 ---

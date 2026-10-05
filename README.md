@@ -1,48 +1,74 @@
 # GridVision — Smart Energy Analytics & AI Copilot
 
-**Status:** UI Shell & Safe Scaffold Operational (Decoupled from Research Methodology)
+**Status:** Fully Implemented & Integrated Research Pipeline and Web Platform  
+**Live Status & Verification:** [`docs/current_status/PROJECT_STATE.md`](file:///c:/Users/mukes/Desktop/Prashant/SIC-AI/Capstone%20project/gridvision-sic/docs/current_status/PROJECT_STATE.md)
 
-GridVision is a smart grid energy analytics platform designed to analyze high-frequency smart meter telemetry, consumer behavioral trajectory clustering, peak demand dynamics, and conversational grid intelligence.
+GridVision is an end-to-end smart grid energy analytics platform and empirical research study examining whether temporal instability in household behavioral-cluster assignments predicts subsequent extreme load-forecast failures, controlling for intrinsic consumption volatility. The platform combines an offline deterministic ML research pipeline, a high-performance FastAPI service layer, an interactive glassmorphic React frontend, and a grounded AI Operations Copilot.
 
 ---
 
 ## 🏛️ System Architecture
 
+GridVision follows the two-tier architecture specified in **Implementation Blueprint v2 §A**:
+
 ```text
-Capstone Project/
-├── frontend/          # React 19 + TypeScript + Vite (Glassmorphic dark UI)
-│   ├── src/
-│   │   ├── components/# Reusable UI cards, badges, pure SVG load & trajectory charts
-│   │   ├── views/     # Overview, Household Explorer, Behavioral Trajectory, Copilot
-│   │   ├── types/     # Clean domain TypeScript interfaces
-│   │   └── mock/      # Realistic smart meter telemetry & archetype mock data
-├── backend/           # FastAPI with modular routing and CORS middleware
+gridvision-sic/
+├── pipeline/             # Offline ML & research pipeline (P1, P2, P3)
+│   ├── ingestion/        # Flat-rate conversion & household metadata joining
+│   ├── quality/          # 0-negatives, >=95% slot fill, <=3-day gap validation
+│   ├── windows/          # 14 common-calendar 56-day windows & calibration assignment
+│   ├── sampling/         # Stratified sampling (620 HH, seed=42, ACORN-U protected)
+│   ├── features/         # 8 behavioral load-curve features per usable window
+│   ├── clustering/       # K-Means clustering (K=4) & Hungarian temporal alignment
+│   ├── instability/      # Persistence, instability, and historical volatility (CV)
+│   ├── forecasting/      # Pooled global forecaster & per-household calibration
+│   ├── anomaly/          # Isolation Forest & synthetic anomaly injection benchmarks
+│   ├── explainability/   # TreeSHAP feature attributions on global forecaster
+│   ├── research/         # Research table, cluster-robust logit, holdout evaluation
+│   └── run_pipeline.py   # Deterministic pipeline orchestration entrypoint
+├── backend/              # Production FastAPI application (P4)
 │   └── app/
-│       ├── api/v1/    # Versioned API router (/system/info)
-│       ├── core/      # Application settings & CORS config
-│       └── main.py    # FastAPI entrypoint (preserves GET /health)
-├── ml/                # Safe dataset diagnostic tools (ML models pending masterplan)
-│   └── inspect_dataset.py # Read-only smart meter CSV/Parquet inspector
+│       ├── api/v1/       # REST endpoints (/overview, /household/{id}/*, /chat)
+│       └── services/     # Artifact caching, PyArrow pushdown querying, RAG engine
+├── frontend/             # React 19 + TypeScript + Vite UI (P4)
+│   └── src/
+│       ├── views/        # Overview, Household Explorer, Trajectory, Copilot
+│       └── components/   # Reusable metrics, load curves, trajectory flow charts
 ├── data/
-│   ├── raw/           # Raw smart meter telemetry files (.gitkeep)
-│   └── processed/     # Future cleaned and aggregated tensors (.gitkeep)
-└── docs/              # Masterplan, research papers, and methodological specs
+│   ├── raw/              # Low Carbon London dataset (hhblock_dataset, metadata)
+│   ├── interim/          # Partitioned Parquet blocks
+│   └── artifacts/        # Run-versioned Parquet and JSON pipeline outputs
+└── docs/                 # Authoritative master plans and live project state
 ```
 
 ---
 
-## 🧭 Frontend Navigation Views
+## 🧭 Application Modules & Views
 
-1. **Overview Dashboard**: High-level grid operations, 24-hour aggregate load tracking vs baseline, behavioral cluster breakdown, and telemetry alerts.
-2. **Household Explorer**: Granular smart meter inspection, demographic Acorn groups, tariff plans, and individual 24-hour load curves.
-3. **Behavioral Trajectory**: Longitudinal cluster migration tracking, stability index evaluation, and transition ledger.
-4. **GridVision Copilot**: Interactive generative AI assistant simulation with telemetry context chips, suggested inquiries, and operational recommendations.
+1. **Overview Dashboard**: Portfolio KPIs, active anomaly counters, cluster distribution breakdown, and grid alerts.
+2. **Household Explorer**: Granular smart meter inspection, demographic Acorn groups, tariff plans, 56-day actual vs predicted load profiles, and TreeSHAP feature attribution explanations.
+3. **Behavioral Trajectory**: Longitudinal cluster migration tracking across all 14 common-calendar windows, persistence and instability scores, and transition ledger.
+4. **GridVision Copilot**: Local RAG operations assistant with precomputed artifact querying and strict numeric grounding enforcement.
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Frontend Setup (React + Vite)
+### 1. Run the ML & Research Pipeline
+```bash
+# Execute deterministic pipeline end-to-end
+python -m pipeline.run_pipeline
+```
+Outputs are written to `data/artifacts/run_<timestamp>/` and symlinked to `data/artifacts/latest/`.
+
+### 2. Launch the Backend API (FastAPI)
+```bash
+python -m uvicorn app.main:app --app-dir backend --reload --port 8000
+```
+- Health Check: `GET http://localhost:8000/health`
+- Interactive API Docs: `GET http://localhost:8000/docs`
+
+### 3. Launch the Frontend (React + Vite)
 ```bash
 cd frontend
 npm install
@@ -52,65 +78,24 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 Build check:
 ```bash
+cd frontend
 npm run build
-npm run lint
-```
-
-### 2. Backend Setup (FastAPI)
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-- Health Check: `GET http://localhost:8000/health` &rarr; `{"status":"ok"}`
-- Interactive Docs: `GET http://localhost:8000/docs`
-- System Info: `GET http://localhost:8000/api/v1/system/info`
-
-### 3. Safe Dataset Inspection Utility
-Inspect any raw smart meter file safely without training or downloading data:
-```bash
-# General diagnostic check of data/raw/
-python ml/inspect_dataset.py
-
-# Inspect a specific file
-python ml/inspect_dataset.py --file data/raw/your_meter_data.csv
-
-# Generate a small 5-meter synthetic sample for offline smoke testing
-python ml/inspect_dataset.py --generate-sample
 ```
 
 ---
 
-## 🛡️ Methodological Safety & Decoupling Guard
+## 🧪 Testing
 
-The following research and methodological parameters are intentionally uncommitted to preserve full flexibility while the research masterplan is finalized:
-- Exact forecasting horizon and rolling-window protocol
-- Mathematical formulation of behavioral instability
-- Exact volatility metrics and extreme-error thresholds
-- Cluster alignment algorithm (Hungarian vs Centroid distance)
-- Final ML API and RAG tool contracts
+Run the automated test suite covering all gates, schemas, and isolation invariants:
+```bash
+pytest -v
+```
 
 ---
 
 ## 📚 Project Documentation
 
-### Locked Master References (do not modify)
-
-All project specifications are finalized and locked in `docs/gridvision_master_files/`:
-
-| File | Contents |
-|---|---|
-| `GridVision_FINAL_MASTER_PLAN_v4.docx` | Research question, methodology, dataset, calibration design, statistical design (highest authority) |
-| `GridVision_AI_HANDOFF_CONTEXT_LOCKED.md` | Portable project context for any teammate or AI tool |
-| `GridVision_IMPLEMENTATION_BLUEPRINT_v2.md` | Technical architecture, repository structure, data/artifact contracts, module contracts |
-| `GridVision_TEAM_EXECUTION_CONTRACT.md` | Team ownership, dependencies, handoffs, Git workflow, integration gates |
-
-### Live Project Status
-
-Current execution state is tracked in `docs/current_status/`:
-
-| File | Purpose |
-|---|---|
-| `PROJECT_STATE.md` | What the repository actually contains right now |
-| `TASKS.md` | The team's live execution task list |
-| `DECISIONS.md` | Implementation decisions made during execution |
+- **Live Status:** [`docs/current_status/PROJECT_STATE.md`](file:///c:/Users/mukes/Desktop/Prashant/SIC-AI/Capstone%20project/gridvision-sic/docs/current_status/PROJECT_STATE.md)
+- **Live Task List:** [`docs/current_status/TASKS.md`](file:///c:/Users/mukes/Desktop/Prashant/SIC-AI/Capstone%20project/gridvision-sic/docs/current_status/TASKS.md)
+- **Architecture & Contracts:** `docs/gridvision_master_files/GridVision_IMPLEMENTATION_BLUEPRINT_v2.md`
+- **Research Methodology:** `docs/gridvision_master_files/GridVision_FINAL_MASTER_PLAN_v4.docx`

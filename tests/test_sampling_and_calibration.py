@@ -22,6 +22,14 @@ def test_strata_quotas_calculation():
     assert quotas["Adversity"] == 211
     assert quotas["Comfortable"] == 167
 
+    # Issue 4: Protected ACORN-U floor at 15
+    quotas_15 = compute_strata_quotas(counts, target_sample_size=620, min_floor=15)
+    assert sum(quotas_15.values()) == 620
+    assert quotas_15["ACORN-U"] == 15
+    assert quotas_15["Affluent"] == 233
+    assert quotas_15["Adversity"] == 207
+    assert quotas_15["Comfortable"] == 165
+
 
 def test_calibration_assignment_logic():
     """Verify calibration pair, analysis windows, and holdout window assignment."""

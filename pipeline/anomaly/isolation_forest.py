@@ -45,6 +45,7 @@ def fit_anomaly_detector(
     Returns:
         Fitted IsolationForest model.
     """
+    # Deliberate choice: 0.05 reflects the nominal 5% tail anomaly budget in smart meter operational telemetry without requiring ground-truth labels.
     X = features_df[BEHAVIORAL_FEATURE_COLS].values
     model = IsolationForest(
         n_estimators=100,

@@ -30,7 +30,19 @@ from pipeline.windows.calendar import get_calendar_windows, calendar_successor
 logger = logging.getLogger(__name__)
 
 HH_COLS = [f"hh_{i}" for i in range(48)]
-FEATURE_COLS = ["half_hour", "day_of_week", "is_weekend", "mean_load", "peak_load", "std_load"]
+FEATURE_COLS = [
+    "half_hour",
+    "day_of_week",
+    "is_weekend",
+    "mean_load",
+    "peak_load",
+    "std_load",
+    "lag_halfhour_mean",
+    "lag_dow_halfhour_mean",
+    "lag_last_week",
+    "lag_recent_7d_mean",
+    "lag_recent_48h_mean",
+]
 
 
 def train_and_predict_window_transition(
@@ -116,27 +128,60 @@ def train_and_predict_window_transition(
 
         # 1. Training data from w_train
         train_raw = h_readings.reindex(w_train_dates).values.flatten()
-        train_clean = pd.Series(train_raw).interpolate().bfill().ffill().values
+        train_clean = pd.Series(train_raw).interpolate().bfill().ffill().fillna(0.0).values
+        train_mat = train_clean.reshape(len(w_train_dates), 48)
+
+        # Compute lag profiles strictly from w_train
+        dows_train = [pd.to_datetime(d).dayofweek for d in w_train_dates]
+        hh_means = train_mat.mean(axis=0)
+        dow_hh_means = {}
+        for dow in range(7):
+            mask = [i for i, d in enumerate(dows_train) if d == dow]
+            dow_hh_means[dow] = train_mat[mask].mean(axis=0) if mask else hh_means
+
+        last_week_dow_hh = {}
+        for d_idx in range(max(0, len(w_train_dates) - 7), len(w_train_dates)):
+            dow = dows_train[d_idx]
+            last_week_dow_hh[dow] = train_mat[d_idx]
+
+        rec_7d = float(train_mat[-7:].mean()) if len(w_train_dates) >= 7 else float(train_mat.mean())
+        rec_48h = float(train_mat[-2:].mean()) if len(w_train_dates) >= 2 else float(train_mat.mean())
+
         idx = 0
         for d in w_train_dates:
             dt = pd.to_datetime(d)
             dow = dt.dayofweek
             is_wknd = 1 if dow >= 5 else 0
             for hh in range(48):
-                train_data_list.append([hh, dow, is_wknd, m_l, p_l, s_l, train_clean[idx]])
+                l_hh = float(hh_means[hh])
+                l_dow_hh = float(dow_hh_means[dow][hh])
+                l_lw = float(last_week_dow_hh.get(dow, hh_means)[hh])
+                train_data_list.append([
+                    hh, dow, is_wknd, m_l, p_l, s_l,
+                    l_hh, l_dow_hh, l_lw, rec_7d, rec_48h,
+                    train_clean[idx]
+                ])
                 idx += 1
 
         # 2. Test data from w_target
+        # CRITICAL LEAKAGE GUARD: All lag features for w_target are derived
+        # strictly from w_train above (l_hh, l_dow_hh, l_lw, rec_7d, rec_48h).
+        # Target readings are used ONLY as the ground-truth actual outcome y.
         target_raw = h_readings.reindex(w_target_dates).values.flatten()
-        target_clean = pd.Series(target_raw).interpolate().bfill().ffill().values
+        target_clean = pd.Series(target_raw).interpolate().bfill().ffill().fillna(0.0).values
         idx = 0
         for d in w_target_dates:
             dt = pd.to_datetime(d)
             dow = dt.dayofweek
             is_wknd = 1 if dow >= 5 else 0
             for hh in range(48):
+                l_hh = float(hh_means[hh])
+                l_dow_hh = float(dow_hh_means[dow][hh])
+                l_lw = float(last_week_dow_hh.get(dow, hh_means)[hh])
                 test_data_list.append([
-                    h, w_target, idx, d, hh, dow, is_wknd, m_l, p_l, s_l, target_clean[idx]
+                    h, w_target, idx, d, hh, dow, is_wknd,
+                    m_l, p_l, s_l, l_hh, l_dow_hh, l_lw, rec_7d, rec_48h,
+                    target_clean[idx]
                 ])
                 idx += 1
 
@@ -165,15 +210,17 @@ def train_and_predict_window_transition(
         return pd.DataFrame()
 
     train_arr = np.array(train_data_list, dtype=float)
-    X_train = train_arr[:, :6]
-    y_train = train_arr[:, 6]
+    X_train = train_arr[:, :len(FEATURE_COLS)]
+    y_train = train_arr[:, len(FEATURE_COLS)]
 
     test_df = pd.DataFrame(
         test_data_list,
         columns=[
             "household_id", "window_id", "slot_index", "day",
             "half_hour", "day_of_week", "is_weekend",
-            "mean_load", "peak_load", "std_load", "actual"
+            "mean_load", "peak_load", "std_load",
+            "lag_halfhour_mean", "lag_dow_halfhour_mean", "lag_last_week",
+            "lag_recent_7d_mean", "lag_recent_48h_mean", "actual"
         ]
     )
 
