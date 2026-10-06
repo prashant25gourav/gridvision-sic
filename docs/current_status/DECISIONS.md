@@ -202,10 +202,55 @@ Impact: Drastic error reduction, beats seasonal-naive baseline, and restores nom
 Approved by: Development Team / Person 2
 Source: Master Plan v4 §7, Blueprint v2 §D.5
 
+### DEC-015 — Holdout Re-Execution Approval and Retirement of Pre-Fix Holdout
+
+Date: 2026-10-06
+Status: DECIDED
+Decision: The archived pre-fix holdout (`data/artifacts/run_initial_PRE_LAG_FIX_ARCHIVED/holdout_results.json`) is retired and will NOT be reported as the project's holdout result. Re-run `holdout_eval.py` exactly once on the current corrected model in `data/artifacts/latest/` (git commit `84d609303c4f797562de8cabed3447cb5c2e73e8`), and permanently lock holdout re-execution thereafter via a strict code guard requiring explicit `--force-holdout-rerun`.
+Reason: It evaluated a model later confirmed to be missing a locked input (lag features, v4 §7) via evidence entirely independent of holdout (naive-baseline comparison, per-household AE audit, leakage test) — the fix was not informed by holdout feedback, so re-running once is not a violation of "touched once, forward-only, never for tuning," it's completing that protocol correctly on the intended model. This is a one-time, explicitly justified exception, not a precedent. The archived pre-fix holdout is retired and must not be cited in the final report.
+Evaluated Git Commit: `84d609303c4f797562de8cabed3447cb5c2e73e8`
+New Holdout Performance Metrics:
+- Eligible Holdout Households: 612 (out of 620 sampled; 8 gap ineligibles)
+- Holdout Extreme Failures: 157 (event rate: 25.65%)
+- Primary Model ROC-AUC: 0.7298 (improved from pre-fix 0.7010)
+- Primary Model PR-AUC: 0.5378 (vs pre-fix 0.5375)
+- Restricted Model ROC-AUC: 0.7296
+- Delta ROC-AUC: +0.0002
+- Brier Score: 0.16813 (vs pre-fix 0.18760)
+- Log Loss: 0.51322 (vs pre-fix 0.55980)
+- Applied Fixed Coefficients: Intercept = -3.67129, Volatility CV = 2.00767, Instability = -0.08518 (refit_performed: False, 0 fit calls)
+Affected files/modules: `pipeline/research/holdout_eval.py`, `pipeline/run_pipeline.py`, `data/artifacts/latest/holdout_results.json`
+Approved by: Development Team / Research Governance
+Source: Master Plan v4 §4.5, Team Execution Contract §8
+
+### DEC-016 — Formal Closure of Extreme-Failure-Rate Investigation (Candidate c)
+
+Date: 2026-10-06
+Status: DECIDED
+Decision: Formally close the extreme-failure-rate investigation. Adopt Candidate (c): research methodology remains unchanged (locked 95th percentile calibration threshold = 2.53438, cluster-robust logistic regression on 3,676 Analysis observations, event rate = 18.96%), and the seasonal concentration of forecast errors is documented as a methodological limitation of absolute standardized error in the presence of seasonal load expansion.
+Reason: The investigation confirmed that winter space-heating demand expansion induces absolute load and residual variance expansion that outpaces scale-invariant coefficient of variation (CV). As confirmed via season-dummy and window-fixed-effects robustness checks, the bivariate association between instability and forecast failure ($p=0.0471$) is an omitted variable / seasonal timing artifact (summer windows W04–W06 have high early transition noise but low failures; winter windows W07–W10 have smoothed instability but winter heating demand spikes). Once season or baseline volatility is controlled for, instability is statistically non-significant ($p = 0.7481$ in primary model, $p = 0.3573$ with winter control). Methodology is sound and intact; Candidate (c) documents this phenomenon as a research finding and limitation rather than altering the locked pipeline.
+Affected files/modules: `docs/current_status/PROJECT_STATE.md`, `docs/current_status/DECISIONS.md`, `pipeline/research/`
+Approved by: Development Team / Research Governance
+Source: Master Plan v4 §8.5–8.8, Blueprint v2 §D
+
+### Pre-Registered Robustness Suite Summary (v4 §8.8)
+
+In accordance with Master Plan v4 §8.8 and Blueprint v2 §D, the pre-registered robustness specifications were executed via `pipeline/research/robustness.py`:
+1. **Specification 1 (Bivariate Logit: `y ~ instability`):**
+   - Instability Odds Ratio: 1.6943 (95% CI: [1.0070, 2.8497]), z = 1.985, p = 0.0471.
+   - Finding: Nominally significant bivariate association driven by seasonal omitted variable bias (early summer window denominator noise vs winter failure concentration).
+2. **Specification 2 (Season-Controlled Logit: `y ~ volatility_cv + instability + is_winter`):**
+   - Instability Odds Ratio: 0.7815 (95% CI: [0.4623, 1.3211]), z = -0.921, p = 0.3573 (non-significant).
+   - Volatility CV Odds Ratio: 9.4474 (95% CI: [5.9381, 15.0305]), z = 9.479, p < 0.0001.
+   - Winter Indicator (`is_winter`) Odds Ratio: 4.1851 (95% CI: [3.3725, 5.1936]), z = 13.000, p < 0.0001.
+   - Finding: Clean convergence without separation. Confirms that controlling for seasonal demand expansion reinforces the primary finding: cluster instability provides no marginal predictive utility over volatility.
+3. **Deprioritized Checks (Contingency Plan v4 §17, "cut second"):**
+   - Full window-fixed-effects sweep (which suffers from quasi-complete separation on W04/W05 summer zero-failure cells) and placebo/window-length sweeps are deprioritized per the locked Contingency Plan §17 given project schedule constraints.
+
 ---
 
 ## Pending / Open Items
 
 1. **Literature novelty verification search** (non-blocking for implementation, required before submitting final capstone research paper per Master Plan v4 §23 / Handoff §22).
-2. **Team sign-off on Day 19 Holdout re-execution** following lag feature integration (DEC-010).
+2. **Methods & Results write-up and demonstration rehearsal** (viva presentation slides and live demo walkthrough).
 

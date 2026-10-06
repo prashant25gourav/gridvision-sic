@@ -1,5 +1,8 @@
+import os
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.api.v1.api import api_router
@@ -20,16 +23,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def root():
-    return {
-        "message": "Welcome to GridVision API",
-        "docs": "/docs",
-        "health": "/health",
-        "version": settings.VERSION,
-    }
-
-
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -38,4 +31,27 @@ def health():
 # Include modular v1 API router under /api/v1 and directly at root for Blueprint v2 compatibility
 app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(api_router)
+
+# Mount frontend static build if present (per v4 §13 single-container deployment)
+static_candidates = [
+    Path(os.getenv("STATIC_DIR", "")) if os.getenv("STATIC_DIR") else None,
+    Path(__file__).resolve().parent.parent.parent / "frontend" / "dist",
+    Path("frontend/dist"),
+    Path("/app/frontend/dist"),
+]
+
+static_dir = next((p for p in static_candidates if p is not None and p.exists() and (p / "index.html").exists()), None)
+
+if static_dir is not None:
+    app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+else:
+    @app.get("/")
+    def root():
+        return {
+            "message": "Welcome to GridVision API",
+            "docs": "/docs",
+            "health": "/health",
+            "version": settings.VERSION,
+        }
+
 

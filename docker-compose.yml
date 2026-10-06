@@ -1,0 +1,13 @@
+services:
+  gridvision:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gridvision-app
+    ports:
+      - "8000:8000"
+    environment:
+      - STATIC_DIR=/app/frontend/dist
+      - HOST=0.0.0.0
+      - PORT=8000
+    restart: unless-stopped

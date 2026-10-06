@@ -115,6 +115,7 @@ def run_pipeline(
     include_p2: bool = False,
     include_p3: bool = False,
     skip_holdout: bool = False,
+    force_holdout_rerun: bool = False,
 ) -> Path:
     """Execute the full P1, optional P2, and optional P3 pipeline sequence deterministically.
     
@@ -329,24 +330,22 @@ def run_pipeline(
             output_dir=run_dir,
         )
 
-        # 18. Holdout Evaluation (Governance Guard: Issue 3 / DEC-010)
+        # 18. Holdout Evaluation (Governance Guard: Issue 3 / DEC-010 / DEC-015)
         if not skip_holdout:
             logger.info("Stage 17: Forward-only holdout evaluation (Day 19 protocol)...")
-            evaluate_holdout(
-                research_table_df=res_table,
-                statistical_results=stat_res,
-                output_dir=run_dir,
-            )
+            try:
+                evaluate_holdout(
+                    research_table_df=res_table,
+                    statistical_results=stat_res,
+                    output_dir=run_dir,
+                    force_rerun=force_holdout_rerun,
+                )
+            except RuntimeError as e:
+                logger.warning(f"Holdout evaluation guarded: {e}")
         else:
             logger.warning(
-                "Stage 17: SKIPPED holdout evaluation per governance protocol (Issue 3 / DEC-010). "
-                "Preserving archived holdout results from run_initial_PRE_LAG_FIX_ARCHIVED."
+                "Stage 17: SKIPPED holdout evaluation per governance protocol (DEC-010 / DEC-015)."
             )
-            archived_holdout = root / "data" / "artifacts" / "run_initial_PRE_LAG_FIX_ARCHIVED" / "holdout_results.json"
-            if archived_holdout.exists():
-                import shutil
-                shutil.copy2(archived_holdout, run_dir / "holdout_results.json")
-                logger.info(f"Copied archived holdout results to {run_dir / 'holdout_results.json'}")
 
     # Optional P3 Stages
     if include_p3:
@@ -425,6 +424,7 @@ if __name__ == "__main__":
     parser.add_argument("--include-p2", action="store_true", help="Execute P2 forecasting, research table, and statistics")
     parser.add_argument("--include-p3", action="store_true", help="Execute P3 anomaly detection and SHAP explainability")
     parser.add_argument("--skip-holdout", action="store_true", help="Skip holdout evaluation to preserve single-evaluation governance")
+    parser.add_argument("--force-holdout-rerun", action="store_true", help="Explicitly force re-running holdout evaluation (DEC-015)")
     args = parser.parse_args()
 
     out_run = run_pipeline(
@@ -435,6 +435,7 @@ if __name__ == "__main__":
         include_p2=args.include_p2,
         include_p3=args.include_p3,
         skip_holdout=args.skip_holdout,
+        force_holdout_rerun=args.force_holdout_rerun,
     )
     print(f"\nPipeline finished. Outputs saved in: {out_run}")
 

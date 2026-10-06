@@ -30,6 +30,7 @@ def evaluate_holdout(
     research_table_df: Optional[pd.DataFrame] = None,
     statistical_results: Optional[Dict[str, Any]] = None,
     output_dir: Optional[Path] = None,
+    force_rerun: bool = False,
 ) -> Dict[str, Any]:
     """Perform forward-only evaluation on the holdout window.
     
@@ -37,14 +38,15 @@ def evaluate_holdout(
         research_table_df: DataFrame from research_table.parquet.
         statistical_results: Dict from statistical_results.json.
         output_dir: Destination path for holdout_results.json.
+        force_rerun: If True, explicitly allows re-running even if holdout_results.json exists.
         
     Returns:
         Dict containing holdout evaluation metrics.
     """
     latest_artifacts = get_artifacts_dir("latest")
 
+    table_path = latest_artifacts / "research_table.parquet"
     if research_table_df is None:
-        table_path = latest_artifacts / "research_table.parquet"
         research_table_df = pd.read_parquet(table_path)
 
     if statistical_results is None:
@@ -58,6 +60,17 @@ def evaluate_holdout(
         output_dir = Path(output_dir)
 
     output_dir.mkdir(parents=True, exist_ok=True)
+    out_file = output_dir / "holdout_results.json"
+
+    # Governance Guard (DEC-010 / DEC-015): Holdout is touched once, forward-only
+    if out_file.exists() and not force_rerun:
+        if table_path.exists() and out_file.stat().st_mtime >= table_path.stat().st_mtime:
+            raise RuntimeError(
+                f"Holdout evaluation already exists at {out_file} and is up-to-date with "
+                f"research table. Per research integrity governance (DEC-010 / DEC-015), "
+                f"holdout evaluation is forward-only and executed strictly once. "
+                f"To override with explicit documented authorization, provide --force-holdout-rerun."
+            )
 
     # Filter to eligible holdout rows (is_holdout == True)
     holdout_df = research_table_df[research_table_df["is_holdout"]].copy()
@@ -166,5 +179,13 @@ def evaluate_holdout(
 
 
 if __name__ == "__main__":
+    import argparse
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    evaluate_holdout()
+    parser = argparse.ArgumentParser(description="GridVision Holdout Evaluation")
+    parser.add_argument(
+        "--force-holdout-rerun",
+        action="store_true",
+        help="Force re-running holdout evaluation despite existing results (requires governance decision)",
+    )
+    args = parser.parse_args()
+    evaluate_holdout(force_rerun=args.force_holdout_rerun)

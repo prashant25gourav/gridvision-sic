@@ -5,8 +5,7 @@
 >
 > **Do not confuse this with the master files.** The master files define what GridVision IS.
 > This file defines what has ACTUALLY BEEN BUILT and what the current execution state is.
-
-**Last Updated:** 2026-10-04 (Post-Lag Fix & Verification Pass)
+**Last Updated:** 2026-10-06 (Post-Lag Fix, Step 1 Holdout Resolution & Documentation Sync)
 
 ---
 
@@ -91,24 +90,24 @@ The repository contains the complete offline ML & research pipeline (P1, P2, P3)
 | Data quality checks (`checks.py`, `report.py`) | IMPLEMENTED | Validated 95% slot completeness, <=3-day gaps, 0 negatives. Gate G1 PASSED. |
 | Calendar windows (`calendar.py`) | IMPLEMENTED | 14 contiguous 56-day common-calendar windows (W01–W14) |
 | Window eligibility (`eligibility.py`) | IMPLEMENTED | Evaluated 4,438 flat-rate households; 4,252 qualifying (>=6 usable), 2,974 with >=10 |
-| Sampling (`stratified_sample.py`) | IMPLEMENTED | Stratified sample of 620 HHs drawn (seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U) |
+| Sampling (`stratified_sample.py`) | IMPLEMENTED | Stratified sample of 620 HHs drawn (seed=42; 233 Affluent, 207 Adversity, 165 Comfortable, 15 ACORN-U per DEC-013) |
 | Calibration assignment (`calibration_select.py`) | IMPLEMENTED | Per-household own first-2-usable calibration pair; all 620 HHs have n_analysis_windows >= 4 |
-| Behavioral features (`behavioral.py`) | IMPLEMENTED | 8 features on ALL 6,198 usable windows across 620 HHs, 0 NaNs |
+| Behavioral features (`behavioral.py`) | IMPLEMENTED | 8 features on ALL 6,191 usable windows across 620 HHs, 0 NaNs |
 | K selection (`k_selection.py`) | IMPLEMENTED | Silhouette sweep on 1,240 calibration samples; optimal K=4 (silhouette=0.4021) |
-| Clustering (K-Means, `kmeans_fit.py`) | IMPLEMENTED | K-Means (K=4, seed=42) per window; assigned roles: 4,338 analysis, 1,240 cal, 620 holdout |
-| Alignment (Hungarian, `alignment.py`) | IMPLEMENTED | Chained Hungarian alignment per household starting from cal_w1; output 6,198 rows |
-| Instability / volatility metrics (`metrics.py`) | IMPLEMENTED | Persistence, instability, volatility CV; 4,338 Analysis rows; first row trans=2 (Gate G3 PASSED) |
+| Clustering (K-Means, `kmeans_fit.py`) | IMPLEMENTED | K-Means (K=4, seed=42) per window; assigned roles: 4,331 analysis, 1,240 cal, 620 holdout |
+| Alignment (Hungarian, `alignment.py`) | IMPLEMENTED | Chained Hungarian alignment per household starting from cal_w1; output 6,191 rows |
+| Instability / volatility metrics (`metrics.py`) | IMPLEMENTED | Persistence, instability, volatility CV; 4,331 Analysis rows; first row trans=2 (Gate G3 PASSED) |
 | Calibration forecasting (`calibration_forecast.py`) | IMPLEMENTED | Per-household GBDT forecaster on Cal-W1 predicting Cal-W2; 1,666,560 residuals, 620 summary rows (Gate G2 PASSED) |
-| Extreme-failure threshold (`extreme_failure.py`) | IMPLEMENTED | 95th pct threshold = 2.5804 (fallback 90th = 2.0605) pre-fixed strictly from calibration StdErrors (Gate G6) |
-| Global forecasting (`global_forecaster.py`) | IMPLEMENTED | Pooled GBDT retrained per calendar window; 14,824,320 half-hourly predictions, 5,515 summary rows (Gate G4 & G5 PASSED) |
-| Per-cluster forecasting (`cluster_forecaster.py`) | IMPLEMENTED | Separate GBDT trained per behavioral cluster for UI comparison; 14,824,320 rows (capstone only, isolated from research table) |
+| Extreme-failure threshold (`extreme_failure.py`) | IMPLEMENTED | 95th pct threshold = 2.53438 (fallback 90th = 2.03492) pre-fixed strictly from calibration StdErrors (Gate G6) |
+| Global forecasting (`global_forecaster.py`) | IMPLEMENTED | Pooled GBDT retrained per calendar window with locked lag features; 14,805,504 half-hourly predictions, 5,508 summary rows (Gates G4 & G5 PASSED, beats seasonal-naive baseline) |
+| Per-cluster forecasting (`cluster_forecaster.py`) | IMPLEMENTED | Separate GBDT trained per behavioral cluster for UI comparison; 14,805,504 rows (capstone only, isolated from research table) |
 | Error standardization (`error_standardization.py`) | IMPLEMENTED | Standardized error with MAD effective floor (factor 0.05) and threshold labeling |
-| Research table construction (`build_research_table.py`) | IMPLEMENTED | Joined instability at w, global forecast AE at w+1, calibration summary, and fixed threshold; 4,294 rows (3,682 Analysis, 612 Holdout) |
-| Statistical model (`statistical_model.py`) | IMPLEMENTED | Cluster-robust logistic regression on 3,682 Analysis rows; Volatility OR=7.3997 (p<0.001), Instability OR=1.1519 (p=0.5364); H0 supported (Gate G6 PASSED) |
-| Holdout evaluation (`holdout_eval.py`) | IMPLEMENTED | Forward-only scoring of fixed model on 612 eligible holdouts (0 fit calls); ROC-AUC=0.7010, PR-AUC=0.5375 (Gate G7 PASSED) |
-| Anomaly detection (`isolation_forest.py`, `explain.py`) | IMPLEMENTED | Unsupervised Isolation Forest (contamination=0.05, seed=42) on 8 behavioral features with plain-language z-score feature-based explanations (NOT SHAP); produces `anomaly_flags.parquet` (6,198 rows, 310 anomalies) |
+| Research table construction (`build_research_table.py`) | IMPLEMENTED | Joined instability at w, global forecast AE at w+1, calibration summary, and fixed threshold; 4,288 rows (3,676 Analysis, 612 Holdout) |
+| Statistical model (`statistical_model.py`) | IMPLEMENTED | Cluster-robust logistic regression on 3,676 Analysis rows; Volatility OR=7.4459 (p<0.0001), Instability OR=0.9183 (p=0.7481), Event Rate=18.96%; H0 supported (Gate G6 PASSED) |
+| Holdout evaluation (`holdout_eval.py`) | IMPLEMENTED | Forward-only scoring of fixed post-lag-fix model on 612 eligible holdouts (0 fit calls); ROC-AUC=0.7298, PR-AUC=0.5378, Event Rate=25.65% (157 / 612), Brier=0.16813, Log Loss=0.51322 (Gate G7 PASSED, DEC-015) |
+| Anomaly detection (`isolation_forest.py`, `explain.py`) | IMPLEMENTED | Unsupervised Isolation Forest (contamination=0.05, seed=42) on 8 behavioral features with plain-language z-score feature-based explanations (NOT SHAP); produces `anomaly_flags.parquet` (6,191 rows, 310 anomalies) |
 | Synthetic anomaly benchmark (`synthetic_injection.py`) | IMPLEMENTED | Injects 4 realistic perturbation patterns; produces `anomaly_benchmark.json` (Precision=0.5383, Recall=0.9850, F1=0.6961, ROC-AUC=0.9330) |
-| SHAP explainability (`shap_forecaster.py`) | IMPLEMENTED | TreeSHAP feature attributions strictly scoped to global forecaster; produces `shap_explanations.parquet` (352,960 explained forecast points across 620 households) |
+| TreeSHAP explainability (`shap_forecaster.py`) | IMPLEMENTED | TreeSHAP feature attributions strictly scoped to global forecaster; produces `shap_explanations.parquet` (352,512 explained forecast points across 620 households) | points across 620 households) |
 
 #### Data (`data/`)
 
@@ -151,38 +150,35 @@ The repository contains the complete offline ML & research pipeline (P1, P2, P3)
 |---|---|---|
 | **P1** — Data / Research Pipeline Lead | Ingestion, QC, sampling, common-calendar windows, per-household calibration assignment, behavioral features, K selection / K-Means, cluster alignment / Hungarian matching, instability, volatility | COMPLETE — Milestones M0, M1, M2 & Gates G1, G3 PASSED (Days 1–10 deliverables implemented & verified) |
 | **P2** — Forecasting / Statistics | Calibration forecaster, global forecaster, per-cluster forecaster (capstone-only), forecast-error standardization, extreme-failure threshold, research table construction, statistical analysis, holdout evaluation | COMPLETE — Milestones M3, M4, M5, M6, M7 & Gates G2, G4, G5, G6, G7 PASSED (Days 5–14, 19 deliverables implemented & verified) |
-| **P3** — Anomaly / Explainability | Anomaly detection (Isolation Forest, synthetic injection), SHAP (global forecaster only), explainability | COMPLETE — Milestone M9 (Days 16–17 deliverables implemented & verified: `anomaly_flags.parquet`, `anomaly_benchmark.json`, `shap_explanations.parquet`) |
 | **P4** — Backend / Frontend / RAG | FastAPI backend, React frontend, RAG / Copilot (retriever + tools + grounding check), integrating all 23 artifacts into app | COMPLETE — Milestones M8, M10 (Days 1–12, 18 deliverables implemented & verified: 7 API endpoints, artifact loader, RAG Copilot, 4 React views connected to live data) |
 
 ---
 
 ## D. CURRENT PHASE
 
-**Phase: Days 1–18 Complete (Full System Integration Complete — P1, P2, P3, P4)**
+**Phase: Days 1–19 Complete (Full System Integration & Step 1 Holdout Resolution Complete)**
 
 All data, research, forecasting, statistical, anomaly detection, SHAP explainability, backend API, RAG Copilot, and frontend views are fully built, tested, and validated:
 - Raw dataset ingested to Parquet (112 blocks, 2.77M rows, 0 negatives).
 - Window eligibility evaluated (4,252 qualifying households, exact match with v4 §3).
-- Stratified sample drawn (620 households, seed=42; 237 Affluent, 211 Adversity, 167 Comfortable, 5 ACORN-U).
+- Stratified sample drawn (620 households, seed=42; 233 Affluent, 207 Adversity, 165 Comfortable, 15 ACORN-U per DEC-013).
 - Per-household calibration assigned (own first-2 usable windows; all 620 have n_analysis >= 4).
-- Behavioral features computed across all 6,198 usable windows (0 NaNs).
+- Behavioral features computed across all 6,191 usable windows (0 NaNs).
 - Silhouette sweep completed on calibration features fixing optimal K=4 (silhouette=0.4021).
 - K-Means clustered per window and Hungarian aligned per household sequence.
-- Instability and volatility metrics computed for all 4,338 Analysis windows (transition 1->2 recorded).
-- Calibration forecaster, extreme-failure threshold (2.5804), global & cluster forecasters trained.
-- Primary research experiment completed: cluster-robust logistic regression supports H0 (instability adds no significant predictive power over volatility, p=0.5364).
-- Forward-only holdout evaluation completed (ROC-AUC = 0.7010).
+- Instability and volatility metrics computed for all 4,331 Analysis windows (transition 1->2 recorded).
+- Calibration forecaster, extreme-failure threshold (2.53438), global & cluster forecasters trained.
+- Primary research experiment completed: cluster-robust logistic regression on 3,676 Analysis rows supports H0 (instability OR=0.9183, p=0.7481; volatility OR=7.4459, p<0.0001; event rate 18.96%).
+- Forward-only holdout evaluation completed on corrected model: ROC-AUC = 0.7298, PR-AUC = 0.5378, Event Rate = 25.65% (157 / 612 eligible holdouts; refit_performed: False, DEC-015).
 - Isolation Forest anomaly detection (5.00% contamination, 310 anomalies flagged) with feature-based z-score explanations.
 - Synthetic anomaly injection benchmark: 98.50% recall, 0.9330 ROC-AUC.
-- TreeSHAP feature attributions on global forecaster across 352,960 forecast instances.
+- TreeSHAP feature attributions on global forecaster across 352,512 forecast instances.
 - FastAPI backend serving all Blueprint v2 §F endpoints (`/overview`, `/household/...`, `/households`, `/chat`) from `data/artifacts/latest`.
 - RAG Copilot with domain knowledge base, tools, and strict numeric grounding enforcement.
 - React 19 + TypeScript + Vite frontend built and wired across all 4 operational views.
 - Full test suite passes: 58/58 tests.
 
 ---
-
-
 
 ## E. COMPLETED
 
@@ -202,29 +198,29 @@ All data, research, forecasting, statistical, anomaly detection, SHAP explainabi
 - [x] Data quality checks & report (`pipeline/quality/checks.py`, `report.py`): Gate G1 PASSED
 - [x] 14 common-calendar 56-day windows (`pipeline/windows/calendar.py`): W01–W14
 - [x] Window usability evaluation (`pipeline/windows/eligibility.py`): 4,252 qualifying households (>=6 usable)
-- [x] Stratified household sampling (`pipeline/sampling/stratified_sample.py`): 620 HHs drawn (seed=42)
+- [x] Stratified household sampling (`pipeline/sampling/stratified_sample.py`): 620 HHs drawn (seed=42; 233 Affluent, 207 Adversity, 165 Comfortable, 15 ACORN-U)
 - [x] Per-household calibration assignment (`pipeline/windows/calibration_select.py`): own first-2 usable windows
-- [x] Behavioral feature extraction (`pipeline/features/behavioral.py`): 8 features across 6,198 usable windows, 0 NaNs
+- [x] Behavioral feature extraction (`pipeline/features/behavioral.py`): 8 features across 6,191 usable windows, 0 NaNs
 - [x] K selection silhouette sweep (`pipeline/clustering/k_selection.py`): optimal K=4 (score 0.4021)
 - [x] K-Means clustering (`pipeline/clustering/kmeans_fit.py`): K=4 fitted per window with role annotation
-- [x] Chained Hungarian alignment (`pipeline/clustering/alignment.py`): 6,198 aligned rows
+- [x] Chained Hungarian alignment (`pipeline/clustering/alignment.py`): 6,191 aligned rows
 - [x] Instability and volatility metrics (`pipeline/instability/metrics.py`): Gate G3 PASSED (first row transitions=2)
 
 ### P2 — Forecasting & Statistical Research (Days 5–14, 19)
 - [x] Per-household calibration forecaster (`pipeline/forecasting/calibration_forecast.py`): Gate G2 PASSED
-- [x] Extreme-failure threshold computation (`pipeline/research/extreme_failure.py`): 95th pct threshold = 2.5804 (Gate G6)
+- [x] Extreme-failure threshold computation (`pipeline/research/extreme_failure.py`): 95th pct threshold = 2.53438 (Gate G6)
 - [x] Error standardization with MAD floor (`pipeline/forecasting/error_standardization.py`)
-- [x] Global demand forecaster (`pipeline/forecasting/global_forecaster.py`): Gates G4 & G5 PASSED (14.8M predictions)
+- [x] Global demand forecaster (`pipeline/forecasting/global_forecaster.py`): Gates G4 & G5 PASSED (14.8M predictions, lag features restored per v4 §7)
 - [x] Per-cluster comparison forecaster (`pipeline/forecasting/cluster_forecaster.py`): capstone-only, isolated from research table
-- [x] Research table construction (`pipeline/research/build_research_table.py`): 4,294 rows (3,682 Analysis, 612 Holdout)
-- [x] Statistical analysis (`pipeline/research/statistical_model.py`): cluster-robust logistic regression, Gate G6 PASSED (event rate 24.25%), H0 supported (instability adds no significant predictive power over volatility, p=0.5364)
-- [x] Forward-only holdout evaluation (`pipeline/research/holdout_eval.py`): 612 eligible holdouts, 0 fit calls, Gate G7 PASSED (ROC-AUC=0.7010, PR-AUC=0.5375)
+- [x] Research table construction (`pipeline/research/build_research_table.py`): 4,288 rows (3,676 Analysis, 612 Holdout)
+- [x] Statistical analysis (`pipeline/research/statistical_model.py`): cluster-robust logistic regression, Gate G6 PASSED (event rate 18.96%), H0 supported (instability OR=0.9183, p=0.7481; volatility OR=7.4459, p<0.0001)
+- [x] Forward-only holdout evaluation (`pipeline/research/holdout_eval.py`): 612 eligible holdouts, 0 fit calls, Gate G7 PASSED (ROC-AUC=0.7298, PR-AUC=0.5378, event rate 25.65%, Brier=0.16813, Log Loss=0.51322, DEC-015)
 
 ### P3 — Anomaly Detection & SHAP Explainability (Days 16–17)
 - [x] Feature-based anomaly explanation (`pipeline/anomaly/explain.py`): standardized z-scores against household baselines, non-SHAP
-- [x] Unsupervised Isolation Forest (`pipeline/anomaly/isolation_forest.py`): `anomaly_flags.parquet` (6,198 rows, 310 anomalies at 5.00%)
+- [x] Unsupervised Isolation Forest (`pipeline/anomaly/isolation_forest.py`): `anomaly_flags.parquet` (6,191 rows, 310 anomalies at 5.00%)
 - [x] Synthetic anomaly injection benchmark (`pipeline/anomaly/synthetic_injection.py`): `anomaly_benchmark.json` (Precision=0.5383, Recall=0.9850, F1=0.6961, ROC-AUC=0.9330)
-- [x] TreeSHAP explainability (`pipeline/explainability/shap_forecaster.py`): scoped strictly to global forecaster, `shap_explanations.parquet` (352,960 explained points)
+- [x] TreeSHAP explainability (`pipeline/explainability/shap_forecaster.py`): scoped strictly to global forecaster, `shap_explanations.parquet` (352,512 explained points)
 
 ### P4 — Backend, Frontend & RAG Copilot (Days 1–12, 18)
 - [x] FastAPI backend router & server (`backend/app/main.py`, `backend/app/api/v1/`): mounted at `/` and `/api/v1`
@@ -283,6 +279,8 @@ No items are currently blocked. All technical and research pipeline stages are f
 | DEC-012 | Deliberate Isolation Forest contamination=0.05 parameter (industry tail budget) | DECIDED | Master Plan v4 §10, Blueprint v2 §C.7; DECISIONS.md |
 | DEC-013 | ACORN-U minimum stratification floor raised from 5 to 15 (proportional was no-op) | DECIDED | Master Plan v4 §3.6; DECISIONS.md |
 | DEC-014 | Global forecaster lag features addition strictly derived from window <= w | DECIDED | Master Plan v4 §7; DECISIONS.md |
+| DEC-015 | Holdout re-execution on corrected post-lag-fix model (pre-fix retired, code guard locked) | DECIDED | Master Plan v4 §4.5, Contract §8; DECISIONS.md |
+| DEC-016 | Formal closure of extreme-failure-rate investigation (Candidate c: winter demand expansion limitation) | DECIDED | Master Plan v4 §8.5–8.8; DECISIONS.md |
 | OPEN-2 | Literature novelty verification search documentation (non-blocking for implementation, blocks novelty claims in paper) | OPEN | Master Plan v4 §23; Handoff §22 |
 
 ---
