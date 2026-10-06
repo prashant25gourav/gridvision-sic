@@ -36,14 +36,7 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
   // Area path for actual demand
   const areaPath = `${actualPath} L ${getX(data.length - 1)},${padding.top + chartH} L ${getX(0)},${padding.top + chartH} Z`;
 
-  // Peak band highlight indices
-  const peakIndices = data.map((d, i) => (d.isPeak ? i : -1)).filter((i) => i !== -1);
-  const peakStartIdx = peakIndices.length > 0 ? Math.min(...peakIndices) : null;
-  const peakEndIdx = peakIndices.length > 0 ? Math.max(...peakIndices) : null;
-
   const yTicks = [0, 250, 500, 750, 1000].filter((v) => v <= maxVal);
-
-  const hoveredPoint = hoveredIdx !== null ? data[hoveredIdx] : null;
 
   return (
     <div style={{ width: '100%', position: 'relative' }}>
@@ -60,48 +53,20 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.8rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <span style={{ width: '12px', height: '3px', backgroundColor: 'var(--accent-cyan)', borderRadius: '2px' }} />
-            <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>Active Grid Load (kW)</span>
+            <span style={{ width: '12px', height: '3px', backgroundColor: 'var(--accent-emerald)', borderRadius: '2px' }} />
+            <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>Cohort Consumption</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span
               style={{
                 width: '12px',
                 height: '2px',
-                borderTop: '2px dashed var(--accent-indigo)',
+                borderTop: '2px dashed var(--foreground-subtle)',
               }}
             />
-            <span style={{ color: 'var(--text-secondary)' }}>Baseline Profile</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <span
-              style={{
-                width: '10px',
-                height: '10px',
-                backgroundColor: 'rgba(245, 158, 11, 0.2)',
-                border: '1px solid var(--accent-amber)',
-                borderRadius: '2px',
-              }}
-            />
-            <span style={{ color: 'var(--accent-amber)' }}>Peak Window</span>
+            <span style={{ color: 'var(--foreground-muted)' }}>Baseline Profile</span>
           </div>
         </div>
-
-        {hoveredPoint && (
-          <div
-            style={{
-              padding: '0.2rem 0.6rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'rgba(6, 182, 212, 0.15)',
-              border: '1px solid var(--accent-cyan)',
-              color: 'var(--text-highlight)',
-              fontSize: '0.75rem',
-              fontFamily: 'var(--font-mono)',
-            }}
-          >
-            {hoveredPoint.label} UTC: <strong>{hoveredPoint.actualKw} kW</strong> (Base: {hoveredPoint.baselineKw} kW)
-          </div>
-        )}
       </div>
 
       {/* SVG Canvas */}
@@ -113,12 +78,8 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
         >
           <defs>
             <linearGradient id="loadAreaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.0" />
-            </linearGradient>
-            <linearGradient id="peakGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.03" />
+              <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="var(--accent-emerald)" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -132,13 +93,13 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
                   y1={y}
                   x2={padding.left + chartW}
                   y2={y}
-                  stroke="rgba(255, 255, 255, 0.06)"
+                  stroke="var(--border)"
                   strokeDasharray="4 4"
                 />
                 <text
                   x={padding.left - 8}
                   y={y + 4}
-                  fill="var(--text-muted)"
+                  fill="var(--foreground-subtle)"
                   fontSize="11"
                   textAnchor="end"
                   fontFamily="var(--font-mono)"
@@ -149,33 +110,6 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
             );
           })}
 
-          {/* Peak Window Background Zone */}
-          {peakStartIdx !== null && peakEndIdx !== null && (
-            <g>
-              <rect
-                x={getX(peakStartIdx) - 10}
-                y={padding.top}
-                width={getX(peakEndIdx) - getX(peakStartIdx) + 20}
-                height={chartH}
-                fill="url(#peakGradient)"
-                stroke="rgba(245, 158, 11, 0.25)"
-                strokeDasharray="3 3"
-                rx="4"
-              />
-              <text
-                x={(getX(peakStartIdx) + getX(peakEndIdx)) / 2}
-                y={padding.top + 16}
-                fill="var(--accent-amber)"
-                fontSize="11"
-                fontWeight="600"
-                textAnchor="middle"
-                letterSpacing="0.05em"
-              >
-                PEAK DEMAND ZONE
-              </text>
-            </g>
-          )}
-
           {/* Area fill */}
           <path d={areaPath} fill="url(#loadAreaGradient)" />
 
@@ -183,17 +117,17 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
           <path
             d={baselinePath}
             fill="none"
-            stroke="var(--accent-indigo)"
-            strokeWidth="2"
+            stroke="var(--foreground-subtle)"
+            strokeWidth="1.75"
             strokeDasharray="5 4"
-            opacity="0.75"
+            opacity="0.85"
           />
 
           {/* Actual Line */}
           <path
             d={actualPath}
             fill="none"
-            stroke="var(--accent-cyan)"
+            stroke="var(--accent-emerald)"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -223,7 +157,7 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
                   <text
                     x={x}
                     y={padding.top + chartH + 20}
-                    fill="var(--text-muted)"
+                    fill="var(--foreground-subtle)"
                     fontSize="11"
                     textAnchor="middle"
                     fontFamily="var(--font-mono)"
@@ -240,15 +174,15 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
                       y1={padding.top}
                       x2={x}
                       y2={padding.top + chartH}
-                      stroke="rgba(255, 255, 255, 0.3)"
+                      stroke="var(--border-strong)"
                       strokeDasharray="2 2"
                     />
                     <circle
                       cx={x}
                       cy={y}
                       r="6"
-                      fill="var(--accent-cyan)"
-                      stroke="#ffffff"
+                      fill="var(--accent-emerald)"
+                      stroke="var(--surface)"
                       strokeWidth="2"
                     />
                   </g>

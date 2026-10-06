@@ -2,10 +2,11 @@ export function Footer() {
   return (
     <footer
       style={{
-        borderTop: '1px solid var(--border-subtle)',
-        backgroundColor: 'rgba(8, 12, 21, 0.7)',
+        borderTop: '1px solid var(--border)',
+        backgroundColor: 'var(--surface)',
         padding: '1.25rem 1.5rem',
         marginTop: 'auto',
+        transition: 'background-color var(--transition-theme), border-color var(--transition-theme)',
       }}
     >
       <div

@@ -191,6 +191,7 @@
 - [x] Glassmorphic dark theme CSS design system
 - [x] Reusable components (Card, Badge, MetricCard, TabNav)
 - [x] Chart components (LoadChart, ClusterBarChart, TrajectoryFlow)
+- [x] Dashboard Shell implementation (persistent minimizable sidebar, workspace switcher, Light/Dark theme consistency)
 
 ### Days 9–12: Wire Real Data
 

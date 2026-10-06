@@ -1,105 +1,73 @@
-import type { NavTab } from '../../types/energy';
-import { TabNav } from '../common/TabNav';
-import { Badge } from '../common/Badge';
+import React from 'react';
+import { Sun, Moon } from 'lucide-react';
+import './Header.css';
 
 interface HeaderProps {
-  activeTab: NavTab;
-  onTabChange: (tab: NavTab) => void;
-  apiConnected?: boolean;
+  currentMode: 'overview' | 'dashboard';
+  onNavigateWelcome: () => void;
+  onNavigateOverview: () => void;
+  onNavigateDashboard: () => void;
+  theme?: 'dark' | 'light';
+  onToggleTheme?: () => void;
 }
 
-export function Header({ activeTab, onTabChange, apiConnected = true }: HeaderProps) {
+export const Header: React.FC<HeaderProps> = ({
+  currentMode,
+  onNavigateWelcome,
+  onNavigateOverview,
+  onNavigateDashboard,
+  theme = 'dark',
+  onToggleTheme,
+}) => {
   return (
-    <header
-      style={{
-        backgroundColor: 'rgba(8, 12, 21, 0.85)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--border-subtle)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1440px',
-          margin: '0 auto',
-          padding: '0.85rem 1.5rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        {/* Brand & Identity */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 16px rgba(6, 182, 212, 0.4)',
-              color: '#ffffff',
-            }}
+    <header className={`app-header ${currentMode === 'dashboard' ? 'dashboard-mode' : ''}`}>
+      <div className="app-header-inner">
+        {/* 1. Brand Logo & Telemetry Indicator */}
+        <button
+          type="button"
+          className="app-header-brand"
+          onClick={onNavigateWelcome}
+          aria-label="Return to GridVision Welcome page"
+        >
+          <span className="app-header-brand-dot" aria-hidden="true" />
+          <span className="app-header-brand-text">GRIDVISION</span>
+        </button>
+
+        {/* 2. Primary Application Navigation */}
+        <nav className="app-header-nav" aria-label="Application navigation">
+          <button
+            type="button"
+            className={`app-header-nav-link ${currentMode === 'overview' ? 'active' : ''}`}
+            onClick={onNavigateOverview}
+            aria-current={currentMode === 'overview' ? 'page' : undefined}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-            </svg>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 700,
-                  letterSpacing: '-0.02em',
-                  color: 'var(--text-highlight)',
-                }}
-              >
-                GridVision
-              </span>
-              <Badge variant="cyan" size="sm">
-                v0.1 Shell
-              </Badge>
-            </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>
-              Smart Energy Analytics &amp; AI Copilot
-            </p>
-          </div>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-          <TabNav activeTab={activeTab} onTabChange={onTabChange} />
-        </div>
-
-        {/* System & Connection Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.35rem 0.75rem',
-              borderRadius: 'var(--radius-full)',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-subtle)',
-              fontSize: '0.75rem',
-            }}
+            Overview
+          </button>
+          <button
+            type="button"
+            className={`app-header-nav-link ${currentMode === 'dashboard' ? 'active' : ''}`}
+            onClick={onNavigateDashboard}
+            aria-current={currentMode === 'dashboard' ? 'page' : undefined}
           >
-            <span className={apiConnected ? 'status-dot-pulse' : 'status-dot-amber'} />
-            <span style={{ color: 'var(--text-secondary)' }}>
-              {apiConnected ? 'FastAPI Connected' : 'Mock Telemetry Mode'}
-            </span>
-          </div>
+            Dashboard
+          </button>
+        </nav>
+
+        {/* 3. Theme Toggle Control (Strictly Top-Right) */}
+        <div className="app-header-actions">
+          {onToggleTheme && (
+            <button
+              type="button"
+              className="app-header-theme-toggle"
+              onClick={onToggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              <span>{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
+            </button>
+          )}
         </div>
       </div>
     </header>
   );
-}
+};

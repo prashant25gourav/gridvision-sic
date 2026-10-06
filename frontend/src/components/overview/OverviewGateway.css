@@ -1,0 +1,258 @@
+/* OverviewGateway.css — Editorial Two-Panel Gateway for GridVision */
+
+.overview-page-container {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  background-color: var(--background);
+  color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.25rem 2rem 3.5rem 2rem;
+  transition: background-color var(--transition-theme), color var(--transition-theme);
+}
+
+.overview-inner {
+  width: 100%;
+  max-width: 1380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 1. Header Section: Minimal & Editorial */
+.overview-header {
+  text-align: center;
+  margin-bottom: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overview-category-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hero-pill-color);
+  background: var(--hero-pill-bg);
+  border: 1px solid var(--hero-pill-border);
+  padding: 0.35rem 1.15rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  transition: all var(--transition-theme);
+}
+
+.overview-main-title {
+  font-family: var(--font-sans);
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--foreground);
+  margin: 0;
+  transition: color var(--transition-theme);
+}
+
+/* 2. Two Equal Large Panels Grid */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.25rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* 3. Individual Editorial Panel */
+.overview-panel {
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 14px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  text-align: left;
+  outline: none;
+  transition: border-color var(--transition-theme), background-color var(--transition-theme), transform 250ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.overview-panel:hover,
+.overview-panel:focus-visible {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="light"] .overview-panel:hover,
+[data-theme="light"] .overview-panel:focus-visible {
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Subtle focus ring for accessibility */
+.overview-panel:focus-visible {
+  outline: 2px solid var(--accent-lime);
+  outline-offset: 2px;
+}
+
+/* 4. Large Visual Area */
+.overview-panel-visual {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background-color: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-theme), border-color var(--transition-theme);
+}
+
+.overview-visual-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.overview-panel:hover .overview-visual-wrapper {
+  transform: scale(1.025);
+}
+
+.overview-svg-graphic {
+  width: 100%;
+  height: 100%;
+}
+
+/* 5. Editorial Content Area */
+.overview-panel-body {
+  padding: 1.75rem 2rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.overview-panel-header {
+  margin-bottom: 1.5rem;
+}
+
+.overview-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-lime);
+  margin-bottom: 0.85rem;
+  transition: color var(--transition-theme);
+}
+
+.overview-panel:hover .overview-eyebrow {
+  opacity: 0.9;
+}
+
+.overview-panel-title {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  margin: 0 0 0.85rem 0;
+  min-height: 3.5rem;
+  display: flex;
+  align-items: flex-start;
+  transition: color var(--transition-theme);
+}
+
+.overview-panel-features {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--foreground-muted);
+  margin: 0;
+  transition: color var(--transition-theme);
+}
+
+/* 6. Action Button (EXPLORE →) */
+.overview-panel-footer {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: border-color var(--transition-theme);
+}
+
+.overview-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--transition-theme);
+}
+
+.overview-cta-arrow {
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), color var(--transition-theme);
+}
+
+.overview-panel:hover .overview-cta-btn {
+  color: var(--accent-lime);
+}
+
+.overview-panel:hover .overview-cta-arrow {
+  transform: translateX(5px);
+  color: var(--accent-lime);
+}
+
+/* 7. Responsive Media Queries */
+@media (max-width: 1024px) {
+  .overview-grid {
+    gap: 1.75rem;
+  }
+  .overview-panel-body {
+    padding: 1.75rem;
+  }
+  .overview-panel-title {
+    font-size: 1.35rem;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .overview-page-container {
+    padding: 2.5rem 1.25rem 4rem 1.25rem;
+  }
+  .overview-header {
+    margin-bottom: 2.5rem;
+  }
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .overview-panel-visual {
+    height: 220px;
+  }
+  .overview-panel-title {
+    min-height: auto;
+  }
+}
