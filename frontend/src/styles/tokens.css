@@ -1,0 +1,140 @@
+/* GridVision Semantic Design System Tokens (Light & Dark) */
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ========================================================= */
+  /* DARK THEME (Default)                                      */
+  /* ========================================================= */
+  --background: #070a0e;
+  --surface: #0e131b;
+  --surface-raised: #141b26;
+  --surface-muted: #1c2433;
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --border-grid: rgba(255, 255, 255, 0.10);
+
+  --foreground: #f3f5f8;
+  --foreground-muted: #94a3b8;
+  --foreground-subtle: #64748b;
+
+  /* Backward compatible semantic text aliases */
+  --text-primary: var(--foreground);
+  --text-secondary: var(--foreground-muted);
+  --text-muted: var(--foreground-subtle);
+  --text-highlight: var(--foreground);
+
+  /* Authentic Clean Energy Accents */
+  --accent-lime: #e1fcad;
+  --accent-lime-fg: #0d1618;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-blue: #38bdf8;
+  --accent-rose: #f43f5e;
+
+  /* Hero-Specific Semantic Tokens (Dark) */
+  --hero-bg: #05080c;
+  --hero-scrim: radial-gradient(circle at center, rgba(8, 12, 18, 0.42) 0%, rgba(4, 6, 9, 0.82) 100%),
+                linear-gradient(to bottom, rgba(4, 6, 9, 0.60) 0%, rgba(4, 6, 9, 0.25) 50%, rgba(4, 6, 9, 0.90) 100%);
+  --hero-grid-border: rgba(255, 255, 255, 0.10);
+  --hero-title-color: #ffffff;
+  --hero-title-shadow: 0 4px 40px rgba(0, 0, 0, 0.65);
+
+  --hero-pill-bg: rgba(225, 252, 173, 0.10);
+  --hero-pill-border: rgba(225, 252, 173, 0.40);
+  --hero-pill-color: #e1fcad;
+
+  --hero-btn-dashboard-bg: #e1fcad;
+  --hero-btn-dashboard-fg: #0d1618;
+  --hero-btn-dashboard-hover-bg: #edfec9;
+  --hero-btn-dashboard-shadow: 0 6px 24px rgba(225, 252, 173, 0.22);
+
+  --hero-btn-overview-bg: rgba(255, 255, 255, 0.08);
+  --hero-btn-overview-border: rgba(255, 255, 255, 0.22);
+  --hero-btn-overview-fg: #ffffff;
+  --hero-btn-overview-hover-bg: rgba(255, 255, 255, 0.16);
+  --hero-btn-overview-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+
+  --hero-nav-brand-fg: #ffffff;
+  --hero-nav-dot: #e1fcad;
+  --hero-nav-toggle-bg: rgba(255, 255, 255, 0.08);
+  --hero-nav-toggle-border: rgba(255, 255, 255, 0.18);
+  --hero-nav-toggle-fg: #ffffff;
+
+  /* Shadows & Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+  --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-theme: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================================= */
+/* LIGHT THEME (Intentional High-Key Editorial Daylight)     */
+/* ========================================================= */
+[data-theme="light"] {
+  --background: #f4f3ef;
+  --surface: #faf9f6;
+  --surface-raised: #eeece6;
+  --surface-muted: #e5e3dc;
+  --border: rgba(30, 36, 32, 0.08);
+  --border-strong: rgba(30, 36, 32, 0.18);
+  --border-grid: rgba(30, 36, 32, 0.06);
+
+  --foreground: #12181a;
+  --foreground-muted: #505c56;
+  --foreground-subtle: #74807a;
+
+  /* Backward compatible semantic text aliases */
+  --text-primary: var(--foreground);
+  --text-secondary: var(--foreground-muted);
+  --text-muted: var(--foreground-subtle);
+  --text-highlight: var(--foreground);
+
+  --accent-lime: #0b4f3f;
+  --accent-lime-fg: #ffffff;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-blue: #0284c7;
+  --accent-rose: #e11d48;
+
+  /* Hero-Specific Semantic Tokens (Light: Bright / Editorial / Photographic / Warm) */
+  --hero-bg: #1c2331;
+  --hero-scrim: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%),
+                linear-gradient(to bottom, rgba(248, 250, 252, 0.24) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(226, 232, 240, 0.38) 100%);
+  --hero-grid-border: rgba(15, 23, 42, 0.07);
+  --hero-title-color: #090e17;
+  --hero-title-shadow: 0 0 35px rgba(255, 255, 255, 0.95), 0 2px 14px rgba(255, 255, 255, 0.90);
+
+  --hero-pill-bg: rgba(220, 238, 228, 0.65);
+  --hero-pill-border: rgba(11, 79, 63, 0.28);
+  --hero-pill-color: #0b4f3f;
+
+  --hero-btn-dashboard-bg: #090e17;
+  --hero-btn-dashboard-fg: #ffffff;
+  --hero-btn-dashboard-hover-bg: #1e293b;
+  --hero-btn-dashboard-shadow: 0 6px 20px rgba(15, 23, 42, 0.22);
+
+  --hero-btn-overview-bg: rgba(255, 255, 255, 0.85);
+  --hero-btn-overview-border: rgba(15, 23, 42, 0.20);
+  --hero-btn-overview-fg: #0a0f18;
+  --hero-btn-overview-hover-bg: #ffffff;
+  --hero-btn-overview-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+
+  --hero-nav-brand-fg: #0a0f18;
+  --hero-nav-dot: #0b4f3f;
+  --hero-nav-toggle-bg: rgba(250, 249, 246, 0.90);
+  --hero-nav-toggle-border: rgba(30, 36, 32, 0.14);
+  --hero-nav-toggle-fg: #12181a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.09);
+}
