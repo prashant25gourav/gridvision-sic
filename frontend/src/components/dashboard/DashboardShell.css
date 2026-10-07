@@ -3,10 +3,12 @@
 .dashboard-shell {
   display: flex;
   width: 100%;
-  min-height: calc(100vh - 61px);
+  height: calc(100vh - 61px);
+  max-height: calc(100vh - 61px);
   background-color: var(--background);
   color: var(--foreground);
   position: relative;
+  overflow: hidden;
   transition: background-color var(--transition-theme), color var(--transition-theme);
 }
 
@@ -15,6 +17,8 @@
   min-width: 0; /* Prevents overflow issues in flex layouts */
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   background-color: var(--background);
   transition: background-color var(--transition-theme);
 }
@@ -22,8 +26,10 @@
 .dashboard-workspace-content {
   flex: 1;
   width: 100%;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Mobile sub-header navigation trigger */
@@ -31,7 +37,7 @@
   display: none;
   align-items: center;
   justify-content: space-between;
-  padding: 0.65rem 1rem;
+  padding: 0.75rem 1.25rem;
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
   transition: background-color var(--transition-theme), border-color var(--transition-theme);
@@ -44,13 +50,13 @@
   background: var(--surface-raised);
   border: 1px solid var(--border);
   color: var(--foreground);
-  padding: 0.45rem 0.85rem;
+  padding: 0.5rem 0.95rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
 .dashboard-mobile-section-name {
@@ -58,6 +64,22 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-shell {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .dashboard-workspace-wrapper {
+    height: auto;
+    overflow: visible;
+  }
+
+  .dashboard-workspace-content {
+    height: auto;
+    overflow: visible;
+  }
+
   .dashboard-mobile-nav-bar {
     display: flex;
   }

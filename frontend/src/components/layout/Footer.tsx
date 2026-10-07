@@ -23,8 +23,8 @@ export function Footer() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span>GridVision &copy; {new Date().getFullYear()}</span>
-          <span>&bull;</span>
+          <span>GridVision © {new Date().getFullYear()}</span>
+          <span>•</span>
           <span>Capstone Research Framework</span>
         </div>
 

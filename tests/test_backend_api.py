@@ -208,3 +208,37 @@ def test_numeric_grounding_enforcement():
     # Hallucinated answer: invents 0.89 and 99.4
     hallucinated_answer = "The instability was 0.89 and model confidence was 99.4%."
     assert verify_numeric_grounding(hallucinated_answer, context) is False
+
+
+def test_analytics_endpoints(client):
+    """Verify precomputed research and analytics endpoints."""
+    # 1. Research findings
+    res_f = client.get("/research/findings")
+    assert res_f.status_code == 200
+    f_data = res_f.json()
+    assert "statistical_results" in f_data
+    assert "holdout_results" in f_data
+    assert "extreme_failure_threshold" in f_data
+
+    # 2. Segmentation overview
+    res_s = client.get("/segmentation/overview")
+    assert res_s.status_code == 200
+    s_data = res_s.json()
+    assert s_data["selected_k"] == 4
+    assert len(s_data["clusters"]) == 4
+
+    # 3. Anomalies overview
+    res_a = client.get("/anomalies/overview")
+    assert res_a.status_code == 200
+    a_data = res_a.json()
+    assert "real_anomalies" in a_data
+    assert "synthetic_benchmark" in a_data
+
+    # 4. Forecast summary
+    res_fc = client.get("/forecast/summary")
+    assert res_fc.status_code == 200
+    fc_data = res_fc.json()
+    assert "mae_global" in fc_data
+    assert "representative_series" in fc_data
+    assert len(fc_data["representative_series"]) == 48
+

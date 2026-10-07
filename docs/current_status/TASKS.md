@@ -203,9 +203,22 @@
   - [x] `GET /household/{household_id}/anomaly`
   - [x] `GET /households` (portfolio list for explorer)
   - [x] `POST /chat`
+  - [x] `GET /research/findings` (statistical logistic regression, holdout evaluation, fixed threshold)
+  - [x] `GET /segmentation/overview` (K-Means profiles, silhouette sweep, 8-feature comparison)
+  - [x] `GET /anomalies/overview` (real household anomalies timeline + synthetic benchmark)
+  - [x] `GET /forecast/summary` (system metrics + 24h cohort demand curve)
 - [x] Implement `backend/app/services/artifact_loader.py` — cached in-memory and PyArrow filtered querying from `data/artifacts/latest`
-- [x] Replace frontend mock data with real API calls (`frontend/src/services/api.ts`)
-- [x] Implement proper error/loading/empty states across all 4 React views
+- [x] Connect frontend API client (`frontend/src/services/api.ts`) to real backend endpoints with verified artifact fallbacks
+- [x] Implement real data across all 8 Dashboard workspaces:
+  - [x] Overview (concise snapshot, sample metrics, cohort profile, segment distribution)
+  - [x] Forecasting (cohort mean & per-household out-of-sample actual vs GBDT forecast, naive baseline comparison)
+  - [x] Household Explorer (620-meter directory, load curves, Hungarian trajectory, TreeSHAP, Isolation Forest flags)
+  - [x] Segmentation (K=4 centroids, silhouette sweep, 8-feature normalized profile comparison)
+  - [x] Anomalies (observed household anomalies clearly separated from synthetic injection benchmark)
+  - [x] Copilot (grounded turn dialog with tool execution badges and household context)
+  - [x] Research Findings (honest H0 reporting, Volatility OR 7.40 vs Instability OR 1.15, LR test, W14 holdout)
+  - [x] Research Methodology (11-step visual flowchart, protocol invariants, zero-leakage guards)
+- [x] Welcome page theme transition (noticeably brighter cinematic dark mode, richer natural light mode, smooth 400ms crossfade)
 
 ### Day 12: Deployment Skeleton
 

@@ -72,6 +72,21 @@ def verify_numeric_grounding(
         if num in whitelisted:
             continue
         if num not in source_numbers:
-            unsupported.append(num)
+            # Check numerical equivalence for floating point representations
+            matched = False
+            try:
+                f_val = float(num)
+                for s in source_numbers:
+                    try:
+                        if abs(float(s) - f_val) < 1e-3:
+                            matched = True
+                            break
+                    except ValueError:
+                        continue
+            except ValueError:
+                pass
+
+            if not matched:
+                unsupported.append(num)
 
     return len(unsupported) == 0

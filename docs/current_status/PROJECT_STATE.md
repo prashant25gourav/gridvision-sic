@@ -4,8 +4,7 @@
 > It is updated after every meaningful change to the repository.
 >
 > **Do not confuse this with the master files.** The master files define what GridVision IS.
-> This file defines what has ACTUALLY BEEN BUILT and what the current execution state is.
-**Last Updated:** 2026-10-06 (Post-Lag Fix, Step 1 Holdout Resolution & Documentation Sync)
+**Last Updated:** 2026-10-06 (Final Frontend Integration & Information-Hierarchy Pass Completed)
 
 ---
 
@@ -48,34 +47,33 @@ The repository contains the complete offline ML & research pipeline (P1, P2, P3)
 | Config (`app/core/config.py`) | IMPLEMENTED | Basic settings class (project name, version, CORS origins) |
 | API router (`app/api/v1/api.py`) | IMPLEMENTED | Routes system, overview, household, and chat endpoints |
 | System endpoint (`app/api/v1/endpoints/system.py`) | IMPLEMENTED | `GET /system/info` returns app metadata |
-| `/overview` endpoint (`app/api/v1/endpoints/overview.py`) | IMPLEMENTED | Blueprint v2 §F.1: returns n_households (620), n_active_anomalies (43), cluster distribution, last_pipeline_run |
-| `/household/{id}/forecast` endpoint | IMPLEMENTED | Blueprint v2 §F.2: returns series, mae_global, mae_percluster, shap_top_features (404 on invalid HH) |
-| `/household/{id}/segment` endpoint | IMPLEMENTED | Blueprint v2 §F.3: returns cluster trajectory, current_cluster_id, current_cluster_label |
-| `/household/{id}/instability` endpoint | IMPLEMENTED | Blueprint v2 §F.4: returns instability series, volatility_cv, reliability_indicator ('stable', 'moderate', 'elevated_risk') |
-| `/household/{id}/anomaly` endpoint | IMPLEMENTED | Blueprint v2 §F.5: returns Isolation Forest flags, triggering statistics, z-score, severity, explanation |
-| `/households` endpoint | IMPLEMENTED | Returns list of all 620 sampled households with cluster, instability, and anomaly summary for explorer |
-| `/chat` endpoint (`app/api/v1/endpoints/chat.py`) | IMPLEMENTED | Blueprint v2 §F.6: RAG Copilot with tool-calling and strict numeric grounding enforcement |
-| Artifact loader service (`app/services/artifact_loader.py`) | IMPLEMENTED | In-memory cached and PyArrow pushdown querying from `data/artifacts/latest/` |
-| RAG Copilot service (`app/services/rag/`) | IMPLEMENTED | 5 domain markdown docs, TF-IDF cosine retriever, tools (`get_forecast`, `get_segment`, `get_instability`, `get_anomaly`), numeric grounding check |
+| `/overview/grid` endpoint | IMPLEMENTED | Returns utility KPIs: total consumption (200.3 MWh), peak load (0.229 MW at 19:00), average demand (0.149 MW), attention count (44), diurnal series, and operational alerts |
+| `/demand/analysis` endpoint | IMPLEMENTED | Returns 48-slot diurnal load curve, weekday vs weekend comparison (-3.1%), 14-window trend (W01–W14), seasonal summaries, and peak/baseload characteristics |
+| `/consumers/rankings` endpoint | IMPLEMENTED | Returns cohort rankings by load, peak demand, forecast MAE, anomaly flags, instability, and load factor with attention classification |
+| `/consumers/{id}/profile` endpoint | IMPLEMENTED | Returns complete household profile: load factor, peak-to-average, 24h curve, 14-window trajectory, and grounded "why flagged" explanation |
+| `/anomalies/analysis` endpoint | IMPLEMENTED | Returns operational anomaly metrics, window timeline, severity distribution, and affected consumers table with action guidelines |
+| `/forecast/portal` endpoint | IMPLEMENTED | Returns 24h horizon expected demand, peak forecast, accuracy benchmarks (MAE 0.081 kW), and confidence distribution (High/Medium/Needs Attention) |
+| `/chat` endpoint (`app/api/v1/endpoints/chat.py`) | IMPLEMENTED | Upgraded with utility operational tools (`get_grid_demand`, `get_attention_summary`, `get_consumer_rankings_tool`) alongside research tools |
+| Artifact loader service (`app/services/artifact_loader.py`) | IMPLEMENTED | Precomputed demand cache and PyArrow queries from `data/artifacts/latest/` |
 | `requirements.txt` | IMPLEMENTED | Contains fastapi, uvicorn, pydantic, pandas, pyarrow, scikit-learn |
 
 #### Frontend (`frontend/`)
 
 | Component | Status | Notes |
 |---|---|---|
-| Vite + React 19 + TypeScript setup | IMPLEMENTED | `package.json`, `vite.config.ts`, `tsconfig` files; builds in <500ms |
-| App shell (`App.tsx`) | IMPLEMENTED | Tab-based navigation across 4 views |
-| Header / Footer layout | IMPLEMENTED | `components/layout/Header.tsx`, `Footer.tsx` |
-| Common components | IMPLEMENTED | `Card.tsx`, `Badge.tsx`, `MetricCard.tsx`, `TabNav.tsx` |
-| Chart components | IMPLEMENTED | `LoadChart.tsx`, `ClusterBarChart.tsx`, `TrajectoryFlow.tsx` |
-| OverviewView | IMPLEMENTED | Connects to `GET /overview`; displays live metrics, aggregated demand, 4-cluster distribution |
-| HouseholdView | IMPLEMENTED | Connects to `GET /households`, `/forecast`, `/segment`, `/instability`, `/anomaly`; displays real actual vs predicted load profiles, SHAP features, anomaly alerts |
-| TrajectoryView | IMPLEMENTED | Connects to live household metrics; renders longitudinal Hungarian-aligned transition flow |
-| CopilotView | IMPLEMENTED | Connects to `POST /chat`; renders grounded answers, tool execution badges, and household selector |
-| API client (`src/services/api.ts`) | IMPLEMENTED | Full TypeScript client talking to FastAPI backend with graceful mock fallbacks |
-| TypeScript types (`types/energy.ts`) | IMPLEMENTED | Domain interfaces for metrics, clusters, households, etc. |
-| CSS design system (`index.css`) | IMPLEMENTED | Glassmorphic dark theme with CSS custom properties |
-| Connection to real backend data | IMPLEMENTED | All 4 views wired to real pipeline artifacts with resilient offline fallback |
+| Vite + React 19 + TypeScript setup | IMPLEMENTED | `package.json`, `vite.config.ts`, `tsconfig` files; builds in <870ms |
+| Product Navigation Shell | IMPLEMENTED | 4 logical tiers: OVERVIEW (Grid Overview), ANALYTICS (Demand Analysis, Consumer Intelligence, Anomaly Analysis, Forecasting), INTELLIGENCE (AI Copilot), RESEARCH (Research Findings, Methodology) |
+| Grid Overview Workspace | IMPLEMENTED | 6 utility KPIs, period-over-period trend, weekday/weekend contrast, diurnal load curve, 3 operational alerts with 1-click navigation |
+| Demand Analysis Workspace | IMPLEMENTED | Dedicated analytical workspace: 24h diurnal curve, weekday vs weekend comparison, multi-window trend (W01–W14), seasonal comparison, and peak dynamics |
+| Consumer Intelligence Workspace | IMPLEMENTED | Consumer rankings table (6 sort modes) + Household explorer directory + full meter deep-dive with load factor, 24h curve, trajectory, and grounded explanation |
+| Anomaly Analysis Workspace | IMPLEMENTED | Operational anomaly detection: timeline, severity breakdown, and affected consumers table with Date / Severity / Observed Pattern / Action |
+| Day-Ahead Forecasting Workspace | IMPLEMENTED | Expected demand (0.240 kW/home), peak forecast (0.229 MW at 19:00), MAE 0.081 kW (+31.4% gain), and confidence tiers |
+| AI Copilot Workspace | IMPLEMENTED | Utility operational query suggestions + Research inquiry suggestions, backed by tool-calling and strict numeric grounding |
+| Research Findings & Methodology | IMPLEMENTED | Clean, professional secondary workspaces communicating empirical regression results and rigorous experimental controls |
+| Dashboard Workspaces (8 modules) | INTEGRATED | Fully wired to real artifacts/endpoints: Overview, Forecasting, Households, Segmentation, Anomalies, Copilot, Research Findings, Research Methodology |
+| API client (`src/services/api.ts`) | IMPLEMENTED | Full TypeScript client talking to FastAPI backend with verified artifact fallbacks |
+| CSS design system (`index.css`, `tokens.css`, `Workspaces.css`) | IMPLEMENTED | Restrained semantic dark/light design system without AI-slop |
+| Connection to real backend data | INTEGRATED | All 8 dashboard workspaces wired to real pipeline artifacts and endpoints |
 
 
 #### ML / Pipeline (`pipeline/`)

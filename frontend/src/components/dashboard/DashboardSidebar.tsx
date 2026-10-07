@@ -3,7 +3,7 @@ import {
   LayoutDashboard,
   TrendingUp,
   Users,
-  Network,
+  Activity,
   AlertTriangle,
   Sparkles,
   BookOpen,
@@ -29,17 +29,23 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const DASHBOARD_ITEMS: NavItem[] = [
-  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+const OVERVIEW_ITEMS: NavItem[] = [
+  { id: 'overview', label: 'Grid Overview', icon: LayoutDashboard },
+];
+
+const ANALYTICS_ITEMS: NavItem[] = [
+  { id: 'demand', label: 'Demand Analysis', icon: Activity },
+  { id: 'consumers', label: 'Consumer Intelligence', icon: Users },
+  { id: 'anomalies', label: 'Anomaly Analysis', icon: AlertTriangle },
   { id: 'forecasting', label: 'Forecasting', icon: TrendingUp },
-  { id: 'households', label: 'Households', icon: Users },
-  { id: 'segmentation', label: 'Segmentation', icon: Network },
-  { id: 'anomalies', label: 'Anomalies', icon: AlertTriangle },
-  { id: 'copilot', label: 'Copilot', icon: Sparkles },
+];
+
+const INTELLIGENCE_ITEMS: NavItem[] = [
+  { id: 'copilot', label: 'AI Copilot', icon: Sparkles },
 ];
 
 const RESEARCH_ITEMS: NavItem[] = [
-  { id: 'findings', label: 'Findings', icon: BookOpen },
+  { id: 'findings', label: 'Research Findings', icon: BookOpen },
   { id: 'methodology', label: 'Methodology', icon: FileText },
 ];
 
@@ -68,7 +74,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       <ul className="sidebar-nav-list" role="list">
         {items.map((item) => {
           const Icon = item.icon;
-          const isActive = activeSection === item.id;
+          const isActive =
+            activeSection === item.id ||
+            (item.id === 'consumers' && activeSection === 'households') ||
+            (item.id === 'demand' && activeSection === 'segmentation');
 
           return (
             <li key={item.id} className="sidebar-nav-item">
@@ -117,7 +126,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       >
         <div className="sidebar-inner">
           <nav className="sidebar-nav" aria-label="Sections">
-            {renderNavGroup('DASHBOARD', DASHBOARD_ITEMS)}
+            {renderNavGroup('OVERVIEW', OVERVIEW_ITEMS)}
+            {renderNavGroup('ANALYTICS', ANALYTICS_ITEMS)}
+            {renderNavGroup('INTELLIGENCE', INTELLIGENCE_ITEMS)}
             {renderNavGroup('RESEARCH', RESEARCH_ITEMS)}
           </nav>
 

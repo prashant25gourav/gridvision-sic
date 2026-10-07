@@ -1,15 +1,17 @@
 export type DashboardSection =
   | 'overview'
-  | 'forecasting'
-  | 'households'
-  | 'segmentation'
+  | 'demand'
+  | 'consumers'
   | 'anomalies'
+  | 'forecasting'
   | 'copilot'
   | 'findings'
-  | 'methodology';
+  | 'methodology'
+  | 'households' // legacy alias for consumers
+  | 'segmentation'; // legacy alias for consumers/demand
 
 export interface SidebarItem {
   id: DashboardSection;
   label: string;
-  section: 'DASHBOARD' | 'RESEARCH';
+  section: 'OVERVIEW' | 'ANALYTICS' | 'INTELLIGENCE' | 'RESEARCH';
 }

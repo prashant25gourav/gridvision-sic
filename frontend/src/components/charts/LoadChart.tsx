@@ -11,8 +11,9 @@ export function LoadChart({ data, height = 240 }: LoadChartProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   if (!data || data.length === 0) {
-    return <div style={{ color: 'var(--text-muted)', padding: '2rem', textAlign: 'center' }}>No telemetry data</div>;
+    return <div style={{ color: 'var(--foreground-muted)', padding: '2rem', textAlign: 'center' }}>Electricity load data unavailable for selected range</div>;
   }
+
 
   // Viewbox coordinates
   const width = 800;

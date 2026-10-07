@@ -15,9 +15,10 @@ Does longitudinal consumer segment instability predict tail-event forecast failu
 7. **TreeSHAP Explainability:** Local feature attributions calculated across all forecast predictions. Top drivers: mean_load (65.9%), half_hour (29.7%), std_load (3.3%).
 
 ### Primary Empirical Results (H1 vs H0)
-- Logistic regression model: Failure ~ Volatility + Instability, with standard errors clustered at the household level.
-- **Consumption Volatility:** Odds Ratio = 7.3997 (p < 0.001) — strong, highly significant predictor of extreme failure.
-- **Cluster Instability:** Odds Ratio = 1.1519 (95% CI [0.7357, 1.8035], p = 0.5364).
-- **Likelihood Ratio Test (LRT):** p = 0.2809.
+- Logistic regression model: Failure ~ Volatility + Instability, with standard errors clustered at the household level across 3,676 observations (620 households).
+- **Consumption Volatility:** Odds Ratio = 7.4459 (95% CI [4.8736, 11.3758], p < 0.0001) — strong, highly significant predictor of extreme failure.
+- **Cluster Instability:** Odds Ratio = 0.9183 (95% CI [0.5461, 1.5444], p = 0.7481).
+- **Nested Model Likelihood Ratio Test (LRT):** LR statistic = 0.2671, p = 0.6053.
 - **Verdict:** The null hypothesis (H0) is supported. While behavioral instability indicates customer lifestyle changes, raw volatility remains the dominant driver of extreme forecast failure.
-- **Forward-Only Holdout Evaluation:** Fixed model achieved ROC-AUC = 0.7010 and PR-AUC = 0.5375 on holdout households.
+- **Forward-Only Holdout Evaluation (W14):** Fixed model evaluated on 612 eligible holdout households (157 extreme failures, 25.65% event rate) achieved ROC-AUC = 0.7298 and PR-AUC = 0.5378 with zero refitting or parameter adjustment.
+

@@ -17,5 +17,16 @@ While volatility measures variations in raw electricity volume, instability capt
 An extreme forecast failure occurs when the standardized forecast error of a household exceeds a prospectively fixed threshold:
 - Standardized Error ($StdError$):
   $$StdError = \frac{\text{AE} - \text{Calibration Median AE}}{\text{MAD}_{effective}}$$
-- Extreme-Failure Threshold: Fixed strictly at 2.5804 (the 95th percentile of pooled calibration standardized errors).
-- When $StdError > 2.5804$, the window forecast is classified as an extreme failure.
+- Extreme-Failure Threshold: Fixed strictly at 2.53438 (the 95th percentile of pooled calibration standardized errors).
+- When $StdError > 2.53438$, the window forecast is classified as an extreme failure.
+
+### Hungarian Alignment
+Hungarian alignment is an optimal matching algorithm that prevents cluster label scrambling across time. Because K-Means clustering assigns cluster labels arbitrarily in each observation window, running clustering independently in each period would cause Cluster 0 in one window to represent a completely different behavior in the next. GridVision uses the Hungarian algorithm to chain each window's cluster centroids to the preceding window, minimizing centroid distance and preserving consistent behavioral identities over all 14 windows.
+
+### Optimal Cluster Count (K=4): What Does K=4 Mean?
+What does K=4 mean? GridVision selected K = 4 behavioral clusters through a silhouette coefficient sweep evaluated strictly on 1,240 calibration feature vectors. K = 4 achieved the highest partition separability (silhouette score 0.4021) among tested values K in [3, 8], identifying four distinct archetypes: Evening Peakers, Baseload Steady, Daytime Peakers, and Dual Peakers.
+
+### Day-Ahead Demand Forecasting: How Does GridVision Forecast Electricity Demand?
+How does GridVision forecast electricity demand? GridVision forecasts household electricity demand 24 hours ahead across 48 half-hourly time intervals using a pooled Gradient Boosted Decision Tree (GBDT) model. The forecaster utilizes lag features and time indicators without future data leakage, achieving a cohort mean absolute error of 0.081 kW and outperforming standard seasonal baselines by 31.4%.
+
+
