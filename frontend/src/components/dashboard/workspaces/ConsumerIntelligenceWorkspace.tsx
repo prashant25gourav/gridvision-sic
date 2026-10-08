@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, Search } from 'lucide-react';
 import {
   fetchConsumerRankings,
   fetchConsumerProfile,
@@ -201,6 +201,20 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
       a.household_id.localeCompare(b.household_id, undefined, { numeric: true, sensitivity: 'base' })
     );
   }, [rankingsData]);
+
+  // Consumer Profiles search state
+  const [consumerSearchTerm, setConsumerSearchTerm] = useState<string>('');
+
+  // Filtered Consumer Profiles based on search term
+  const filteredConsumerProfiles = useMemo(() => {
+    if (!consumerSearchTerm.trim()) return consumerProfilesList;
+    const term = consumerSearchTerm.trim().toLowerCase();
+    return consumerProfilesList.filter((item) => {
+      const idMatch = item.household_id.toLowerCase().includes(term);
+      const formattedMatch = formatConsumerId(item.household_id).toLowerCase().includes(term);
+      return idMatch || formattedMatch;
+    });
+  }, [consumerProfilesList, consumerSearchTerm]);
 
   return (
     <div className="workspace-container">
@@ -1222,12 +1236,85 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
       {/* TAB 5: CONSUMER PROFILES (ALL CONSUMERS DIRECTORY ORDERED BY METER ID) */}
       {activeTab === 'profiles' && (
         <section className="workspace-card" aria-label="Consumer Profiles Directory">
-          <div className="workspace-card-header">
-            <div>
+          <div className="workspace-card-header" style={{ flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+            <div style={{ flex: 1, minWidth: '240px' }}>
               <h2 className="workspace-card-title">Consumer Profiles</h2>
               <p className="workspace-card-subtitle">
-                Browse all consumers by meter ID.
+                Browse all consumers by meter ID or search for a specific household.
               </p>
+            </div>
+
+            {/* Consumer Search Input */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  minWidth: '280px',
+                  maxWidth: '380px',
+                }}
+              >
+                <Search
+                  size={16}
+                  style={{
+                    position: 'absolute',
+                    left: '0.85rem',
+                    color: 'var(--foreground-muted)',
+                    pointerEvents: 'none',
+                  }}
+                />
+                <input
+                  type="text"
+                  value={consumerSearchTerm}
+                  onChange={(e) => setConsumerSearchTerm(e.target.value)}
+                  placeholder="Search consumers by Meter ID..."
+                  aria-label="Search consumers by Meter ID"
+                  style={{
+                    width: '100%',
+                    padding: '0.55rem 2.2rem 0.55rem 2.4rem',
+                    fontSize: '0.84rem',
+                    backgroundColor: 'var(--surface-raised)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-sm)',
+                    color: 'var(--foreground)',
+                    outline: 'none',
+                    transition: 'border-color 150ms ease',
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = 'var(--accent-emerald)')}
+                  onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+                />
+                {consumerSearchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => setConsumerSearchTerm('')}
+                    style={{
+                      position: 'absolute',
+                      right: '0.65rem',
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--foreground-muted)',
+                      cursor: 'pointer',
+                      padding: '0.2rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                    title="Clear search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+              <span
+                style={{
+                  fontSize: '0.78rem',
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--foreground-subtle)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {filteredConsumerProfiles.length} of {consumerProfilesList.length}
+              </span>
             </div>
           </div>
 
@@ -1239,13 +1326,18 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
             <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
               No consumer profiles available for {selectedWindow}.
             </div>
+          ) : filteredConsumerProfiles.length === 0 ? (
+            <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+              No consumers matching &ldquo;{consumerSearchTerm}&rdquo; found. Try another meter ID.
+            </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', overflowX: 'auto' }}>
               <table
                 style={{
                   width: '100%',
+                  minWidth: '920px',
                   borderCollapse: 'collapse',
-                  fontSize: '0.84rem',
+                  fontSize: '0.90rem',
                   textAlign: 'left',
                 }}
               >
@@ -1254,21 +1346,21 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                     style={{
                       borderBottom: '1px solid var(--border)',
                       color: 'var(--foreground-subtle)',
-                      fontSize: '0.75rem',
+                      fontSize: '0.78rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <th style={{ padding: '0.75rem 1rem' }}>Meter ID</th>
-                    <th style={{ padding: '0.75rem 1rem' }}>Consumer</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Avg Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Load Factor</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Cluster</th>
+                    <th style={{ padding: '0.90rem 1.25rem', width: '22%' }}>Meter ID</th>
+                    <th style={{ padding: '0.90rem 1.25rem', width: '22%' }}>Consumer</th>
+                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Avg Demand</th>
+                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Peak Demand</th>
+                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Load Factor</th>
+                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Cluster</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {consumerProfilesList.map((item) => (
+                  {filteredConsumerProfiles.map((item) => (
                     <tr
                       key={item.household_id}
                       onClick={() => setDetailConsumerId(item.household_id)}
@@ -1287,7 +1379,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                     >
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.25rem',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
                           color: 'var(--foreground)',
@@ -1295,14 +1387,14 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       >
                         {item.household_id}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
+                      <td style={{ padding: '0.95rem 1.25rem' }}>
                         <div style={{ fontWeight: 600, color: 'var(--foreground)' }}>
                           {formatConsumerId(item.household_id)}
                         </div>
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.25rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
@@ -1313,7 +1405,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.25rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
@@ -1324,7 +1416,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.25rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
@@ -1333,12 +1425,12 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       >
                         {item.load_factor.toFixed(1)}%
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                      <td style={{ padding: '0.95rem 1.25rem', textAlign: 'right' }}>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.74rem',
-                            padding: '0.2rem 0.55rem',
+                            fontSize: '0.76rem',
+                            padding: '0.22rem 0.6rem',
                             borderRadius: 'var(--radius-sm)',
                             backgroundColor: 'var(--surface-raised)',
                             border: '1px solid var(--border)',

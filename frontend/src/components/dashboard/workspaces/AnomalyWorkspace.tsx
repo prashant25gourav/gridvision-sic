@@ -416,13 +416,13 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
               No high-severity anomalies detected in observation window {selectedWindow}.
             </div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.90rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Consumer</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Window</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Severity</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Pattern</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '28%' }}>Consumer</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>Window</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '16%' }}>Severity</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pattern</th>
                 </tr>
               </thead>
               <tbody>
@@ -449,25 +449,25 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--surface-raised)')}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                     >
-                      <td style={{ padding: '0.75rem 0.75rem' }}>
-                        <span style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
+                        <span style={{ fontWeight: 600, fontSize: '0.92rem', color: 'var(--foreground)' }}>
                           {formatConsumerId(row.household_id)}
                         </span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--foreground-subtle)', marginLeft: '0.5rem' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--foreground-subtle)', marginLeft: '0.65rem' }}>
                           {row.household_id}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem 0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--foreground-subtle)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--foreground-subtle)' }}>
                         {row.window_id}
                       </td>
-                      <td style={{ padding: '0.75rem 0.75rem' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.74rem',
+                            fontSize: '0.76rem',
                             fontWeight: 700,
                             textTransform: 'uppercase',
-                            padding: '0.18rem 0.55rem',
+                            padding: '0.22rem 0.65rem',
                             borderRadius: 'var(--radius-full)',
                             backgroundColor: `color-mix(in srgb, ${badgeColor} 15%, transparent)`,
                             border: `1px solid ${badgeColor}`,
@@ -477,7 +477,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                           {sev}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem 0.75rem', color: 'var(--foreground)', fontWeight: 500 }}>
+                      <td style={{ padding: '0.95rem 1.15rem', color: 'var(--foreground)', fontWeight: 500, fontSize: '0.90rem' }}>
                         {row.observed_pattern}
                       </td>
                     </tr>
@@ -514,8 +514,8 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                   type="button"
                   onClick={() => setSeverityFilter(sev.id as any)}
                   style={{
-                    padding: '0.35rem 0.75rem',
-                    fontSize: '0.75rem',
+                    padding: '0.40rem 0.85rem',
+                    fontSize: '0.78rem',
                     fontWeight: isSelected ? 700 : 500,
                     borderRadius: 'var(--radius-sm)',
                     border: isSelected ? '1px solid var(--accent-emerald)' : '1px solid var(--border)',
@@ -543,13 +543,13 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
             </div>
           ) : (
             <>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.90rem' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
-                    <th style={{ padding: '0.65rem 0.75rem' }}>Consumer</th>
-                    <th style={{ padding: '0.65rem 0.75rem' }}>Window</th>
-                    <th style={{ padding: '0.65rem 0.75rem' }}>Severity</th>
-                    <th style={{ padding: '0.65rem 0.75rem' }}>Pattern</th>
+                    <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '28%' }}>Consumer</th>
+                    <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '14%' }}>Window</th>
+                    <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', width: '16%' }}>Severity</th>
+                    <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pattern</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -576,25 +576,25 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--surface-raised)')}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                       >
-                        <td style={{ padding: '0.75rem 0.75rem' }}>
-                          <span style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                        <td style={{ padding: '0.95rem 1.15rem' }}>
+                          <span style={{ fontWeight: 600, fontSize: '0.92rem', color: 'var(--foreground)' }}>
                             {formatConsumerId(row.household_id)}
                           </span>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--foreground-subtle)', marginLeft: '0.5rem' }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--foreground-subtle)', marginLeft: '0.65rem' }}>
                             {row.household_id}
                           </span>
                         </td>
-                        <td style={{ padding: '0.75rem 0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--foreground-subtle)' }}>
+                        <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--foreground-subtle)' }}>
                           {row.window_id}
                         </td>
-                        <td style={{ padding: '0.75rem 0.75rem' }}>
+                        <td style={{ padding: '0.95rem 1.15rem' }}>
                           <span
                             style={{
                               fontFamily: 'var(--font-mono)',
-                              fontSize: '0.68rem',
+                              fontSize: '0.76rem',
                               fontWeight: 700,
                               textTransform: 'uppercase',
-                              padding: '0.18rem 0.55rem',
+                              padding: '0.22rem 0.65rem',
                               borderRadius: 'var(--radius-full)',
                               backgroundColor: `color-mix(in srgb, ${badgeColor} 15%, transparent)`,
                               border: `1px solid ${badgeColor}`,
@@ -604,7 +604,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                             {sev}
                           </span>
                         </td>
-                        <td style={{ padding: '0.75rem 0.75rem', color: 'var(--foreground)', fontWeight: 500 }}>
+                        <td style={{ padding: '0.95rem 1.15rem', color: 'var(--foreground)', fontWeight: 500, fontSize: '0.90rem' }}>
                           {row.observed_pattern}
                         </td>
                       </tr>
@@ -614,13 +614,13 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
               </table>
 
               {filteredAffected.length > visibleCount && (
-                <div style={{ padding: '1rem', textAlign: 'center', borderTop: '1px solid var(--border)' }}>
+                <div style={{ padding: '1.25rem', textAlign: 'center', borderTop: '1px solid var(--border)' }}>
                   <button
                     type="button"
                     onClick={() => setVisibleCount((c) => c + 30)}
                     style={{
-                      padding: '0.45rem 1.25rem',
-                      fontSize: '0.8rem',
+                      padding: '0.55rem 1.5rem',
+                      fontSize: '0.84rem',
                       fontWeight: 600,
                       backgroundColor: 'var(--surface-raised)',
                       color: 'var(--foreground)',
@@ -638,7 +638,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
         </div>
       </section>
 
-      {/* ANOMALY DETAIL MODAL (In-workspace detail inspection, preserves anomaly context) */}
+      {/* ANOMALY DETAIL MODAL (In-workspace detail inspection, preserves anomaly context — ENLARGED FOCUS CARD) */}
       {selectedAnomaly && (
         <div
           role="dialog"
@@ -647,8 +647,8 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.72)',
-            backdropFilter: 'blur(3px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.76)',
+            backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -661,41 +661,42 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
             style={{
               backgroundColor: 'var(--surface)',
               border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-lg, 12px)',
               width: '100%',
-              maxWidth: '540px',
+              maxWidth: '780px',
               maxHeight: '90vh',
               overflowY: 'auto',
-              boxShadow: '0 20px 45px rgba(0,0,0,0.45)',
-              padding: '1.75rem',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.55)',
+              padding: '2.25rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.25rem',
+              gap: '1.5rem',
             }}
           >
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border)', paddingBottom: '0.85rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem' }}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                  <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.55rem', fontWeight: 700, color: 'var(--foreground)' }}>
                     {formatConsumerId(selectedAnomaly.household_id)}
                   </h3>
                   <span
                     style={{
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.74rem',
-                      padding: '0.15rem 0.5rem',
+                      fontSize: '0.82rem',
+                      padding: '0.22rem 0.65rem',
                       borderRadius: 'var(--radius-sm)',
                       backgroundColor: 'var(--surface-raised)',
                       border: '1px solid var(--border)',
                       color: 'var(--foreground-subtle)',
+                      fontWeight: 600,
                     }}
                   >
                     {selectedAnomaly.household_id}
                   </span>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--foreground-muted)', marginTop: '0.25rem' }}>
-                  Flagged anomaly event in observation window {selectedAnomaly.window_id}
+                <div style={{ fontSize: '0.90rem', color: 'var(--foreground-muted)', marginTop: '0.35rem' }}>
+                  Flagged anomaly deviation event &bull; Observation Window {selectedAnomaly.window_id}
                 </div>
               </div>
 
@@ -703,54 +704,55 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 type="button"
                 onClick={() => setSelectedAnomaly(null)}
                 style={{
-                  background: 'none',
-                  border: 'none',
+                  background: 'var(--surface-raised)',
+                  border: '1px solid var(--border)',
                   color: 'var(--foreground-muted)',
                   cursor: 'pointer',
-                  padding: '0.35rem',
+                  padding: '0.45rem',
                   borderRadius: 'var(--radius-sm)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  transition: 'color 120ms ease',
                 }}
                 title="Close anomaly detail"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            {/* Properties Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem' }}>
-              <div style={{ padding: '0.75rem', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
-                <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  Severity
+            {/* Properties Grid — Large, Clear Focus Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+              <div style={{ padding: '1rem 1.15rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
+                  Event Severity
                 </span>
-                <div style={{ marginTop: '0.25rem' }}>
+                <div style={{ marginTop: '0.45rem' }}>
                   <span
                     style={{
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.74rem',
+                      fontSize: '0.84rem',
                       fontWeight: 700,
                       textTransform: 'uppercase',
-                      padding: '0.15rem 0.5rem',
+                      padding: '0.25rem 0.75rem',
                       borderRadius: 'var(--radius-full)',
                       backgroundColor:
-                        selectedAnomaly.severity.toUpperCase() === 'HIGH'
-                          ? 'color-mix(in srgb, var(--accent-rose) 15%, transparent)'
-                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM'
-                          ? 'color-mix(in srgb, var(--accent-amber) 15%, transparent)'
-                          : 'color-mix(in srgb, var(--accent-emerald) 15%, transparent)',
+                        selectedAnomaly.severity.toUpperCase() === 'HIGH' || selectedAnomaly.severity.toUpperCase() === 'EXTREME'
+                          ? 'color-mix(in srgb, var(--accent-rose) 18%, transparent)'
+                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM' || selectedAnomaly.severity.toUpperCase() === 'ELEVATED'
+                          ? 'color-mix(in srgb, var(--accent-amber) 18%, transparent)'
+                          : 'color-mix(in srgb, var(--accent-emerald) 18%, transparent)',
                       border: `1px solid ${
-                        selectedAnomaly.severity.toUpperCase() === 'HIGH'
+                        selectedAnomaly.severity.toUpperCase() === 'HIGH' || selectedAnomaly.severity.toUpperCase() === 'EXTREME'
                           ? 'var(--accent-rose)'
-                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM'
+                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM' || selectedAnomaly.severity.toUpperCase() === 'ELEVATED'
                           ? 'var(--accent-amber)'
                           : 'var(--accent-emerald)'
                       }`,
                       color:
-                        selectedAnomaly.severity.toUpperCase() === 'HIGH'
+                        selectedAnomaly.severity.toUpperCase() === 'HIGH' || selectedAnomaly.severity.toUpperCase() === 'EXTREME'
                           ? 'var(--accent-rose)'
-                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM'
+                          : selectedAnomaly.severity.toUpperCase() === 'MEDIUM' || selectedAnomaly.severity.toUpperCase() === 'ELEVATED'
                           ? 'var(--accent-amber)'
                           : 'var(--accent-emerald)',
                     }}
@@ -760,33 +762,65 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 </div>
               </div>
 
-              <div style={{ padding: '0.75rem', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
-                <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <div style={{ padding: '1rem 1.15rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
                   Observation Window
                 </span>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.92rem', fontWeight: 700, color: 'var(--foreground)', marginTop: '0.2rem' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--foreground)', marginTop: '0.35rem' }}>
                   {selectedAnomaly.window_id}
                 </div>
               </div>
 
-              <div style={{ padding: '0.75rem', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)', gridColumn: 'span 2' }}>
-                <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <div style={{ padding: '1rem 1.15rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
+                  Trigger Metric
+                </span>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.90rem', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.45rem', wordBreak: 'break-word' }}>
+                  {selectedAnomaly.triggering_statistic || 'Statistical Deviation'}
+                </div>
+              </div>
+
+              <div style={{ padding: '1.15rem 1.25rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)', gridColumn: 'span 3' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
                   Observed Pattern
                 </span>
-                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.35rem', lineHeight: 1.45 }}>
                   {selectedAnomaly.observed_pattern}
                 </div>
               </div>
             </div>
 
-            {/* What Was Detected */}
-            <div style={{ padding: '0.85rem 1rem', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
-              <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '0.35rem' }}>
-                What Was Detected
+            {/* What Was Detected — Spacious Analytical Interpretation */}
+            <div style={{ padding: '1.25rem 1.4rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-raised)', border: '1px solid var(--border)' }}>
+              <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '0.45rem', fontWeight: 600 }}>
+                Analytical Explanation
               </span>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
                 {getWhatWasDetected(selectedAnomaly.observed_pattern, selectedAnomaly.triggering_statistic)}
               </p>
+              <div style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--foreground-subtle)', borderTop: '1px solid var(--border)', paddingTop: '0.55rem' }}>
+                Screened against historical household baseline using the locked anomaly detection methodology.
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.25rem' }}>
+              <button
+                type="button"
+                onClick={() => setSelectedAnomaly(null)}
+                style={{
+                  padding: '0.55rem 1.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  backgroundColor: 'var(--surface-raised)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--foreground)',
+                  borderRadius: 'var(--radius-sm)',
+                  cursor: 'pointer',
+                }}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

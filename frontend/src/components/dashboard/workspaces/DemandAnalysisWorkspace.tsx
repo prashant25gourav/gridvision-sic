@@ -567,18 +567,18 @@ export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = (
               </p>
             </div>
           </div>
-          <div style={{ padding: '0 1rem 1rem 1rem', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', marginTop: '0.5rem' }}>
+          <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.90rem', marginTop: '0.5rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Window</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Calendar Period</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Season</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Mean Demand</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Peak Demand</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Peak / Avg</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Day / Night</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Anomalies</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Window</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Calendar Period</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Season</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mean Demand</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Peak Demand</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Peak / Avg</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Day / Night</th>
+                  <th style={{ padding: '0.90rem 1.15rem', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Anomalies</th>
                 </tr>
               </thead>
               <tbody>
@@ -595,41 +595,43 @@ export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = (
                           : i % 2 === 0
                           ? 'transparent'
                           : 'color-mix(in srgb, var(--surface-raised) 50%, transparent)',
+                        transition: 'background-color 120ms ease',
                       }}
                     >
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: isSelected ? 'var(--accent-emerald)' : 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: isSelected ? 'var(--accent-emerald)' : 'var(--foreground)' }}>
                         {w.window_id} {w.window_id === 'W14' ? '(Latest)' : ''}
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--foreground-muted)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--foreground-muted)' }}>
                         {w.date_range}
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
                         <span
                           style={{
-                            padding: '0.15rem 0.45rem',
+                            padding: '0.2rem 0.55rem',
                             borderRadius: 'var(--radius-sm)',
-                            fontSize: '0.72rem',
+                            fontSize: '0.76rem',
                             backgroundColor: 'var(--surface-raised)',
                             border: '1px solid var(--border)',
                             color: isWinter ? 'var(--accent-amber)' : 'var(--foreground-muted)',
+                            fontWeight: 500,
                           }}
                         >
                           {w.season}
                         </span>
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 500 }}>
                         {w.mean_load_kw.toFixed(3)} kW / consumer
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--accent-amber)' }}>
                         {w.peak_load_kw.toFixed(3)} kW / consumer
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)' }}>
                         {w.p2a_ratio.toFixed(2)}×
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)' }}>
                         {w.day_night_ratio.toFixed(2)}
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)' }}>
                         {w.flagged_anomalies > 0 ? (
                           <span style={{ color: 'var(--accent-rose)', fontWeight: 600 }}>
                             {w.flagged_anomalies}
@@ -665,41 +667,41 @@ export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = (
               <div
                 key={s.season}
                 style={{
-                  padding: '1rem 1.1rem',
+                  padding: '1.15rem 1.25rem',
                   borderRadius: 'var(--radius-md)',
                   backgroundColor: 'var(--surface-raised)',
                   border: '1px solid var(--border)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '0.6rem',
+                  gap: '0.75rem',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--foreground)' }}>
                     {s.season}
                   </h3>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--foreground-subtle)', fontFamily: 'var(--font-mono)' }}>
                     {s.window_count} {s.window_count === 1 ? 'window' : 'windows'}
                   </span>
                 </div>
 
                 <div>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     Average Demand
                   </span>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--foreground)', marginTop: '0.1rem' }}>
-                    {s.mean_load_kw.toFixed(3)} <span style={{ fontSize: '0.78rem', fontWeight: 500, color: 'var(--foreground-muted)' }}>kW / consumer</span>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.35rem', fontWeight: 700, color: 'var(--foreground)', marginTop: '0.15rem' }}>
+                    {s.mean_load_kw.toFixed(3)} <span style={{ fontSize: '0.80rem', fontWeight: 500, color: 'var(--foreground-muted)' }}>kW / consumer</span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', borderTop: '1px solid var(--border)', paddingTop: '0.45rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.84rem', borderTop: '1px solid var(--border)', paddingTop: '0.55rem' }}>
                   <span style={{ color: 'var(--foreground-muted)' }}>Peak</span>
                   <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)' }}>
-                    {s.peak_load_kw.toFixed(3)}
+                    {s.peak_load_kw.toFixed(3)} kW
                   </strong>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.84rem' }}>
                   <span style={{ color: 'var(--foreground-muted)' }}>Peak / Avg</span>
                   <strong style={{ fontFamily: 'var(--font-mono)' }}>
                     {s.p2a_ratio.toFixed(2)}×
@@ -709,72 +711,128 @@ export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = (
             ))}
           </div>
 
-          {/* Seasonal Comparison Bar Chart */}
+          {/* Seasonal Comparison Bar Chart — Professional Analytical Styling */}
           {seasonalData.length > 0 && (
-            <div style={{ padding: '0.75rem 1.25rem 1.25rem 1.25rem' }}>
-              <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--foreground-muted)', margin: '0 0 0.75rem 0' }}>
-                Seasonal Average vs Peak Demand
-              </h3>
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', gap: '1.5rem', height: '180px', padding: '0 2rem' }}>
-                {seasonalData.map((s) => {
-                  const avgHeight = Math.max(4, (s.mean_load_kw / maxSeasonalDemand) * 160);
-                  const peakHeight = Math.max(4, (s.peak_load_kw / maxSeasonalDemand) * 160);
+            <div style={{ padding: '1rem 1.5rem 1.5rem 1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                <h3 style={{ fontSize: '0.90rem', fontWeight: 600, color: 'var(--foreground-muted)', margin: 0 }}>
+                  Seasonal Average vs Peak Demand (kW / consumer)
+                </h3>
+                {/* Legend */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.80rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span style={{ width: '12px', height: '12px', backgroundColor: 'var(--accent-emerald)', borderRadius: '2px', opacity: 0.85 }} />
+                    <span style={{ color: 'var(--foreground-muted)' }}>Average Demand</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span style={{ width: '12px', height: '12px', backgroundColor: 'var(--accent-amber)', borderRadius: '2px', opacity: 0.85 }} />
+                    <span style={{ color: 'var(--foreground-muted)' }}>Peak Demand</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chart container with horizontal grid lines */}
+              <div
+                style={{
+                  position: 'relative',
+                  backgroundColor: 'var(--surface-raised)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '1.5rem 2rem 1.25rem 3.5rem',
+                  height: '240px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                }}
+              >
+                {/* Y-axis gridlines and labels */}
+                {[1.0, 0.75, 0.5, 0.25, 0].map((frac) => {
+                  const val = (maxSeasonalDemand * frac).toFixed(2);
+                  const bottomPct = frac * 100;
                   return (
-                    <div key={s.season} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem', flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '160px' }}>
-                        {/* Average bar */}
-                        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-muted)', marginBottom: '2px' }}>
-                            {s.mean_load_kw.toFixed(3)}
-                          </span>
-                          <div
-                            style={{
-                              width: '28px',
-                              height: `${avgHeight}px`,
-                              backgroundColor: 'var(--accent-emerald)',
-                              borderRadius: '3px 3px 0 0',
-                              opacity: 0.85,
-                              transition: 'height 300ms ease',
-                            }}
-                            title={`${s.season} Average: ${s.mean_load_kw.toFixed(3)} kW / consumer`}
-                          />
-                        </div>
-                        {/* Peak bar */}
-                        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', marginBottom: '2px' }}>
-                            {s.peak_load_kw.toFixed(3)}
-                          </span>
-                          <div
-                            style={{
-                              width: '28px',
-                              height: `${peakHeight}px`,
-                              backgroundColor: 'var(--accent-amber)',
-                              borderRadius: '3px 3px 0 0',
-                              opacity: 0.75,
-                              transition: 'height 300ms ease',
-                            }}
-                            title={`${s.season} Peak: ${s.peak_load_kw.toFixed(3)} kW / consumer`}
-                          />
-                        </div>
-                      </div>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.15rem' }}>
-                        {s.season}
+                    <div
+                      key={frac}
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: `${bottomPct * 0.75 + 18}%`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: '3.2rem',
+                          textAlign: 'right',
+                          paddingRight: '0.5rem',
+                          fontSize: '0.72rem',
+                          fontFamily: 'var(--font-mono)',
+                          color: 'var(--foreground-subtle)',
+                        }}
+                      >
+                        {val}
                       </span>
+                      <div
+                        style={{
+                          flex: 1,
+                          borderTop: frac === 0 ? '1px solid var(--border)' : '1px dashed color-mix(in srgb, var(--border) 60%, transparent)',
+                        }}
+                      />
                     </div>
                   );
                 })}
-              </div>
-              {/* Legend */}
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '0.75rem', fontSize: '0.76rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span style={{ width: '12px', height: '10px', backgroundColor: 'var(--accent-emerald)', borderRadius: '2px', opacity: 0.85 }} />
-                  <span style={{ color: 'var(--foreground-muted)' }}>Average Demand</span>
+
+                {/* Bars group */}
+                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-around', alignItems: 'flex-end', height: '175px', zIndex: 1 }}>
+                  {seasonalData.map((s) => {
+                    const avgHeight = Math.max(8, (s.mean_load_kw / maxSeasonalDemand) * 160);
+                    const peakHeight = Math.max(8, (s.peak_load_kw / maxSeasonalDemand) * 160);
+                    return (
+                      <div key={s.season} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '160px' }}>
+                          {/* Average bar */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.74rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-muted)', marginBottom: '4px' }}>
+                              {s.mean_load_kw.toFixed(3)}
+                            </span>
+                            <div
+                              style={{
+                                width: '32px',
+                                height: `${avgHeight}px`,
+                                backgroundColor: 'var(--accent-emerald)',
+                                borderRadius: '3px 3px 0 0',
+                                opacity: 0.88,
+                                transition: 'height 250ms ease',
+                              }}
+                              title={`${s.season} Average: ${s.mean_load_kw.toFixed(3)} kW / consumer`}
+                            />
+                          </div>
+                          {/* Peak bar */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.74rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', marginBottom: '4px' }}>
+                              {s.peak_load_kw.toFixed(3)}
+                            </span>
+                            <div
+                              style={{
+                                width: '32px',
+                                height: `${peakHeight}px`,
+                                backgroundColor: 'var(--accent-amber)',
+                                borderRadius: '3px 3px 0 0',
+                                opacity: 0.88,
+                                transition: 'height 250ms ease',
+                              }}
+                              title={`${s.season} Peak: ${s.peak_load_kw.toFixed(3)} kW / consumer`}
+                            />
+                          </div>
+                        </div>
+                        <span style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.25rem' }}>
+                          {s.season}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span style={{ width: '12px', height: '10px', backgroundColor: 'var(--accent-amber)', borderRadius: '2px', opacity: 0.75 }} />
-                  <span style={{ color: 'var(--foreground-muted)' }}>Peak Demand</span>
-                </div>
-                <span style={{ color: 'var(--foreground-subtle)', fontFamily: 'var(--font-mono)' }}>kW / consumer</span>
               </div>
             </div>
           )}

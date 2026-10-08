@@ -132,11 +132,19 @@ function App() {
                 setMode('dashboard');
               }}
               onExploreResearch={() => {
-                const el = document.getElementById('research-section');
+                const el = document.getElementById('overview-research');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
               onLaunchDashboard={() => {
                 setDashboardSection('overview');
+                setMode('dashboard');
+              }}
+              onNavigateSection={(sec: DashboardSection) => {
+                setDashboardSection(sec);
+                setMode('dashboard');
+              }}
+              onQueryCopilot={() => {
+                setDashboardSection('copilot');
                 setMode('dashboard');
               }}
             />

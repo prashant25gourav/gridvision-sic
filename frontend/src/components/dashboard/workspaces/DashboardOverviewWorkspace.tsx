@@ -301,18 +301,18 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
         </div>
       </section>
 
-      {/* Electricity Demand Trends Section with Dominant Chart Area */}
-      <section className="workspace-card" aria-label="Demand trends visualization">
-        <div className="workspace-card-header" style={{ flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+      {/* Electricity Demand Trends Section with Spacious Analytical Layout */}
+      <section className="workspace-card" aria-label="Demand trends visualization" style={{ padding: '1.75rem 2rem' }}>
+        <div className="workspace-card-header" style={{ flexWrap: 'wrap', gap: '1.25rem', alignItems: 'center', marginBottom: '0.5rem' }}>
           <div>
-            <h2 className="workspace-card-title">Electricity Demand Trends</h2>
-            <p className="workspace-card-subtitle">
-              Daily, weekly and longitudinal demand patterns.
+            <h2 className="workspace-card-title" style={{ fontSize: '1.35rem' }}>Electricity Demand Trends</h2>
+            <p className="workspace-card-subtitle" style={{ fontSize: '0.98rem', marginTop: '0.35rem' }}>
+              Daily, weekly and longitudinal demand patterns across monitored consumers.
             </p>
           </div>
 
           {/* View Switcher: Daily, Weekly, Longitudinal */}
-          <div role="tablist" style={{ display: 'flex', gap: '0.4rem' }}>
+          <div role="tablist" style={{ display: 'flex', gap: '0.5rem' }}>
             {[
               { id: 'daily', label: 'Daily Trend (24h Diurnal)' },
               { id: 'weekly', label: 'Weekly Trend (Weekday vs Weekend)' },
@@ -327,12 +327,12 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
                   type="button"
                   onClick={() => setActiveTrendTab(tab.id as typeof activeTrendTab)}
                   style={{
-                    padding: '0.4rem 0.85rem',
-                    fontSize: '0.78rem',
+                    padding: '0.5rem 1.05rem',
+                    fontSize: '0.85rem',
                     fontWeight: isActive ? 700 : 500,
                     borderRadius: 'var(--radius-sm)',
                     border: isActive ? '1px solid var(--accent-emerald)' : '1px solid var(--border)',
-                    backgroundColor: isActive ? 'color-mix(in srgb, var(--accent-emerald) 18%, var(--surface))' : 'var(--surface)',
+                    backgroundColor: isActive ? 'color-mix(in srgb, var(--accent-emerald) 18%, var(--surface))' : 'var(--surface-raised)',
                     color: isActive ? 'var(--foreground)' : 'var(--foreground-muted)',
                     cursor: 'pointer',
                     transition: 'all 150ms ease',
@@ -348,31 +348,44 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
         {/* Tab 1: Daily Trend (24-Hour Diurnal Load Curve) */}
         {activeTrendTab === 'daily' && (
           <div>
-            <div className="workspace-chart-wrapper" style={{ padding: '0.5rem 1rem 1rem 1rem' }}>
+            <div className="workspace-chart-wrapper" style={{ padding: '1.25rem 0.5rem 1.5rem 0.5rem' }}>
               {isLoading ? (
-                <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                <div style={{ padding: '4.5rem', textAlign: 'center', color: 'var(--foreground-muted)', fontSize: '0.95rem' }}>
                   Loading daily telemetry...
                 </div>
               ) : dailyTrendPoints.length > 0 ? (
                 <LoadChart
                   data={dailyTrendPoints}
-                  height={340}
+                  height={350}
                   unit="kW / consumer"
                   actualLabel="Observed Demand"
                   baselineLabel={selectedWindow === 'W01' ? undefined : 'Predicted Demand'}
                 />
               ) : (
-                <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                <div style={{ padding: '4.5rem', textAlign: 'center', color: 'var(--foreground-muted)', fontSize: '0.95rem' }}>
                   Diurnal telemetry unavailable for selected window.
                 </div>
               )}
             </div>
-            {/* Concise Chart Footer */}
-            <div style={{ padding: '0.85rem 1.25rem', backgroundColor: 'var(--surface-raised)', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>
-              <span>Period: <strong>{periodLabel}</strong></span>
-              <span>Peak: <strong style={{ color: 'var(--accent-amber)' }}>{activeData.peak_demand_kw.toFixed(3)} kW/consumer · {peakTime}</strong></span>
+            {/* Spacious Analytical Summary Bar */}
+            <div
+              style={{
+                padding: '1rem 1.35rem',
+                backgroundColor: 'var(--surface-raised)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                fontSize: '0.88rem',
+                color: 'var(--foreground-muted)',
+              }}
+            >
+              <span>Observation Period: <strong style={{ color: 'var(--foreground)' }}>{periodLabel}</strong></span>
+              <span>Observed Peak: <strong style={{ color: 'var(--accent-amber)', fontFamily: 'var(--font-mono)' }}>{activeData.peak_demand_kw.toFixed(3)} kW/consumer</strong> ({peakTime})</span>
               {troughEntry && (
-                <span>Trough: <strong>{troughEntry.actual_kw.toFixed(3)} kW/consumer · {troughEntry.time}</strong></span>
+                <span>Observed Trough: <strong style={{ color: 'var(--foreground)', fontFamily: 'var(--font-mono)' }}>{troughEntry.actual_kw.toFixed(3)} kW/consumer</strong> ({troughEntry.time})</span>
               )}
             </div>
           </div>
@@ -381,47 +394,60 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
         {/* Tab 2: Weekly Trend (Weekday vs Weekend Contrast) */}
         {activeTrendTab === 'weekly' && (
           <div>
-            <div className="workspace-chart-wrapper" style={{ padding: '0.5rem 1rem 1rem 1rem' }}>
+            <div className="workspace-chart-wrapper" style={{ padding: '1.25rem 0.5rem 1.5rem 0.5rem' }}>
               {isLoading ? (
-                <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                <div style={{ padding: '4.5rem', textAlign: 'center', color: 'var(--foreground-muted)', fontSize: '0.95rem' }}>
                   Loading weekly telemetry...
                 </div>
               ) : weeklyTrendPoints.length > 0 ? (
                 <LoadChart
                   data={weeklyTrendPoints}
-                  height={340}
+                  height={350}
                   unit="kW / consumer"
                   actualLabel="Weekday Demand"
                   baselineLabel="Weekend Demand"
                 />
               ) : (
-                <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                <div style={{ padding: '4.5rem', textAlign: 'center', color: 'var(--foreground-muted)', fontSize: '0.95rem' }}>
                   Weekly telemetry unavailable for selected window.
                 </div>
               )}
             </div>
-            {/* Concise Chart Footer */}
-            <div style={{ padding: '0.85rem 1.25rem', backgroundColor: 'var(--surface-raised)', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>
-              <span>Period: <strong>{periodLabel}</strong></span>
-              <span>Solid: <strong>Weekday Demand</strong> · Dashed: <strong>Weekend Demand</strong></span>
-              <span>Unit: <strong>kW / consumer</strong></span>
+            {/* Spacious Analytical Summary Bar */}
+            <div
+              style={{
+                padding: '1rem 1.35rem',
+                backgroundColor: 'var(--surface-raised)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                fontSize: '0.88rem',
+                color: 'var(--foreground-muted)',
+              }}
+            >
+              <span>Observation Period: <strong style={{ color: 'var(--foreground)' }}>{periodLabel}</strong></span>
+              <span>Trace Comparison: <strong style={{ color: 'var(--accent-emerald)' }}>Weekday Demand</strong> (Solid) · <strong style={{ color: 'var(--accent-amber)' }}>Weekend Demand</strong> (Dashed)</span>
+              <span>Metric Scale: <strong style={{ color: 'var(--foreground)' }}>kW / consumer</strong></span>
             </div>
           </div>
         )}
 
-        {/* Tab 3: Longitudinal Trend View */}
+        {/* Tab 3: Longitudinal Trend View — Spacious Presentation Table */}
         {activeTrendTab === 'longitudinal' && (
-          <div style={{ padding: '0 1rem 1rem 1rem', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', marginTop: '0.5rem' }}>
+          <div style={{ padding: '0.5rem 0 1rem 0', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.90rem', marginTop: '0.5rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Observation Window</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Calendar Period</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Season</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Mean Demand</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Peak Demand</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Peak-to-Average</th>
-                  <th style={{ padding: '0.65rem 0.75rem' }}>Anomalies</th>
+                <tr style={{ borderBottom: '1px solid var(--border-strong)', textAlign: 'left', color: 'var(--foreground-subtle)', fontSize: '0.80rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Window</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Calendar Period</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Season</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Mean Demand</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Peak Demand</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Peak / Avg</th>
+                  <th style={{ padding: '0.9rem 1.15rem' }}>Anomalies</th>
                 </tr>
               </thead>
               <tbody>
@@ -437,21 +463,23 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
                           ? 'color-mix(in srgb, var(--accent-emerald) 12%, transparent)'
                           : idx % 2 === 0
                           ? 'transparent'
-                          : 'color-mix(in srgb, var(--surface-raised) 50%, transparent)',
+                          : 'color-mix(in srgb, var(--surface-raised) 45%, transparent)',
+                        transition: 'background-color 120ms ease',
                       }}
                     >
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: isSelected ? 'var(--accent-emerald)' : 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.94rem', color: isSelected ? 'var(--accent-emerald)' : 'var(--foreground)' }}>
                         {w.window_id} {w.window_id === 'W14' ? '(Latest)' : ''}
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--foreground-muted)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontSize: '0.84rem', color: 'var(--foreground-muted)' }}>
                         {w.date_range}
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
                         <span
                           style={{
-                            padding: '0.15rem 0.45rem',
+                            padding: '0.25rem 0.65rem',
                             borderRadius: 'var(--radius-sm)',
-                            fontSize: '0.72rem',
+                            fontSize: '0.80rem',
+                            fontWeight: 600,
                             backgroundColor: 'var(--surface-raised)',
                             border: '1px solid var(--border)',
                             color: isWinter ? 'var(--accent-amber)' : 'var(--foreground-muted)',
@@ -460,18 +488,18 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
                           {w.season}
                         </span>
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
                         {w.mean_load_kw.toFixed(3)} kW/consumer
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--accent-amber)' }}>
                         {w.peak_load_kw.toFixed(3)} kW/consumer
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
                         {w.p2a_ratio.toFixed(2)}x
                       </td>
-                      <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', fontFamily: 'var(--font-mono)' }}>
                         {w.flagged_anomalies > 0 ? (
-                          <span style={{ color: 'var(--accent-rose)', fontWeight: 600 }}>
+                          <span style={{ color: 'var(--accent-rose)', fontWeight: 700, backgroundColor: 'color-mix(in srgb, var(--accent-rose) 12%, transparent)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-sm)', border: '1px solid color-mix(in srgb, var(--accent-rose) 25%, transparent)' }}>
                             {w.flagged_anomalies} flags
                           </span>
                         ) : (
@@ -484,7 +512,7 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
               </tbody>
             </table>
 
-            <div style={{ padding: '0.75rem 0.25rem', fontSize: '0.76rem', color: 'var(--foreground-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1rem 0.5rem 0.25rem 0.5rem', fontSize: '0.84rem', color: 'var(--foreground-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>
                 {selectedWindow === 'all'
                   ? 'Showing all 14 observation windows across monitored households.'
@@ -499,7 +527,7 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
                     border: 'none',
                     color: 'var(--accent-emerald)',
                     cursor: 'pointer',
-                    fontSize: '0.76rem',
+                    fontSize: '0.84rem',
                     fontWeight: 600,
                     textDecoration: 'underline',
                   }}
