@@ -26,6 +26,7 @@ class ChatResponse(BaseModel):
     answer: str
     tool_calls: List[ToolCallItem]
     grounded: bool
+    debug: Optional[Dict[str, Any]] = None
 
 
 @router.post("/chat", response_model=ChatResponse)

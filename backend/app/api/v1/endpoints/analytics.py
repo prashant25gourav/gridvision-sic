@@ -4,6 +4,7 @@ Serves precomputed artifacts for Grid Overview, Demand Analysis,
 Consumer Intelligence, Anomaly Analysis, Forecasting, and Research Findings.
 """
 
+from typing import Optional
 from fastapi import APIRouter, HTTPException
 from app.services.artifact_loader import store
 
@@ -11,27 +12,27 @@ router = APIRouter()
 
 
 @router.get("/overview/grid")
-def get_grid_overview_endpoint():
+def get_grid_overview_endpoint(window_id: Optional[str] = None):
     """Retrieve comprehensive grid operational overview and diurnal load profile."""
-    return store.get_overview_data()
+    return store.get_overview_data(window_id=window_id)
 
 
 @router.get("/demand/analysis")
-def get_demand_analysis_endpoint():
+def get_demand_analysis_endpoint(window_id: Optional[str] = None):
     """Retrieve full demand analysis: diurnal profile, weekday vs weekend, window trend, and seasonality."""
-    return store.get_demand_analysis()
+    return store.get_demand_analysis(window_id=window_id)
 
 
 @router.get("/consumers/rankings")
-def get_consumer_rankings_endpoint():
-    """Retrieve consumer ranking tables, operational priorities, and attention status across all 620 homes."""
-    return store.get_consumer_rankings()
+def get_consumer_rankings_endpoint(window_id: Optional[str] = None):
+    """Retrieve consumer ranking tables, operational priorities, and attention status across all households."""
+    return store.get_consumer_rankings(window_id=window_id)
 
 
 @router.get("/consumers/{household_id}/profile")
-def get_consumer_profile_endpoint(household_id: str):
-    """Retrieve full single-consumer profile with consumption, trajectory, forecast, and anomaly history."""
-    profile = store.get_household_full_profile(household_id)
+def get_consumer_profile_endpoint(household_id: str, window_id: Optional[str] = None):
+    """Retrieve full single-consumer profile with consumption, diurnal load profile, and day-ahead forecast."""
+    profile = store.get_household_full_profile(household_id, window_id=window_id)
     if not profile:
         raise HTTPException(status_code=404, detail=f"Consumer '{household_id}' not found in study sample.")
     return profile
@@ -56,9 +57,9 @@ def get_research_findings_endpoint():
 
 
 @router.get("/segmentation/overview")
-def get_segmentation_overview_endpoint():
+def get_segmentation_overview_endpoint(window_id: Optional[str] = None):
     """Retrieve K-Means cluster profiles, silhouette sweep, and feature comparisons."""
-    return store.get_segmentation_overview()
+    return store.get_segmentation_overview(window_id=window_id)
 
 
 @router.get("/anomalies/overview")

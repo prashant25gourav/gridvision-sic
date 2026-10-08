@@ -247,10 +247,21 @@ In accordance with Master Plan v4 §8.8 and Blueprint v2 §D, the pre-registered
 3. **Deprioritized Checks (Contingency Plan v4 §17, "cut second"):**
    - Full window-fixed-effects sweep (which suffers from quasi-complete separation on W04/W05 summer zero-failure cells) and placebo/window-length sweeps are deprioritized per the locked Contingency Plan §17 given project schedule constraints.
 
+### DEC-017 — AI Copilot Audit, Functional Verification, and Grounding Hardening
+
+Date: 2026-10-08
+Status: DECIDED
+Decision: Standardize and harden the existing AI Copilot without altering the locked pipeline, ML models, or precomputed artifacts. Enhance `tools.py` with peak metrics and cluster transition metrics, reinforce TF-IDF RAG retrieval with explicit glossary thresholds and operator checklists, strictly enforce numeric traceability across 100% of responses, support consumer prefix parsing (e.g. `Consumer 023` -> `MAC000023`), refute grounding attacks, and refine the frontend UI (clean "Consumer" selector, remove fake telemetry, categorize working questions, and provide collapsible query trace inspection).
+Reason: Ensures the exhibition Copilot is genuinely grounded in authentic GridVision data, never hallucinates numbers or models, provides clean plain-language explanations with consistent kW units, and visually matches the approved dashboard workspaces.
+Affected files/modules: `backend/app/services/rag/tools.py`, `backend/app/services/rag/agent.py`, `backend/app/services/rag/grounding.py`, `backend/app/services/rag/knowledge_base/`, `backend/app/api/v1/endpoints/chat.py`, `frontend/src/components/dashboard/workspaces/CopilotWorkspace.tsx`, `frontend/src/services/api.ts`, `tests/test_copilot_verification.py`
+Approved by: Development Team / AI Copilot Governance
+Source: Blueprint v2 §F.6, §H; Copilot Verification Audit
+
 ---
 
 ## Pending / Open Items
 
 1. **Literature novelty verification search** (non-blocking for implementation, required before submitting final capstone research paper per Master Plan v4 §23 / Handoff §22).
 2. **Methods & Results write-up and demonstration rehearsal** (viva presentation slides and live demo walkthrough).
+
 

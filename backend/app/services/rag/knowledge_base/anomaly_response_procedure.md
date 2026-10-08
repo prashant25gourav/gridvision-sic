@@ -19,3 +19,11 @@ This procedure outlines operational protocols when an anomaly flag is triggered 
 - **Extreme Spike (`peak_load`, `ramp_rate`):** Sudden surge caused by industrial load, EV rapid charger, or faulty HVAC.
 - **Prolonged Drop (`mean_load`, `std_load`):** Near-zero consumption suggesting vacancy, solar export mismatch, or damaged metering hardware.
 - **Day/Night Inversion (`day_night_ratio`):** Heavy nocturnal consumption shift, indicating off-peak battery charging or unusual shift-work routines.
+
+### Operator Investigation: What Should an Operator Check After an Unusual Consumption Event?
+When an unusual consumption event or anomaly flag occurs, an operator should check:
+1. Anomaly severity level (|z| score) to prioritize response: low severity (|z| < 2.5) requires automated logging only, whereas medium and high severity (|z| >= 2.5) require active investigation.
+2. Smart meter data communication integrity to rule out telemetry dropout, packet delay, or meter freeze.
+3. Substation feeder telemetry to determine if neighboring meters on the same distribution line experienced correlated voltage or demand fluctuations.
+4. Utility maintenance logs and scheduled demand-response events before dispatching field technicians for on-site meter diagnostics.
+

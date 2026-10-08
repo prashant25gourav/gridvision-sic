@@ -29,4 +29,8 @@ What does K=4 mean? GridVision selected K = 4 behavioral clusters through a silh
 ### Day-Ahead Demand Forecasting: How Does GridVision Forecast Electricity Demand?
 How does GridVision forecast electricity demand? GridVision forecasts household electricity demand 24 hours ahead across 48 half-hourly time intervals using a pooled Gradient Boosted Decision Tree (GBDT) model. The forecaster utilizes lag features and time indicators without future data leakage, achieving a cohort mean absolute error of 0.081 kW and outperforming standard seasonal baselines by 31.4%.
 
+### Forecast Reliability: What Does Forecast Reliability Mean?
+What does forecast reliability mean? Forecast reliability reflects the expected dependability of a household's demand prediction. GridVision categorizes households into operational reliability tiers (Stable with instability <= 0.25, Moderate with 0.25 to 0.60, and Elevated Risk with instability > 0.60) based on longitudinal cluster stability and baseline consumption volatility. Stable households exhibit predictable usage routines, making their day-ahead forecasts highly dependable for capacity planning. In contrast, households with high demand volatility or frequent behavioral shifts carry higher forecast uncertainty and require wider operating safety margins.
+
+
 

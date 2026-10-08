@@ -3,7 +3,7 @@ import type { DashboardSection } from './types/dashboard';
 import { WelcomeHero } from './components/welcome/WelcomeHero';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { OverviewView } from './views/OverviewView';
+import { OverviewGateway } from './components/overview/OverviewGateway';
 import { DashboardShell } from './components/dashboard/DashboardShell';
 
 export type AppMode = 'welcome' | 'overview' | 'dashboard';
@@ -15,8 +15,6 @@ const VALID_SECTIONS: DashboardSection[] = [
   'anomalies',
   'forecasting',
   'copilot',
-  'findings',
-  'methodology',
   'households',
   'segmentation',
 ];
@@ -128,13 +126,17 @@ function App() {
       <main style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
         {mode === 'overview' ? (
           <>
-            <OverviewView
+            <OverviewGateway
               onExploreCapstone={() => {
                 setDashboardSection('overview');
                 setMode('dashboard');
               }}
               onExploreResearch={() => {
-                setDashboardSection('findings');
+                const el = document.getElementById('research-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              onLaunchDashboard={() => {
+                setDashboardSection('overview');
                 setMode('dashboard');
               }}
             />
@@ -144,6 +146,18 @@ function App() {
           <DashboardShell
             initialSection={dashboardSection}
             onSectionChange={(newSec) => setDashboardSection(newSec)}
+            onNavigateOverview={(anchor) => {
+              setMode('overview');
+              if (anchor) {
+                if (typeof window !== 'undefined') {
+                  window.location.hash = anchor;
+                }
+                setTimeout(() => {
+                  const el = document.getElementById(anchor);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 120);
+              }
+            }}
           />
         )}
       </main>

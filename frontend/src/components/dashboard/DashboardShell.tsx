@@ -8,18 +8,18 @@ import { ConsumerIntelligenceWorkspace } from './workspaces/ConsumerIntelligence
 import { ForecastingWorkspace } from './workspaces/ForecastingWorkspace';
 import { AnomalyWorkspace } from './workspaces/AnomalyWorkspace';
 import { CopilotWorkspace } from './workspaces/CopilotWorkspace';
-import { ResearchFindingsWorkspace } from './workspaces/ResearchFindingsWorkspace';
-import { ResearchMethodologyWorkspace } from './workspaces/ResearchMethodologyWorkspace';
 import './DashboardShell.css';
 
 interface DashboardShellProps {
   initialSection?: DashboardSection;
   onSectionChange?: (section: DashboardSection) => void;
+  onNavigateOverview?: (anchor?: string) => void;
 }
 
 export const DashboardShell: React.FC<DashboardShellProps> = ({
   initialSection = 'overview',
   onSectionChange,
+  onNavigateOverview,
 }) => {
   const [activeSection, setActiveSection] = useState<DashboardSection>(initialSection);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
@@ -52,26 +52,49 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
   const renderActiveWorkspace = () => {
     switch (activeSection) {
       case 'overview':
-        return <DashboardOverviewWorkspace onNavigateSection={handleSelectSection} />;
+        return (
+          <DashboardOverviewWorkspace
+            onNavigateSection={handleSelectSection}
+            onNavigateOverview={onNavigateOverview}
+          />
+        );
       case 'demand':
       case 'segmentation':
-        return <DemandAnalysisWorkspace />;
+        return <DemandAnalysisWorkspace onNavigateOverview={onNavigateOverview} />;
       case 'consumers':
-        return <ConsumerIntelligenceWorkspace initialTab="rankings" onNavigateSection={handleSelectSection} />;
+        return (
+          <ConsumerIntelligenceWorkspace
+            initialTab="rankings"
+            onNavigateSection={handleSelectSection}
+            onNavigateOverview={onNavigateOverview}
+          />
+        );
       case 'households':
-        return <ConsumerIntelligenceWorkspace initialTab="explorer" onNavigateSection={handleSelectSection} />;
+        return (
+          <ConsumerIntelligenceWorkspace
+            initialTab="explorer"
+            onNavigateSection={handleSelectSection}
+            onNavigateOverview={onNavigateOverview}
+          />
+        );
       case 'anomalies':
-        return <AnomalyWorkspace onNavigateSection={handleSelectSection} />;
+        return (
+          <AnomalyWorkspace
+            onNavigateSection={handleSelectSection}
+            onNavigateOverview={onNavigateOverview}
+          />
+        );
       case 'forecasting':
-        return <ForecastingWorkspace />;
+        return <ForecastingWorkspace onNavigateOverview={onNavigateOverview} />;
       case 'copilot':
-        return <CopilotWorkspace />;
-      case 'findings':
-        return <ResearchFindingsWorkspace />;
-      case 'methodology':
-        return <ResearchMethodologyWorkspace />;
+        return <CopilotWorkspace onNavigateOverview={onNavigateOverview} />;
       default:
-        return <DashboardOverviewWorkspace onNavigateSection={handleSelectSection} />;
+        return (
+          <DashboardOverviewWorkspace
+            onNavigateSection={handleSelectSection}
+            onNavigateOverview={onNavigateOverview}
+          />
+        );
     }
   };
 

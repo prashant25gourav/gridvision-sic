@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, ShieldCheck } from 'lucide-react';
+import { Send, ArrowRight, Sparkles, CheckCircle2, Bot } from 'lucide-react';
 import { sendChatMessage, fetchHouseholds, type HouseholdSummary, type ToolCall } from '../../../services/api';
 import './Workspaces.css';
 
@@ -8,25 +8,43 @@ interface ExtendedCopilotMessage {
   sender: 'user' | 'assistant';
   timestamp: string;
   content: string;
-  toolCalls?: ToolCall[];
   grounded?: boolean;
+  toolCalls?: ToolCall[];
+  debug?: Record<string, any>;
 }
 
-export const CopilotWorkspace: React.FC = () => {
+interface CopilotWorkspaceProps {
+  onNavigateOverview?: (anchor?: string) => void;
+}
+
+// Clean consumer formatting helper (e.g. "MAC000023" -> "Consumer 023")
+function formatConsumerId(rawId: string): string {
+  if (!rawId) return '';
+  const match = rawId.match(/MAC0*(\d+)/i);
+  if (match) {
+    return `Consumer ${match[1].padStart(3, '0')}`;
+  }
+  return `Consumer ${rawId}`;
+}
+
+export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
+  onNavigateOverview,
+}) => {
   const [messages, setMessages] = useState<ExtendedCopilotMessage[]>([
     {
       id: 'initial-1',
       sender: 'assistant',
-      timestamp: 'Utility Analytics Ready',
+      timestamp: 'Ready',
       content:
-        'GridVision Copilot ready. I provide explainable answers for grid demand, peak timing, consumer prioritization, unusual consumption alerts, and research findings with strict numeric grounding. Ask an operational question or select a curated query below.',
+        'Ask about demand, forecasts, consumer profiles, anomalies, or behavioral stability.\n\nGridVision uses its analytics and knowledge base to ground answers in the available data.',
       grounded: true,
+      toolCalls: [],
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [households, setHouseholds] = useState<HouseholdSummary[]>([]);
-  const [selectedHouseholdId, setSelectedHouseholdId] = useState<string>('MAC000045');
+  const [selectedHouseholdId, setSelectedHouseholdId] = useState<string>('MAC000023');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const nextIdRef = useRef(10);
@@ -36,7 +54,12 @@ export const CopilotWorkspace: React.FC = () => {
       .then((data) => {
         if (data.length > 0) {
           setHouseholds(data);
-          setSelectedHouseholdId(data[0].household_id);
+          const found23 = data.find((h) => h.household_id === 'MAC000023');
+          if (found23) {
+            setSelectedHouseholdId(found23.household_id);
+          } else {
+            setSelectedHouseholdId(data[0].household_id);
+          }
         }
       })
       .catch((e) => console.warn('Could not load household list for Copilot:', e));
@@ -71,26 +94,23 @@ export const CopilotWorkspace: React.FC = () => {
         sender: 'assistant',
         timestamp: 'Just now',
         content: response.answer,
-        toolCalls: response.tool_calls,
         grounded: response.grounded,
+        toolCalls: response.tool_calls,
+        debug: response.debug,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
-      console.warn('Backend chat failed, falling back to verified grounded response:', err);
-
-      let responseContent = `Household ${selectedHouseholdId} operates within verified study parameters. Its typical consumption is tracked across 14 observation windows using Hungarian-aligned segmentation.\n\nWhat this means:\n• Baseline demand variability is the primary factor affecting forecast predictability.\n• Behavioral cluster assignments reflect routine daily usage rhythms.\n\nTechnical evidence:\nExtreme failure threshold: 2.53438 | Study cohort: 620 smart meters`;
-      if (text.toLowerCase().includes('research') || text.toLowerCase().includes('findings') || text.toLowerCase().includes('hypothesis') || text.toLowerCase().includes('predict failure')) {
-        responseContent = `The research study found that changing behavioral-cluster assignment over time does not independently predict extreme load-forecast failure once consumption volatility is accounted for.\n\nWhat this means:\n• Baseline consumption volatility is the dominant predictor of forecast accuracy.\n• Shifts between daily behavioral clusters reflect structured lifestyle routines that forecasters readily learn.\n• Nested likelihood-ratio tests confirmed that adding cluster instability provides no statistically significant incremental explanatory gain.\n\nTechnical evidence:\nVolatility OR = 7.4459 (p < 0.0001) | Instability OR = 0.9183 (p = 0.7481) | Nested LRT p = 0.6053 | Holdout ROC-AUC = 0.7298`;
-      }
+      console.warn('Backend chat failed:', err);
 
       const assistantId = nextIdRef.current++;
       const assistantMessage: ExtendedCopilotMessage = {
         id: `ast-${assistantId}`,
         sender: 'assistant',
         timestamp: 'Just now',
-        content: responseContent,
-        grounded: true,
+        content:
+          'Unable to communicate with the GridVision AI Copilot service at this time. Please verify that the backend API server is running and accessible.',
+        grounded: false,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -99,35 +119,79 @@ export const CopilotWorkspace: React.FC = () => {
     }
   };
 
-  const utilitySuggestions = [
-    'What is current demand and when does it peak?',
-    'Which households currently need operational attention?',
-    'Who are the highest electricity consumers in the network?',
-    `Explain household ${selectedHouseholdId}'s load profile and why flagged`,
-  ];
+  const consumerLabel = formatConsumerId(selectedHouseholdId);
 
-  const researchSuggestions = [
-    'Does behavioural instability predict forecast failure?',
-    'What did the research study actually find?',
+  const domainQueryCategories = [
+    {
+      category: 'Demand & Forecasts',
+      prompts: [
+        'When does demand peak across the network?',
+        `What is the forecast for ${consumerLabel}?`,
+        `When is ${consumerLabel} expected to peak?`,
+        `How large is ${consumerLabel}'s forecast error?`,
+      ],
+    },
+    {
+      category: 'Consumers & Profiles',
+      prompts: [
+        `What consumption profile does ${consumerLabel} have?`,
+        `What cluster is ${consumerLabel} currently assigned to?`,
+        `How stable is ${consumerLabel}'s consumption behavior?`,
+        `Has ${consumerLabel} changed behavioral clusters over time?`,
+      ],
+    },
+    {
+      category: 'Anomalies',
+      prompts: [
+        `Is ${consumerLabel} showing an anomaly?`,
+        `Why was ${consumerLabel} flagged?`,
+        'Which consumers were flagged for unusual consumption?',
+      ],
+    },
+    {
+      category: 'Operational Guidance',
+      prompts: [
+        'What does forecast reliability mean?',
+        'What should an operator check after an unusual consumption event?',
+        'How does GridVision forecast electricity demand?',
+      ],
+    },
   ];
 
   return (
     <div className="workspace-container">
       {/* Workspace Header */}
       <header className="workspace-header">
-        <div className="workspace-header-title-row">
-          <h1 className="workspace-title">Energy Analytics Copilot</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div className="workspace-header-title-row">
+              <h1 className="workspace-title">AI Copilot</h1>
+            </div>
+            <p className="workspace-subtitle">
+              Intelligent energy analytics assistant answering questions about demand, forecasts, consumer profiles, and anomalies.
+            </p>
+          </div>
+
+          {onNavigateOverview && (
+            <button
+              type="button"
+              className="workspace-link-btn"
+              onClick={() => onNavigateOverview('overview-copilot')}
+              style={{ fontSize: '0.82rem', alignSelf: 'flex-start' }}
+              title="Learn how the AI Copilot works on the Overview page"
+            >
+              <span>Learn about AI Copilot</span>
+              <ArrowRight size={14} />
+            </button>
+          )}
         </div>
-        <p className="workspace-subtitle">
-          Grounded conversational assistant answering questions about household consumption, forecasting accuracy, customer segmentation, and empirical research findings.
-        </p>
       </header>
 
       {/* Main Split Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.5rem', alignItems: 'start' }}>
         {/* Chat Area */}
-        <div className="workspace-card" style={{ padding: '1.25rem 1.5rem', minHeight: '580px', display: 'flex', flexDirection: 'column' }}>
-          {/* Header Strip with Household Context */}
+        <div className="workspace-card" style={{ padding: '1.25rem 1.5rem', minHeight: '620px', display: 'flex', flexDirection: 'column' }}>
+          {/* Header Strip with Consumer Context */}
           <div
             style={{
               display: 'flex',
@@ -142,7 +206,7 @@ export const CopilotWorkspace: React.FC = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <label htmlFor="copilot-hh-select" style={{ fontSize: '0.82rem', color: 'var(--foreground-muted)' }}>
-                Active Meter Context:
+                Consumer:
               </label>
               <select
                 id="copilot-hh-select"
@@ -158,21 +222,20 @@ export const CopilotWorkspace: React.FC = () => {
               >
                 {households.slice(0, 50).map((h) => (
                   <option key={h.household_id} value={h.household_id}>
-                    {h.household_id} ({h.cluster_label.split('/')[0].trim()})
+                    {formatConsumerId(h.household_id)} ({h.household_id})
                   </option>
                 ))}
               </select>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-emerald)', fontWeight: 700 }}>
-                GROUNDED ARTIFACT ACCESS
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--foreground-subtle)', fontSize: '0.78rem' }}>
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--accent-emerald)' }} />
+              <span>Ready</span>
             </div>
           </div>
 
           {/* Messages Stream */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', overflowY: 'auto', maxHeight: '430px', paddingRight: '0.5rem', marginBottom: '1rem' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.1rem', overflowY: 'auto', maxHeight: '460px', paddingRight: '0.5rem', marginBottom: '1rem' }}>
             {messages.map((msg) => {
               const isAssistant = msg.sender === 'assistant';
               return (
@@ -186,48 +249,12 @@ export const CopilotWorkspace: React.FC = () => {
                     alignSelf: isAssistant ? 'flex-start' : 'flex-end',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', fontSize: '0.75rem', color: 'var(--foreground-subtle)' }}>
-                    <span style={{ fontWeight: 600 }}>{isAssistant ? 'GridVision Copilot' : 'Analyst'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', fontSize: '0.75rem', color: 'var(--foreground-subtle)' }}>
+                    {isAssistant && <Bot size={13} style={{ color: 'var(--accent-emerald)' }} />}
+                    <span style={{ fontWeight: 600 }}>{isAssistant ? 'GridVision Copilot' : 'You'}</span>
                     <span>•</span>
                     <span>{msg.timestamp}</span>
-                    {isAssistant && msg.grounded !== undefined && (
-                      <span
-                        style={{
-                          padding: '0.1rem 0.4rem',
-                          borderRadius: 'var(--radius-full)',
-                          fontSize: '0.65rem',
-                          fontFamily: 'var(--font-mono)',
-                          fontWeight: 700,
-                          backgroundColor: msg.grounded ? 'color-mix(in srgb, var(--accent-emerald) 15%, transparent)' : 'color-mix(in srgb, var(--accent-rose) 15%, transparent)',
-                          color: msg.grounded ? 'var(--accent-emerald)' : 'var(--accent-rose)',
-                        }}
-                      >
-                        {msg.grounded ? 'VERIFIED GROUNDED' : 'UNVERIFIED'}
-                      </span>
-                    )}
                   </div>
-
-                  {/* Tool Call Tag */}
-                  {isAssistant && msg.toolCalls && msg.toolCalls.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '0.35rem' }}>
-                      {msg.toolCalls.map((tc, idx) => (
-                        <span
-                          key={idx}
-                          style={{
-                            fontSize: '0.72rem',
-                            fontFamily: 'var(--font-mono)',
-                            padding: '0.15rem 0.5rem',
-                            borderRadius: 'var(--radius-sm)',
-                            backgroundColor: 'var(--surface-raised)',
-                            color: 'var(--accent-emerald)',
-                            border: '1px solid var(--border)',
-                          }}
-                        >
-                          Tool: {tc.tool}({JSON.stringify(tc.args).replace(/["{}]/g, '')})
-                        </span>
-                      ))}
-                    </div>
-                  )}
 
                   {/* Message Bubble */}
                   <div
@@ -240,9 +267,48 @@ export const CopilotWorkspace: React.FC = () => {
                       fontSize: '0.88rem',
                       lineHeight: 1.6,
                       whiteSpace: 'pre-wrap',
+                      boxShadow: isAssistant ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                     }}
                   >
                     {msg.content}
+
+                    {/* Grounding & Development Transparency */}
+                    {isAssistant && msg.grounded !== undefined && (
+                      <div style={{ marginTop: '0.75rem', paddingTop: '0.55rem', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.72rem', color: msg.grounded ? 'var(--accent-emerald)' : 'var(--foreground-subtle)', fontWeight: 600 }}>
+                            <CheckCircle2 size={12} />
+                            {msg.grounded ? 'Grounded in GridVision data' : 'Domain response'}
+                          </span>
+
+                          {msg.toolCalls && msg.toolCalls.length > 0 && (
+                            <details style={{ fontSize: '0.72rem', color: 'var(--foreground-subtle)', cursor: 'pointer' }}>
+                              <summary style={{ outline: 'none', userSelect: 'none' }}>
+                                Trace ({msg.toolCalls.length} tool{msg.toolCalls.length > 1 ? 's' : ''})
+                              </summary>
+                              <div
+                                style={{
+                                  marginTop: '0.4rem',
+                                  padding: '0.5rem 0.75rem',
+                                  backgroundColor: 'var(--surface)',
+                                  borderRadius: 'var(--radius-sm)',
+                                  border: '1px solid var(--border)',
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.72rem',
+                                  whiteSpace: 'pre-wrap',
+                                }}
+                              >
+                                {msg.toolCalls.map((tc, idx) => (
+                                  <div key={idx} style={{ marginBottom: '0.25rem' }}>
+                                    <strong style={{ color: 'var(--accent-emerald)' }}>{tc.tool}</strong>({JSON.stringify(tc.args)})
+                                  </div>
+                                ))}
+                              </div>
+                            </details>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -251,7 +317,7 @@ export const CopilotWorkspace: React.FC = () => {
             {isTyping && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-emerald)', fontSize: '0.82rem' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--accent-emerald)' }} />
-                <span>Retrieving verified data and synthesizing grounded response...</span>
+                <span>Consulting GridVision analytics & knowledge base...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -261,7 +327,7 @@ export const CopilotWorkspace: React.FC = () => {
           <div style={{ display: 'flex', gap: '0.65rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
             <input
               type="text"
-              placeholder={`Ask about ${selectedHouseholdId}, forecasts, research findings, or clusters...`}
+              placeholder={`Ask about ${consumerLabel}, forecasts, or demand patterns...`}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => {
@@ -297,107 +363,60 @@ export const CopilotWorkspace: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Pre-Configured Domain Prompts & Safety Guard */}
+        {/* Right Column: Suggested Questions Categorized */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div className="workspace-card" style={{ padding: '1.25rem' }}>
-            <div className="workspace-card-header" style={{ marginBottom: '0.75rem' }}>
+            <div className="workspace-card-header" style={{ marginBottom: '0.85rem' }}>
               <div>
-                <h3 className="workspace-card-title">Utility Operational Queries</h3>
+                <h3 className="workspace-card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Sparkles size={16} style={{ color: 'var(--accent-emerald)' }} />
+                  <span>Suggested Questions</span>
+                </h3>
                 <p className="workspace-card-subtitle">
-                  Click to ask practical electricity analytics questions
+                  Click any query to ask the Copilot directly
                 </p>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', marginBottom: '1.25rem' }}>
-              {utilitySuggestions.map((prompt, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => handleSendMessage(prompt)}
-                  style={{
-                    textAlign: 'left',
-                    padding: '0.65rem 0.8rem',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--surface-raised)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--foreground-muted)',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                    transition: 'all 150ms ease',
-                    lineHeight: 1.4,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--foreground)';
-                    e.currentTarget.style.borderColor = 'var(--border-strong)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--foreground-muted)';
-                    e.currentTarget.style.borderColor = 'var(--border)';
-                  }}
-                >
-                  &rarr; {prompt}
-                </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {domainQueryCategories.map((group) => (
+                <div key={group.category}>
+                  <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '0.35rem' }}>
+                    {group.category}
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                    {group.prompts.map((prompt, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => handleSendMessage(prompt)}
+                        style={{
+                          textAlign: 'left',
+                          padding: '0.55rem 0.75rem',
+                          borderRadius: 'var(--radius-sm)',
+                          backgroundColor: 'var(--surface-raised)',
+                          border: '1px solid var(--border)',
+                          color: 'var(--foreground-muted)',
+                          fontSize: '0.78rem',
+                          cursor: 'pointer',
+                          transition: 'all 150ms ease',
+                          lineHeight: 1.35,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--foreground)';
+                          e.currentTarget.style.borderColor = 'var(--accent-emerald)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--foreground-muted)';
+                          e.currentTarget.style.borderColor = 'var(--border)';
+                        }}
+                      >
+                        &rarr; {prompt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </div>
-
-            <div className="workspace-card-header" style={{ marginBottom: '0.65rem', borderTop: '1px solid var(--border)', paddingTop: '0.85rem' }}>
-              <div>
-                <h3 className="workspace-card-title">Research Study Questions</h3>
-                <p className="workspace-card-subtitle">
-                  Empirical methodology &amp; hypothesis results
-                </p>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-              {researchSuggestions.map((prompt, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => handleSendMessage(prompt)}
-                  style={{
-                    textAlign: 'left',
-                    padding: '0.65rem 0.8rem',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--surface-raised)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--foreground-muted)',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                    transition: 'all 150ms ease',
-                    lineHeight: 1.4,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--foreground)';
-                    e.currentTarget.style.borderColor = 'var(--border-strong)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--foreground-muted)';
-                    e.currentTarget.style.borderColor = 'var(--border)';
-                  }}
-                >
-                  &rarr; {prompt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Grounding Protocol Notice */}
-          <div className="workspace-card" style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <ShieldCheck size={16} style={{ color: 'var(--accent-emerald)' }} />
-              <h3 style={{ fontSize: '0.92rem', fontWeight: 600, color: 'var(--foreground)', margin: 0 }}>
-                Strict Numeric Grounding
-              </h3>
-            </div>
-            <p style={{ margin: '0 0 0.75rem 0', fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-              The Copilot is strictly bounded to verified artifacts. It never hallucinates numbers or invents coefficients. Every numeric claim is verified through regex token traceability against tool outputs and indexed documentation.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.76rem', color: 'var(--foreground-subtle)' }}>
-              <div>• <strong>Bound Tools:</strong> get_forecast, get_segment, get_instability, get_anomaly</div>
-              <div>• <strong>Grounding Check:</strong> Automatic token traceability validation</div>
-              <div>• <strong>Zero Hallucination:</strong> Ungrounded numbers flagged and rejected</div>
             </div>
           </div>
         </div>

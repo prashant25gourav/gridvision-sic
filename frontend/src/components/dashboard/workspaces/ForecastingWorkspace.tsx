@@ -1,34 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   TrendingUp,
   Clock,
   Target,
-  Activity,
-  ChevronDown,
-  ChevronUp,
+  Info,
+  User,
+  Users,
+  ArrowRight,
 } from 'lucide-react';
 import { LoadChart } from '../../charts/LoadChart';
-import { fetchForecastPortal, type ForecastPortalData } from '../../../services/api';
+import {
+  fetchForecastPortal,
+  fetchHouseholds,
+  fetchConsumerProfile,
+  type ForecastPortalData,
+  type HouseholdSummary,
+  type ConsumerProfileData,
+} from '../../../services/api';
 import type { DemandDataPoint } from '../../../types/energy';
 import './Workspaces.css';
 
-export const ForecastingWorkspace: React.FC = () => {
-  const [portalData, setPortalData] = useState<ForecastPortalData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false);
+interface ForecastingWorkspaceProps {
+  onNavigateOverview?: (anchor?: string) => void;
+}
 
+// Clean consumer formatting helper
+function formatConsumerId(rawId: string): string {
+  if (!rawId) return '';
+  const match = rawId.match(/MAC0*(\d+)/i);
+  if (match) {
+    return `Consumer ${match[1].padStart(3, '0')}`;
+  }
+  return `Consumer ${rawId}`;
+}
+
+export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = ({
+  onNavigateOverview,
+}) => {
+  const [portalData, setPortalData] = useState<ForecastPortalData | null>(null);
+  const [households, setHouseholds] = useState<HouseholdSummary[]>([]);
+  const [viewMode, setViewMode] = useState<'consumer' | 'cohort'>('consumer');
+  const [selectedHouseholdId, setSelectedHouseholdId] = useState<string>('MAC000045');
+  const [consumerProfile, setConsumerProfile] = useState<ConsumerProfileData | null>(null);
+
+  const [isLoadingPortal, setIsLoadingPortal] = useState<boolean>(true);
+  const [isLoadingConsumer, setIsLoadingConsumer] = useState<boolean>(false);
+
+  // 1. Load portal cohort data and households list
   useEffect(() => {
     let isMounted = true;
-    fetchForecastPortal()
-      .then((data) => {
-        if (isMounted) {
-          setPortalData(data);
-          setIsLoading(false);
+    Promise.all([fetchForecastPortal(), fetchHouseholds()])
+      .then(([pData, hhList]) => {
+        if (!isMounted) return;
+        setPortalData(pData);
+        setHouseholds(hhList);
+        if (hhList.length > 0) {
+          setSelectedHouseholdId(hhList[0].household_id);
         }
+        setIsLoadingPortal(false);
       })
       .catch((err) => {
-        console.warn('Failed to load forecast portal data:', err);
-        if (isMounted) setIsLoading(false);
+        console.warn('Failed to load forecast data:', err);
+        if (isMounted) setIsLoadingPortal(false);
       });
 
     return () => {
@@ -36,312 +69,341 @@ export const ForecastingWorkspace: React.FC = () => {
     };
   }, []);
 
-  const horizon = portalData?.forecast_horizon ?? '24-Hour Day-Ahead Horizon (48 Half-Hour Slots)';
-  const expectedAvg = portalData?.expected_demand_avg_kw ?? 0.240;
-  const expectedPeak = portalData?.expected_peak_kw ?? 0.369;
-  const peakTime = portalData?.expected_peak_time ?? '19:00';
-  const cohortPeakMw = portalData?.cohort_peak_mw ?? 0.229;
-  const mae = portalData?.mae_global_kw ?? 0.0812;
-  const naiveMae = portalData?.mae_seasonal_naive_kw ?? 0.1184;
-  const reductionPct = portalData?.error_reduction_pct ?? 31.4;
+  // 2. Fetch consumer profile when selectedHouseholdId changes
+  useEffect(() => {
+    if (!selectedHouseholdId) return;
+    let isMounted = true;
+    setIsLoadingConsumer(true);
 
-  const reliability = portalData?.reliability_distribution ?? {
-    high_confidence_pct: 45.2,
-    medium_confidence_pct: 38.9,
-    needs_attention_pct: 15.9,
-  };
+    fetchConsumerProfile(selectedHouseholdId)
+      .then((data) => {
+        if (isMounted) {
+          setConsumerProfile(data);
+          setIsLoadingConsumer(false);
+        }
+      })
+      .catch((err) => {
+        console.warn(`Could not load profile for ${selectedHouseholdId}:`, err);
+        if (isMounted) setIsLoadingConsumer(false);
+      });
 
-  // Build chart points from diurnal_series
-  const chartPoints: DemandDataPoint[] =
-    portalData?.diurnal_series.map((pt) => {
-      const hr = Math.floor(pt.slot / 2);
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedHouseholdId]);
+
+  // Compute consumer-level prediction metrics (strictly for the 24-hour day-ahead horizon)
+  const consumerMetrics = useMemo(() => {
+    if (!consumerProfile || !consumerProfile.diurnal_forecast || consumerProfile.diurnal_forecast.length === 0) {
       return {
-        timestamp: pt.time,
-        hour: hr,
-        label: pt.time,
-        actualKw: pt.actual_kw,
-        baselineKw: pt.predicted_kw,
-        isPeak: pt.is_peak,
+        predPeakKw: 0.42,
+        predPeakTime: '19:00',
+        maeKw: 0.081,
       };
-    }) ?? [];
+    }
+
+    const daySeries = consumerProfile.diurnal_forecast.slice(0, 48);
+    let maxPred = -1;
+    let maxPredSlot = 0;
+
+    for (let i = 0; i < daySeries.length; i++) {
+      const pt = daySeries[i];
+      if (pt.predicted_global > maxPred) {
+        maxPred = pt.predicted_global;
+        maxPredSlot = i;
+      }
+    }
+
+    const hr = Math.floor(maxPredSlot / 2);
+    const min = maxPredSlot % 2 === 1 ? '30' : '00';
+    const timeStr = `${hr.toString().padStart(2, '0')}:${min}`;
+
+    return {
+      predPeakKw: maxPred > 0 ? maxPred : 0.42,
+      predPeakTime: timeStr,
+      maeKw: consumerProfile.summary?.forecast_mae_kw ?? 0.081,
+    };
+  }, [consumerProfile]);
+
+  // Compute cohort-level prediction metrics (All Consumers)
+  const cohortMetrics = useMemo(() => {
+    return {
+      predPeakKw: portalData?.expected_peak_kw ?? 0.369,
+      predPeakTime: portalData?.expected_peak_time ?? '19:00',
+      maeKw: portalData?.mae_global_kw ?? 0.0812,
+    };
+  }, [portalData]);
+
+  // Active metrics based on view mode
+  const currentMetrics = viewMode === 'consumer' ? consumerMetrics : cohortMetrics;
+
+  // Build chart points strictly for the 24-hour day-ahead forecast horizon (48 half-hour intervals)
+  const chartPoints: DemandDataPoint[] = useMemo(() => {
+    if (viewMode === 'consumer') {
+      if (!consumerProfile || !consumerProfile.diurnal_forecast || consumerProfile.diurnal_forecast.length === 0) {
+        return [];
+      }
+      const daySeries = consumerProfile.diurnal_forecast.slice(0, 48);
+      return daySeries.map((pt) => {
+        const slot = pt.slot_index % 48;
+        const hr = Math.floor(slot / 2);
+        const min = slot % 2 === 1 ? '30' : '00';
+        const isEveningPeak = hr >= 18 && hr <= 21;
+        return {
+          timestamp: pt.timestamp,
+          hour: hr,
+          label: `${hr.toString().padStart(2, '0')}:${min}`,
+          actualKw: pt.actual,
+          baselineKw: pt.predicted_global,
+          isPeak: isEveningPeak,
+        };
+      });
+    }
+
+    // All Consumers view: 48 half-hour intervals
+    return (
+      portalData?.diurnal_series.map((pt) => {
+        const hr = Math.floor(pt.slot / 2);
+        return {
+          timestamp: pt.time,
+          hour: hr,
+          label: pt.time,
+          actualKw: pt.actual_kw,
+          baselineKw: pt.predicted_kw,
+          isPeak: pt.is_peak,
+        };
+      }) ?? []
+    );
+  }, [viewMode, consumerProfile, portalData]);
 
   return (
     <div className="workspace-container">
       {/* Workspace Header */}
       <header className="workspace-header">
-        <div className="workspace-header-title-row">
-          <h1 className="workspace-title">Day-Ahead Demand Forecasting</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div className="workspace-header-title-row">
+              <h1 className="workspace-title">Demand Forecasting</h1>
+            </div>
+            <p className="workspace-subtitle">
+              Day-ahead demand predictions, forecast error, and peak timing.
+            </p>
+          </div>
+
+          {onNavigateOverview && (
+            <button
+              type="button"
+              className="workspace-link-btn"
+              onClick={() => onNavigateOverview('overview-forecasting')}
+              style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
+              title="Learn how demand forecasting works on the Overview page"
+            >
+              <span>Learn about demand forecasting</span>
+              <ArrowRight size={14} />
+            </button>
+          )}
         </div>
-        <p className="workspace-subtitle">
-          What do we expect demand to look like next? Operational day-ahead demand projections, peak forecasting, accuracy benchmarks, and forecast reliability tiers.
-        </p>
       </header>
 
-      {/* Operational Expected Demand KPIs */}
-      <section className="workspace-kpi-grid" aria-label="Forecast Core Metrics">
+      {/* Forecast Scope Selection */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          padding: '0.75rem 1rem',
+          backgroundColor: 'var(--surface-raised)',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--border)',
+        }}
+      >
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)', fontWeight: 600 }}>
+            FORECAST SCOPE:
+          </span>
+          <button
+            type="button"
+            onClick={() => setViewMode('consumer')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.75rem',
+              fontSize: '0.8rem',
+              fontWeight: viewMode === 'consumer' ? 700 : 500,
+              borderRadius: 'var(--radius-sm)',
+              border: `1px solid ${viewMode === 'consumer' ? 'var(--accent-emerald)' : 'var(--border)'}`,
+              backgroundColor: viewMode === 'consumer' ? 'var(--surface)' : 'transparent',
+              color: viewMode === 'consumer' ? 'var(--accent-emerald)' : 'var(--foreground-muted)',
+              cursor: 'pointer',
+              transition: 'all 150ms ease',
+            }}
+          >
+            <User size={14} />
+            <span>Individual Consumer</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('cohort')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.75rem',
+              fontSize: '0.8rem',
+              fontWeight: viewMode === 'cohort' ? 700 : 500,
+              borderRadius: 'var(--radius-sm)',
+              border: `1px solid ${viewMode === 'cohort' ? 'var(--accent-emerald)' : 'var(--border)'}`,
+              backgroundColor: viewMode === 'cohort' ? 'var(--surface)' : 'transparent',
+              color: viewMode === 'cohort' ? 'var(--accent-emerald)' : 'var(--foreground-muted)',
+              cursor: 'pointer',
+              transition: 'all 150ms ease',
+            }}
+          >
+            <Users size={14} />
+            <span>All Consumers</span>
+          </button>
+        </div>
+
+        {/* Consumer Selector dropdown when in consumer mode */}
+        {viewMode === 'consumer' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label htmlFor="forecast-consumer-select" style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>
+              Consumer:
+            </label>
+            <select
+              id="forecast-consumer-select"
+              value={selectedHouseholdId}
+              onChange={(e) => setSelectedHouseholdId(e.target.value)}
+              className="text-input"
+              style={{
+                padding: '0.35rem 0.75rem',
+                fontSize: '0.82rem',
+                backgroundColor: 'var(--surface)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                minWidth: '220px',
+              }}
+            >
+              {households.map((hh) => (
+                <option key={hh.household_id} value={hh.household_id}>
+                  {formatConsumerId(hh.household_id)} ({hh.household_id})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* Forecast Summary: Horizon, Error, Predicted Peak */}
+      <section
+        className="workspace-kpi-grid"
+        aria-label="Forecast Summary"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}
+      >
         <div className="workspace-kpi-card">
           <div className="workspace-kpi-header">
-            <span className="workspace-kpi-label">Forecast Horizon</span>
-            <Clock size={16} className="workspace-kpi-icon" />
+            <span className="workspace-kpi-label">FORECAST HORIZON</span>
+            <Clock size={16} className="workspace-kpi-icon" style={{ color: 'var(--accent-indigo)' }} />
           </div>
-          <div className="workspace-kpi-value" style={{ fontSize: '1.25rem' }}>
+          <div className="workspace-kpi-value">
             24 Hours
           </div>
           <p className="workspace-kpi-caption">
-            {horizon}
+            48 half-hour intervals
           </p>
         </div>
 
         <div className="workspace-kpi-card">
           <div className="workspace-kpi-header">
-            <span className="workspace-kpi-label">Expected Average Demand</span>
-            <Activity size={16} className="workspace-kpi-icon" />
-          </div>
-          <div className="workspace-kpi-value">
-            {expectedAvg.toFixed(3)} kW
-          </div>
-          <p className="workspace-kpi-caption">
-            0.149 MW cohort average demand
-          </p>
-        </div>
-
-        <div className="workspace-kpi-card">
-          <div className="workspace-kpi-header">
-            <span className="workspace-kpi-label">Expected Peak Demand</span>
-            <TrendingUp size={16} className="workspace-kpi-icon" style={{ color: 'var(--accent-amber)' }} />
-          </div>
-          <div className="workspace-kpi-value" style={{ color: 'var(--accent-amber)' }}>
-            {expectedPeak.toFixed(3)} kW
-          </div>
-          <p className="workspace-kpi-caption">
-            {cohortPeakMw.toFixed(3)} MW cohort peak projected at {peakTime}
-          </p>
-        </div>
-
-        <div className="workspace-kpi-card">
-          <div className="workspace-kpi-header">
-            <span className="workspace-kpi-label">Forecast Accuracy (MAE)</span>
+            <span className="workspace-kpi-label">FORECAST ERROR</span>
             <Target size={16} className="workspace-kpi-icon" style={{ color: 'var(--accent-emerald)' }} />
           </div>
           <div className="workspace-kpi-value" style={{ color: 'var(--accent-emerald)' }}>
-            {mae.toFixed(3)} kW
+            {currentMetrics.maeKw.toFixed(3)} kW
           </div>
           <p className="workspace-kpi-caption">
-            +{reductionPct.toFixed(1)}% gain over seasonal naive ({naiveMae.toFixed(3)} kW)
+            Average difference between predicted and actual demand
+          </p>
+        </div>
+
+        <div className="workspace-kpi-card">
+          <div className="workspace-kpi-header">
+            <span className="workspace-kpi-label">PREDICTED PEAK</span>
+            <TrendingUp size={16} className="workspace-kpi-icon" style={{ color: 'var(--accent-amber)' }} />
+          </div>
+          <div className="workspace-kpi-value" style={{ color: 'var(--accent-amber)' }}>
+            {currentMetrics.predPeakKw.toFixed(3)} kW
+          </div>
+          <p className="workspace-kpi-caption">
+            Expected at {currentMetrics.predPeakTime}
           </p>
         </div>
       </section>
 
-      {/* Primary Forecast Load Curve */}
-      <section className="workspace-card" aria-label="Forecast profile chart">
+      {/* Main Forecast Chart: Actual vs Predicted Demand */}
+      <section className="workspace-card" aria-label="Actual vs predicted load curve">
         <div className="workspace-card-header">
           <div>
-            <h2 className="workspace-card-title">Day-Ahead Expected Demand vs. Observed Consumption</h2>
+            <h2 className="workspace-card-title">
+              {viewMode === 'consumer'
+                ? `${formatConsumerId(selectedHouseholdId)} (${selectedHouseholdId}): Day-Ahead Forecast`
+                : 'All Consumers: Day-Ahead Forecast'}
+            </h2>
             <p className="workspace-card-subtitle">
-              Cohort average electricity profile across 48 half-hourly dispatch slots. Green curve represents actual observed smart meter demand; dashed curve represents GridVision day-ahead expected load.
+              {viewMode === 'consumer'
+                ? 'Recorded half-hourly electricity demand versus LightGBM day-ahead predictions across 48 dispatch intervals.'
+                : 'Combined demand across all monitored consumers (24-hour horizon).'}
             </p>
           </div>
         </div>
 
         <div className="workspace-chart-wrapper">
-          {isLoading ? (
+          {(viewMode === 'consumer' ? isLoadingConsumer : isLoadingPortal) ? (
             <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
-              Loading forecasting models...
+              Loading forecast data...
             </div>
+          ) : chartPoints.length > 0 ? (
+            <LoadChart
+              data={chartPoints}
+              height={340}
+              unit="kW"
+              actualLabel="Actual Demand"
+              baselineLabel="Predicted Demand"
+            />
           ) : (
-            <LoadChart data={chartPoints} height={320} />
+            <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+              Forecast data unavailable for this selection.
+            </div>
           )}
         </div>
 
-        <div style={{ padding: '1rem 1.25rem', backgroundColor: 'var(--surface-raised)', borderTop: '1px solid var(--border)', fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-          <strong style={{ color: 'var(--foreground)' }}>Peak Dispatch Guidance:</strong> Expected cohort peak reaches {cohortPeakMw.toFixed(3)} MW ({expectedPeak.toFixed(3)} kW per household) at {peakTime}. The day-ahead model tracks the evening ramp between 17:30 and 20:30 with high fidelity (MAE &lt; 0.089 kW during peak slots).
-        </div>
-      </section>
-
-      {/* Forecast Reliability & Attention Tiers */}
-      <section className="workspace-card" style={{ padding: '1.25rem 1.5rem' }}>
-        <div className="workspace-card-header">
-          <div>
-            <h2 className="workspace-card-title">Forecast Reliability &amp; Operational Confidence</h2>
-            <p className="workspace-card-subtitle">
-              Distribution of forecast reliability across monitored households, derived from historical prediction error bounds.
-            </p>
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginTop: '0.5rem' }}>
-          {/* High Confidence */}
-          <div
-            style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--surface-raised)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground)' }}>
-                High Confidence
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>
-                {reliability.high_confidence_pct.toFixed(1)}%
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-              Households with consistent routines and minimal residual error (MAE &lt; 0.07 kW). Highly suitable for automated scheduling.
-            </p>
-          </div>
-
-          {/* Medium Confidence */}
-          <div
-            style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--surface-raised)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground)' }}>
-                Medium Confidence
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-amber)' }}>
-                {reliability.medium_confidence_pct.toFixed(1)}%
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-              Standard residential households with occasional day-to-day schedule shifts. Moderate error margin (MAE 0.07–0.14 kW).
-            </p>
-          </div>
-
-          {/* Needs Attention */}
-          <div
-            style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--surface-raised)',
-              border: '1px solid color-mix(in srgb, var(--accent-rose) 35%, var(--border))',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground)' }}>
-                Needs Attention
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-rose)' }}>
-                {reliability.needs_attention_pct.toFixed(1)}%
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-              Households with elevated forecast error (MAE &gt; 0.15 kW) driven by high intrinsic volatility. Require operational buffering.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Performance by Behavioral Archetype */}
-      <section className="workspace-card">
-        <div className="workspace-card-header">
-          <div>
-            <h2 className="workspace-card-title">Forecast Performance by Consumer Archetype</h2>
-            <p className="workspace-card-subtitle">
-              Evaluating forecast accuracy across the 4 primary behavioral consumer segments.
-            </p>
-          </div>
-        </div>
-
-        <div style={{ padding: '0 1rem 1rem 1rem', overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
-                <th style={{ padding: '0.65rem 0.75rem' }}>Archetype</th>
-                <th style={{ padding: '0.65rem 0.75rem' }}>Cohort Share</th>
-                <th style={{ padding: '0.65rem 0.75rem' }}>Forecast MAE</th>
-                <th style={{ padding: '0.65rem 0.75rem' }}>Predictability Assessment</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(portalData?.performance_by_archetype || []).map((row, idx) => (
-                <tr
-                  key={row.archetype}
-                  style={{
-                    borderBottom: '1px solid var(--border)',
-                    backgroundColor: idx % 2 === 0 ? 'transparent' : 'color-mix(in srgb, var(--surface-raised) 50%, transparent)',
-                  }}
-                >
-                  <td style={{ padding: '0.65rem 0.75rem', fontWeight: 600 }}>
-                    {row.archetype}
-                  </td>
-                  <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)' }}>
-                    {row.share_pct.toFixed(1)}%
-                  </td>
-                  <td style={{ padding: '0.65rem 0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-emerald)' }}>
-                    {row.mae_kw.toFixed(3)} kW
-                  </td>
-                  <td style={{ padding: '0.65rem 0.75rem', color: 'var(--foreground-muted)' }}>
-                    {row.archetype === 'Baseload Steady'
-                      ? 'Highest predictability; steady load with minimal variance.'
-                      : row.archetype === 'Daytime Active'
-                      ? 'High predictability; stable daytime occupancy curve.'
-                      : row.archetype === 'Evening Peaker'
-                      ? 'Good predictability; sharp evening ramp requires accurate timing.'
-                      : 'Moderate predictability; morning and evening peaks vary by household schedule.'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Progressive Disclosure: Technical Details Accordion */}
-      <section className="workspace-card">
-        <button
-          type="button"
-          onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
+        {/* Chart Footer: Point Forecast Note & Peak Prediction */}
+        <div
           style={{
-            width: '100%',
+            padding: '0.85rem 1.25rem',
+            backgroundColor: 'var(--surface-raised)',
+            borderTop: '1px solid var(--border)',
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
-            background: 'none',
-            border: 'none',
-            padding: '0.85rem 1rem',
-            cursor: 'pointer',
-            color: 'var(--foreground)',
-            fontFamily: 'var(--font-sans)',
-            fontSize: '0.9rem',
-            fontWeight: 600,
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+            fontSize: '0.8rem',
+            color: 'var(--foreground-muted)',
           }}
         >
-          <span>Technical details (Model architecture, feature set &amp; TreeSHAP attributions)</span>
-          {showTechnicalDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-
-        {showTechnicalDetails && (
-          <div style={{ padding: '0 1rem 1.25rem 1rem', borderTop: '1px solid var(--border)', marginTop: '0.5rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', margin: '0.85rem 0 1rem 0' }}>
-              <div className="cohort-stat">
-                <span className="cohort-stat-label">Model Architecture</span>
-                <span className="cohort-stat-val">LightGBM GBDT (Global Model)</span>
-              </div>
-              <div className="cohort-stat">
-                <span className="cohort-stat-label">Lag Features</span>
-                <span className="cohort-stat-val">t-48 (24h), t-336 (7d) lags</span>
-              </div>
-              <div className="cohort-stat">
-                <span className="cohort-stat-label">Calendar Features</span>
-                <span className="cohort-stat-val">half-hour slot, day-of-week</span>
-              </div>
-              <div className="cohort-stat">
-                <span className="cohort-stat-label">Holdout Protocol</span>
-                <span className="cohort-stat-val">Forward-only W14 holdout</span>
-              </div>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-              Global LightGBM model achieves 0.0812 kW MAE on the holdout evaluation period, delivering a +31.4% improvement over the standard seasonal naive baseline (0.1184 kW MAE).
-            </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+            <Info size={14} style={{ color: 'var(--foreground-subtle)' }} />
+            <span>Point forecast — prediction intervals are not available for this model.</span>
           </div>
-        )}
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--foreground)' }}>
+            Predicted Peak: <strong style={{ color: 'var(--accent-amber)' }}>{currentMetrics.predPeakTime} ({currentMetrics.predPeakKw.toFixed(3)} kW)</strong>
+          </div>
+        </div>
       </section>
     </div>
   );

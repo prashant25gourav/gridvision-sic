@@ -5,7 +5,7 @@
  * Includes graceful fallbacks in case the backend server is temporarily starting up.
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 export interface OverviewData {
   n_households: number;
@@ -105,6 +105,7 @@ export interface ChatResponse {
   answer: string;
   tool_calls: ToolCall[];
   grounded: boolean;
+  debug?: Record<string, any>;
 }
 
 /**
@@ -299,15 +300,30 @@ export interface ClusterDetail {
     weekday_weekend_contrast: number;
     peak_timing: number;
   };
+  profile?: {
+    slot: number;
+    time: string;
+    actual_kw: number;
+  }[];
 }
 
 export interface SegmentationOverviewData {
+  window_id?: string;
   selected_k: number;
   best_silhouette_score: number;
   silhouette_sweep: Record<string, number>;
   inertia_sweep: Record<string, number>;
   feature_columns: string[];
   clusters: ClusterDetail[];
+  daily_profiles?: {
+    slot: number;
+    half_hour: number;
+    time: string;
+    cluster_0: number;
+    cluster_1: number;
+    cluster_2: number;
+    cluster_3: number;
+  }[];
 }
 
 export interface AnomalyOverviewData {
@@ -378,8 +394,9 @@ export async function fetchResearchFindings(): Promise<ResearchFindingsData> {
 /**
  * Fetch behavioral segmentation overview, silhouette sweep, and cluster feature profiles.
  */
-export async function fetchSegmentationOverview(): Promise<SegmentationOverviewData> {
-  const res = await fetch(`${API_BASE}/segmentation/overview`);
+export async function fetchSegmentationOverview(windowId?: string): Promise<SegmentationOverviewData> {
+  const url = windowId ? `${API_BASE}/segmentation/overview?window_id=${windowId}` : `${API_BASE}/segmentation/overview`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch segmentation overview: ${res.statusText}`);
   }
@@ -408,7 +425,60 @@ export async function fetchForecastSummary(): Promise<ForecastSummaryData> {
   return res.json();
 }
 
+export interface WindowDemandData {
+  window_id: string;
+  window_name: string;
+  start_date: string;
+  end_date: string;
+  date_range: string;
+  n_households: number;
+  total_consumption_mwh: number;
+  avg_demand_kw: number;
+  total_avg_demand_kw: number;
+  total_avg_demand_mw: number;
+  peak_demand_kw: number;
+  total_peak_demand_kw: number;
+  total_peak_demand_mw: number;
+  peak_time: string;
+  peak_timestamp: string;
+  latest_demand_kw: number;
+  total_latest_demand_kw: number;
+  total_latest_demand_mw: number;
+  latest_timestamp: string;
+  diurnal_profile: {
+    slot: number;
+    time: string;
+    actual_kw: number;
+    predicted_kw: number | null;
+    baseline_kw: number | null;
+    is_peak: boolean;
+  }[];
+  weekday_vs_weekend: {
+    slot: number;
+    time: string;
+    weekday_kw: number;
+    weekend_kw: number;
+    difference_pct: number;
+  }[];
+  load_curve?: {
+    slot: number;
+    day: string;
+    half_hour: number;
+    time: string;
+    label: string;
+    actual_kw: number;
+    predicted_kw: number | null;
+    is_peak: boolean;
+  }[];
+}
+
 export interface GridOverviewData {
+  window_id?: string;
+  window_name?: string;
+  window_dates?: string;
+  window_start_date?: string;
+  window_end_date?: string;
+  window_duration_days?: number;
   total_consumption_mwh: number;
   avg_demand_kw: number;
   total_avg_demand_kw: number;
@@ -419,6 +489,8 @@ export interface GridOverviewData {
   peak_timestamp: string;
   latest_demand_kw: number;
   total_latest_demand_kw: number;
+  total_latest_demand_mw?: number;
+  latest_timestamp?: string;
   households_monitored: number;
   households_needing_attention: number;
   demand_change: {
@@ -436,10 +508,18 @@ export interface GridOverviewData {
     slot: number;
     time: string;
     actual_kw: number;
-    predicted_kw: number;
-    baseline_kw: number;
+    predicted_kw: number | null;
+    baseline_kw: number | null;
     is_peak: boolean;
   }[];
+  weekday_vs_weekend?: {
+    slot: number;
+    time: string;
+    weekday_kw: number;
+    weekend_kw: number;
+    difference_pct: number;
+  }[];
+  windows?: Record<string, WindowDemandData>;
 }
 
 export interface DemandAnalysisData {
@@ -447,8 +527,8 @@ export interface DemandAnalysisData {
     slot: number;
     time: string;
     actual_kw: number;
-    predicted_kw: number;
-    baseline_kw: number;
+    predicted_kw: number | null;
+    baseline_kw: number | null;
     is_peak: boolean;
   }[];
   weekday_vs_weekend: {
@@ -458,8 +538,21 @@ export interface DemandAnalysisData {
     weekend_kw: number;
     difference_pct: number;
   }[];
+  load_curve?: {
+    slot: number;
+    day: string;
+    half_hour: number;
+    time: string;
+    label: string;
+    actual_kw: number;
+    predicted_kw: number | null;
+    is_peak: boolean;
+  }[];
   window_trend: {
     window_id: string;
+    start_date?: string;
+    end_date?: string;
+    date_range?: string;
     mean_load_kw: number;
     peak_load_kw: number;
     p2a_ratio: number;
@@ -489,6 +582,7 @@ export interface DemandAnalysisData {
     peak_to_average_ratio: number;
     peak_window_description: string;
   };
+  windows?: Record<string, WindowDemandData>;
 }
 
 export interface ConsumerRankingItem {
@@ -511,6 +605,7 @@ export interface ConsumerRankingItem {
 }
 
 export interface ConsumerRankingsData {
+  window_id?: string;
   summary: {
     total_consumers: number;
     needs_attention_count: number;
@@ -524,6 +619,7 @@ export interface ConsumerRankingsData {
     by_anomalies: ConsumerRankingItem[];
     by_instability: ConsumerRankingItem[];
     by_load_factor: ConsumerRankingItem[];
+    by_p2a?: ConsumerRankingItem[];
   };
   all_consumers: ConsumerRankingItem[];
 }
@@ -531,22 +627,31 @@ export interface ConsumerRankingsData {
 export interface ConsumerProfileData {
   household_id: string;
   acorn_grouped: string;
+  window_id?: string;
   summary: {
     mean_load_kw: number;
     peak_load_kw: number;
     load_factor_pct: number;
     peak_to_average_ratio: number;
-    recent_demand_kw: number;
-    forecast_mae_kw: number;
-    forecast_reliability: string;
+    recent_demand_kw?: number;
+    forecast_mae_kw?: number;
+    forecast_reliability?: string;
     cluster_id: number;
     cluster_label: string;
-    instability_score: number;
-    volatility_cv: number;
-    anomaly_count: number;
-    attention_status: 'Needs Attention' | 'Moderate' | 'Stable';
-    attention_reasons: string[];
+    instability_score?: number;
+    volatility_cv?: number;
+    anomaly_count?: number;
+    attention_status?: 'Needs Attention' | 'Moderate' | 'Stable';
+    attention_reasons?: string[];
   };
+  diurnal_profile?: {
+    slot: number;
+    half_hour: number;
+    time: string;
+    actual_kw: number;
+    predicted_kw: number | null;
+    is_peak?: boolean;
+  }[];
   diurnal_forecast: ForecastPoint[];
   behavioral_history: SegmentTrajectoryPoint[];
   anomaly_history: AnomalyFlag[];
@@ -573,6 +678,10 @@ export interface AnomaliesAnalysisData {
     severity: string;
     triggering_statistic: string;
     z_score: number;
+    anomaly_score?: number | null;
+    value?: number | null;
+    baseline_mean?: number | null;
+    baseline_std?: number | null;
     observed_pattern: string;
     explanation: string;
     action: string;
@@ -608,32 +717,38 @@ export interface ForecastPortalData {
   }[];
 }
 
-export async function fetchGridOverview(): Promise<GridOverviewData> {
-  const res = await fetch(`${API_BASE}/overview/grid`);
+export async function fetchGridOverview(windowId?: string): Promise<GridOverviewData> {
+  const url = windowId ? `${API_BASE}/overview/grid?window_id=${encodeURIComponent(windowId)}` : `${API_BASE}/overview/grid`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch grid overview: ${res.statusText}`);
   }
   return res.json();
 }
 
-export async function fetchDemandAnalysis(): Promise<DemandAnalysisData> {
-  const res = await fetch(`${API_BASE}/demand/analysis`);
+export async function fetchDemandAnalysis(windowId?: string): Promise<DemandAnalysisData> {
+  const url = windowId ? `${API_BASE}/demand/analysis?window_id=${encodeURIComponent(windowId)}` : `${API_BASE}/demand/analysis`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch demand analysis: ${res.statusText}`);
   }
   return res.json();
 }
 
-export async function fetchConsumerRankings(): Promise<ConsumerRankingsData> {
-  const res = await fetch(`${API_BASE}/consumers/rankings`);
+export async function fetchConsumerRankings(windowId?: string): Promise<ConsumerRankingsData> {
+  const url = windowId ? `${API_BASE}/consumers/rankings?window_id=${windowId}` : `${API_BASE}/consumers/rankings`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch consumer rankings: ${res.statusText}`);
   }
   return res.json();
 }
 
-export async function fetchConsumerProfile(householdId: string): Promise<ConsumerProfileData> {
-  const res = await fetch(`${API_BASE}/consumers/${householdId}/profile`);
+export async function fetchConsumerProfile(householdId: string, windowId?: string): Promise<ConsumerProfileData> {
+  const url = windowId
+    ? `${API_BASE}/consumers/${householdId}/profile?window_id=${windowId}`
+    : `${API_BASE}/consumers/${householdId}/profile`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch consumer profile: ${res.statusText}`);
   }

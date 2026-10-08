@@ -13,18 +13,47 @@ from app.services.artifact_loader import store
 
 
 def get_forecast(household_id: str, window_id: Optional[str] = None) -> Dict[str, Any]:
-    """Retrieve demand forecast metrics, MAE, and SHAP top features for a household."""
+    """Retrieve demand forecast metrics, peak prediction, MAE, and SHAP top features for a household."""
     res = store.get_household_forecast(household_id, window_id=window_id)
     if not res:
         return {
             "error": f"No forecast data found for household {household_id}" + (f" in window {window_id}" if window_id else ""),
             "household_id": household_id,
         }
+
+    series_24h = res["series"][:48] if res.get("series") else []
+    if series_24h:
+        peak_pred_item = max(series_24h, key=lambda x: x.get("predicted_global", 0.0))
+        peak_pred_kw = round(peak_pred_item.get("predicted_global", 0.0), 3)
+        peak_pred_raw = peak_pred_item.get("timestamp", "")
+        predicted_peak_time = peak_pred_raw.split("T")[1][:5] if "T" in peak_pred_raw else peak_pred_raw
+
+        peak_act_item = max(series_24h, key=lambda x: x.get("actual", 0.0))
+        peak_act_kw = round(peak_act_item.get("actual", 0.0), 3)
+        peak_act_raw = peak_act_item.get("timestamp", "")
+        observed_peak_time = peak_act_raw.split("T")[1][:5] if "T" in peak_act_raw else peak_act_raw
+
+        predicted_mean_kw = round(sum(x.get("predicted_global", 0.0) for x in series_24h) / len(series_24h), 3)
+    else:
+        peak_pred_kw = 0.0
+        predicted_peak_time = "N/A"
+        peak_act_kw = 0.0
+        observed_peak_time = "N/A"
+        predicted_mean_kw = 0.0
+
     return {
         "household_id": res["household_id"],
         "window_id": res["window_id"],
-        "mae_global": res["mae_global"],
-        "mae_percluster": res["mae_percluster"],
+        "mae_global": round(res["mae_global"], 4),
+        "mae_percluster": round(res["mae_percluster"], 4),
+        "mae_kw": round(res["mae_global"], 4),
+        "predicted_peak_kw": peak_pred_kw,
+        "predicted_peak_time": predicted_peak_time,
+        "observed_peak_kw": peak_act_kw,
+        "observed_peak_time": observed_peak_time,
+        "predicted_mean_kw": predicted_mean_kw,
+        "forecast_horizon_hours": 24,
+        "half_hourly_slots": 48,
         "shap_top_features": res["shap_top_features"][:4],
         "sample_points_count": len(res["series"]),
     }
@@ -38,12 +67,28 @@ def get_segment(household_id: str) -> Dict[str, Any]:
             "error": f"No segmentation data found for household {household_id}",
             "household_id": household_id,
         }
+
+    trajectory = res.get("trajectory", [])
+    clusters_visited = {p.get("cluster_id") for p in trajectory if "cluster_id" in p}
+    has_switched = len(clusters_visited) > 1
+
+    curr_cid = res.get("current_cluster_id")
+    streak = 0
+    for p in reversed(trajectory):
+        if p.get("cluster_id") == curr_cid:
+            streak += 1
+        else:
+            break
+
     return {
         "household_id": res["household_id"],
         "current_cluster_id": res["current_cluster_id"],
         "current_cluster_label": res["current_cluster_label"],
-        "trajectory_windows_count": len(res["trajectory"]),
-        "recent_trajectory": res["trajectory"][-4:],
+        "trajectory_windows_count": len(trajectory),
+        "has_switched_clusters": has_switched,
+        "distinct_clusters_count": len(clusters_visited),
+        "stable_windows_streak": streak,
+        "recent_trajectory": trajectory[-4:],
     }
 
 
@@ -56,12 +101,17 @@ def get_instability(household_id: str) -> Dict[str, Any]:
             "household_id": household_id,
         }
     latest_pt = res["series"][-1] if res["series"] else {}
+    inst_score = round(latest_pt.get("instability", 0.0), 3)
+    vol_cv = round(latest_pt.get("volatility_cv", 0.0), 3)
+    rel_indicator = res.get("reliability_indicator", "stable")
+
     return {
         "household_id": res["household_id"],
         "latest_window": latest_pt.get("window_id", "N/A"),
-        "instability": latest_pt.get("instability", 0.0),
-        "volatility_cv": latest_pt.get("volatility_cv", 0.0),
-        "reliability_indicator": res["reliability_indicator"],
+        "instability": inst_score,
+        "volatility_cv": vol_cv,
+        "reliability_indicator": rel_indicator,
+        "is_stable": inst_score <= 0.25,
         "history": res["series"][-4:],
     }
 

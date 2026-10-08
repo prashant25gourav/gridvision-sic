@@ -6,8 +6,6 @@ import {
   Activity,
   AlertTriangle,
   Sparkles,
-  BookOpen,
-  FileText,
   PanelLeftClose,
   PanelLeftOpen,
 } from 'lucide-react';
@@ -21,6 +19,7 @@ interface DashboardSidebarProps {
   onToggleCollapse: () => void;
   isOpenMobile: boolean;
   onCloseMobile: () => void;
+  onNavigateOverview?: () => void;
 }
 
 interface NavItem {
@@ -29,8 +28,8 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const OVERVIEW_ITEMS: NavItem[] = [
-  { id: 'overview', label: 'Grid Overview', icon: LayoutDashboard },
+const SNAPSHOT_ITEMS: NavItem[] = [
+  { id: 'overview', label: 'Demand Snapshot', icon: LayoutDashboard },
 ];
 
 const ANALYTICS_ITEMS: NavItem[] = [
@@ -42,11 +41,6 @@ const ANALYTICS_ITEMS: NavItem[] = [
 
 const INTELLIGENCE_ITEMS: NavItem[] = [
   { id: 'copilot', label: 'AI Copilot', icon: Sparkles },
-];
-
-const RESEARCH_ITEMS: NavItem[] = [
-  { id: 'findings', label: 'Research Findings', icon: BookOpen },
-  { id: 'methodology', label: 'Methodology', icon: FileText },
 ];
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -126,10 +120,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       >
         <div className="sidebar-inner">
           <nav className="sidebar-nav" aria-label="Sections">
-            {renderNavGroup('OVERVIEW', OVERVIEW_ITEMS)}
+            {renderNavGroup('SNAPSHOT', SNAPSHOT_ITEMS)}
             {renderNavGroup('ANALYTICS', ANALYTICS_ITEMS)}
             {renderNavGroup('INTELLIGENCE', INTELLIGENCE_ITEMS)}
-            {renderNavGroup('RESEARCH', RESEARCH_ITEMS)}
           </nav>
 
           {/* Bottom Sidebar Controls (Collapse / Expand) */}

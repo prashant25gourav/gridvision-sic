@@ -17,7 +17,7 @@ export interface DemandDataPoint {
   hour: number;
   label: string;
   actualKw: number;
-  baselineKw: number;
+  baselineKw?: number | null;
   isPeak: boolean;
 }
 

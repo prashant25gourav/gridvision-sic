@@ -4,7 +4,7 @@
 > It is updated after every meaningful change to the repository.
 >
 > **Do not confuse this with the master files.** The master files define what GridVision IS.
-**Last Updated:** 2026-10-06 (Final Frontend Integration & Information-Hierarchy Pass Completed)
+**Last Updated:** 2026-10-08 (Final Release Audit & Main-Readiness Verification Completed)
 
 ---
 
@@ -53,7 +53,7 @@ The repository contains the complete offline ML & research pipeline (P1, P2, P3)
 | `/consumers/{id}/profile` endpoint | IMPLEMENTED | Returns complete household profile: load factor, peak-to-average, 24h curve, 14-window trajectory, and grounded "why flagged" explanation |
 | `/anomalies/analysis` endpoint | IMPLEMENTED | Returns operational anomaly metrics, window timeline, severity distribution, and affected consumers table with action guidelines |
 | `/forecast/portal` endpoint | IMPLEMENTED | Returns 24h horizon expected demand, peak forecast, accuracy benchmarks (MAE 0.081 kW), and confidence distribution (High/Medium/Needs Attention) |
-| `/chat` endpoint (`app/api/v1/endpoints/chat.py`) | IMPLEMENTED | Upgraded with utility operational tools (`get_grid_demand`, `get_attention_summary`, `get_consumer_rankings_tool`) alongside research tools |
+| `/chat` endpoint (`app/api/v1/endpoints/chat.py`) | VERIFIED & AUDITED | Deterministic tool execution (`get_forecast`, `get_segment`, `get_instability`, `get_anomaly`, `get_grid_demand`), RAG retrieval over TF-IDF knowledge base, strict numeric grounding verification, and developer trace |
 | Artifact loader service (`app/services/artifact_loader.py`) | IMPLEMENTED | Precomputed demand cache and PyArrow queries from `data/artifacts/latest/` |
 | `requirements.txt` | IMPLEMENTED | Contains fastapi, uvicorn, pydantic, pandas, pyarrow, scikit-learn |
 
@@ -61,14 +61,15 @@ The repository contains the complete offline ML & research pipeline (P1, P2, P3)
 
 | Component | Status | Notes |
 |---|---|---|
-| Vite + React 19 + TypeScript setup | IMPLEMENTED | `package.json`, `vite.config.ts`, `tsconfig` files; builds in <870ms |
+| Vite + React 19 + TypeScript setup | IMPLEMENTED | `package.json`, `vite.config.ts`, `tsconfig` files; builds in <950ms |
 | Product Navigation Shell | IMPLEMENTED | 4 logical tiers: OVERVIEW (Grid Overview), ANALYTICS (Demand Analysis, Consumer Intelligence, Anomaly Analysis, Forecasting), INTELLIGENCE (AI Copilot), RESEARCH (Research Findings, Methodology) |
+| Overview Gateway Page | REFINED & PRESENTATION-READY | Single-page editorial & technical architecture overview: 13 structured sections, 3-level information hierarchy (Plain Language -> Method -> Technical Deep-Dive), clean Capstone vs Research separation, precise LightGBM/K-Means/Isolation Forest/Copilot descriptions, zero raw metric dumping, smooth-scrolling cross-dashboard anchor links |
 | Grid Overview Workspace | IMPLEMENTED | 6 utility KPIs, period-over-period trend, weekday/weekend contrast, diurnal load curve, 3 operational alerts with 1-click navigation |
 | Demand Analysis Workspace | IMPLEMENTED | Dedicated analytical workspace: 24h diurnal curve, weekday vs weekend comparison, multi-window trend (W01–W14), seasonal comparison, and peak dynamics |
 | Consumer Intelligence Workspace | IMPLEMENTED | Consumer rankings table (6 sort modes) + Household explorer directory + full meter deep-dive with load factor, 24h curve, trajectory, and grounded explanation |
 | Anomaly Analysis Workspace | IMPLEMENTED | Operational anomaly detection: timeline, severity breakdown, and affected consumers table with Date / Severity / Observed Pattern / Action |
 | Day-Ahead Forecasting Workspace | IMPLEMENTED | Expected demand (0.240 kW/home), peak forecast (0.229 MW at 19:00), MAE 0.081 kW (+31.4% gain), and confidence tiers |
-| AI Copilot Workspace | IMPLEMENTED | Utility operational query suggestions + Research inquiry suggestions, backed by tool-calling and strict numeric grounding |
+| AI Copilot Workspace | VERIFIED & REFINED | Refined dashboard presentation matching style: "Learn about AI Copilot" link, "Consumer" context, no fake telemetry, structured answers (`DIRECT ANSWER` + `WHAT THIS MEANS` + `OPERATIONAL GUIDANCE`), categorized working questions, trace inspector, 100% grounded in GridVision artifacts |
 | Research Findings & Methodology | IMPLEMENTED | Clean, professional secondary workspaces communicating empirical regression results and rigorous experimental controls |
 | Dashboard Workspaces (8 modules) | INTEGRATED | Fully wired to real artifacts/endpoints: Overview, Forecasting, Households, Segmentation, Anomalies, Copilot, Research Findings, Research Methodology |
 | API client (`src/services/api.ts`) | IMPLEMENTED | Full TypeScript client talking to FastAPI backend with verified artifact fallbacks |

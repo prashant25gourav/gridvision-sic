@@ -32,8 +32,9 @@ gridvision-sic/
 │       └── services/     # Artifact caching, PyArrow pushdown querying, RAG engine
 ├── frontend/             # React 19 + TypeScript + Vite UI (P4)
 │   └── src/
-│       ├── views/        # Overview, Household Explorer, Trajectory, Copilot
-│       └── components/   # Reusable metrics, load curves, trajectory flow charts
+│       ├── components/   # Overview, Dashboard Workspaces, Charts, Layout
+│       ├── services/     # Typed API client
+│       └── types/        # Energy and dashboard interfaces
 ├── data/
 │   ├── raw/              # Low Carbon London dataset (hhblock_dataset, metadata)
 │   ├── interim/          # Partitioned Parquet blocks
@@ -43,12 +44,16 @@ gridvision-sic/
 
 ---
 
-## 🧭 Application Modules & Views
+## 🧭 Application Workspaces & Views
 
-1. **Overview Dashboard**: Portfolio KPIs, active anomaly counters, cluster distribution breakdown, and grid alerts.
-2. **Household Explorer**: Granular smart meter inspection, demographic Acorn groups, tariff plans, 56-day actual vs predicted load profiles, and TreeSHAP feature attribution explanations.
-3. **Behavioral Trajectory**: Longitudinal cluster migration tracking across all 14 common-calendar windows, persistence and instability scores, and transition ledger.
-4. **GridVision Copilot**: Local RAG operations assistant with precomputed artifact querying and strict numeric grounding enforcement.
+1. **Overview Gateway**: Single-page product introduction and technical architecture overview with 3-tier hierarchy, covering forecasting formulation, behavioral segmentation, anomaly screening, Copilot orchestration, and the research extension.
+2. **Demand Snapshot**: Portfolio KPIs, total consumption (MWh), peak load and timing, average demand, and operational attention counters across 14 observation windows.
+3. **Demand Analysis**: Diurnal load curves across 48 half-hour slots, weekday vs. weekend demand comparison, 14-window longitudinal trajectory, and seasonal load dynamics.
+4. **Consumer Intelligence**: Meter ranking directory (by peak load, forecast error, anomaly count, or instability) with comprehensive individual household drill-down and Hungary-aligned behavioral load profiles.
+5. **Anomaly Analysis**: Unsupervised Isolation Forest screening timeline, severity classifications, and affected consumer roster with recommended operational guidance.
+6. **Demand Forecasting**: 24-hour horizon day-ahead demand predictions with LightGBM, comparing actual vs. predicted load, error metrics, and confidence distributions.
+7. **AI Operations Copilot**: Natural-language operational assistant combining deterministic analytical tool retrieval with RAG domain knowledge guidance, featuring 100% strict numeric grounding verification.
+8. **Research Extension**: Controlled empirical evaluation testing whether behavioral cluster instability prospectively predicts extreme load-forecast failure after controlling for intrinsic consumption volatility.
 
 ---
 

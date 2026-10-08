@@ -38,6 +38,14 @@ def extract_numeric_tokens(text_or_obj: Union[str, Any]) -> Set[str]:
         except ValueError:
             pass
 
+    # Extract digits from meter IDs like MAC000023 -> '000023', '023', '23'
+    for mac_match in re.findall(r"MAC(\d+)", text, re.IGNORECASE):
+        normalized.add(mac_match)
+        stripped = mac_match.lstrip("0") or "0"
+        normalized.add(stripped)
+        if len(mac_match) >= 3:
+            normalized.add(mac_match[-3:])
+
     return normalized
 
 
@@ -64,8 +72,8 @@ def verify_numeric_grounding(
     for source in context_sources:
         source_numbers.update(extract_numeric_tokens(source))
 
-    # Common innocent numbers / dates that don't need strict verification (e.g. single digits like 1, 2)
-    whitelisted = {"1", "2", "3", "4"}
+    # Common innocent numbers / dates that don't need strict verification (e.g. single digits like 1, 2 or standard 24h / 48 half-hour intervals)
+    whitelisted = {"1", "2", "3", "4", "24", "48"}
 
     unsupported = []
     for num in answer_numbers:
