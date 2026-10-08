@@ -1031,146 +1031,15 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
         </section>
       )}
 
-      {/* TAB 4: CONSUMER CLUSTERS */}
+      {/* TAB 4: CONSUMER CLUSTERS / CLUSTER INTELLIGENCE */}
       {activeTab === 'clusters' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Cluster Overview Grid */}
-          <section className="workspace-card" aria-label="Consumer Clusters Overview">
-            <div className="workspace-card-header">
+          <section className="workspace-card" aria-label="Cluster Intelligence">
+            <div className="workspace-card-header" style={{ marginBottom: '0.25rem', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
               <div>
-                <h2 className="workspace-card-title">Consumer Clusters</h2>
-                <p className="workspace-card-subtitle">Consumers grouped by similar load behaviour.</p>
-              </div>
-            </div>
-
-            {isLoadingSegmentation ? (
-              <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
-                Loading cluster segmentation...
-              </div>
-            ) : clustersList.length === 0 ? (
-              <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
-                No cluster data available for {selectedWindow}.
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                  gap: '1rem',
-                }}
-              >
-                {clustersList.map((c) => {
-                  const color = CLUSTER_COLORS[c.cluster_id % 4];
-                  return (
-                    <div
-                      key={c.cluster_id}
-                      style={{
-                        padding: '1.25rem',
-                        borderRadius: 'var(--radius-md)',
-                        backgroundColor: 'var(--surface-raised)',
-                        border: '1px solid var(--border)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        gap: '1rem',
-                      }}
-                    >
-                      <div>
-                        {/* Title & Archetype */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                          <div
-                            style={{
-                              width: '9px',
-                              height: '9px',
-                              borderRadius: '50%',
-                              backgroundColor: color,
-                              flexShrink: 0,
-                            }}
-                          />
-                          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--foreground)' }}>
-                            Cluster {c.cluster_id + 1}
-                          </h3>
-                        </div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--foreground)', marginBottom: '0.35rem' }}>
-                          {c.archetype}
-                        </div>
-
-                        {/* Cohort size */}
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.76rem',
-                            color: color,
-                            fontWeight: 600,
-                            marginBottom: '0.75rem',
-                          }}
-                        >
-                          {c.household_count} consumers · {c.percentage}% of cohort
-                        </div>
-
-                        {/* Short behavioral description */}
-                        <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.45 }}>
-                          {c.description}
-                        </p>
-                      </div>
-
-                      {/* Summary metrics */}
-                      <div
-                        style={{
-                          padding: '0.75rem',
-                          borderRadius: 'var(--radius-sm)',
-                          backgroundColor: 'var(--surface)',
-                          border: '1px solid var(--border)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.6rem',
-                          fontSize: '0.76rem',
-                        }}
-                      >
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                          <div>
-                            <span style={{ color: 'var(--foreground-subtle)' }}>Mean Demand</span>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--foreground)', marginTop: '0.15rem' }}>
-                              {c.features.mean_load.toFixed(3)} kW
-                            </div>
-                          </div>
-                          <div>
-                            <span style={{ color: 'var(--foreground-subtle)' }}>Peak Demand</span>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--accent-amber)', marginTop: '0.15rem' }}>
-                              {c.features.peak_load.toFixed(3)} kW
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <span style={{ color: 'var(--foreground-subtle)' }}>Peak Window</span>
-                          <div style={{ fontWeight: 600, color: 'var(--foreground)', marginTop: '0.15rem' }}>
-                            {c.peak_window}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </section>
-
-          {/* Cluster Daily Load-Profile Multi-Line Visualization */}
-          <section className="workspace-card" aria-label="Cluster Typical Daily Load Profile">
-            <div
-              className="workspace-card-header"
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '0.75rem',
-              }}
-            >
-              <div>
-                <h3 className="workspace-card-title">Typical Daily Load Profiles</h3>
-                <p className="workspace-card-subtitle">
-                  Average demand curve across 48 half-hour intervals (00:00 → 23:30) in kW / consumer.
+                <h2 className="workspace-card-title">Cluster Intelligence</h2>
+                <p className="workspace-card-subtitle" style={{ fontSize: '0.98rem' }}>
+                  Households are grouped by recurring electricity-consumption behavior across 8 standardized features (K = 4).
                 </p>
               </div>
 
@@ -1180,8 +1049,8 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                   type="button"
                   onClick={() => setActiveClusterFilter(null)}
                   style={{
-                    padding: '0.3rem 0.65rem',
-                    fontSize: '0.75rem',
+                    padding: '0.35rem 0.75rem',
+                    fontSize: '0.78rem',
                     fontWeight: activeClusterFilter === null ? 700 : 500,
                     borderRadius: 'var(--radius-sm)',
                     border: '1px solid var(--border)',
@@ -1201,8 +1070,8 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       type="button"
                       onClick={() => setActiveClusterFilter(isSelected ? null : c.cluster_id)}
                       style={{
-                        padding: '0.3rem 0.65rem',
-                        fontSize: '0.75rem',
+                        padding: '0.35rem 0.75rem',
+                        fontSize: '0.78rem',
                         fontWeight: isSelected ? 700 : 500,
                         borderRadius: 'var(--radius-sm)',
                         border: `1px solid ${isSelected ? color : 'var(--border)'}`,
@@ -1211,24 +1080,123 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                         cursor: 'pointer',
                       }}
                     >
-                      Cluster {c.cluster_id + 1}
+                      Cluster {c.cluster_id + 1} ({c.archetype})
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Multi-Line SVG Chart */}
-            {clusterDailyProfiles.length > 0 ? (
-              <ClusterDailyProfilesSvg
-                data={clusterDailyProfiles}
-                activeClusterFilter={activeClusterFilter}
-              />
-            ) : (
-              <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
-                No load profiles recorded for this observation window.
+            {/* Primary Visualization: Diurnal Archetype Profiles */}
+            <div style={{ padding: '0.5rem 0 1rem 0' }}>
+              <div style={{ marginBottom: '0.65rem' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground-muted)' }}>
+                  Typical 24-Hour Diurnal Demand Profiles (48 half-hour intervals &bull; 00:00 &rarr; 23:30)
+                </span>
               </div>
-            )}
+              {isLoadingSegmentation ? (
+                <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                  Loading cluster profiles...
+                </div>
+              ) : clusterDailyProfiles.length > 0 ? (
+                <ClusterDailyProfilesSvg
+                  data={clusterDailyProfiles}
+                  activeClusterFilter={activeClusterFilter}
+                />
+              ) : (
+                <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
+                  No load profiles recorded for this observation window.
+                </div>
+              )}
+            </div>
+
+            {/* Analytical Cluster Comparison Table */}
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
+              <div style={{ marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Analytical Comparison Across Archetypes
+                </span>
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--foreground-subtle)', fontSize: '0.76rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th style={{ padding: '0.75rem 1rem' }}>Cluster</th>
+                      <th style={{ padding: '0.75rem 1rem' }}>Archetype</th>
+                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Cohort Share</th>
+                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Mean Demand</th>
+                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
+                      <th style={{ padding: '0.75rem 1rem' }}>Peak Window</th>
+                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak / Avg</th>
+                      <th style={{ padding: '0.75rem 1rem' }}>Characteristic Consumption Pattern</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clustersList.map((c) => {
+                      const color = CLUSTER_COLORS[c.cluster_id % 4];
+                      const isSelected = activeClusterFilter === c.cluster_id;
+                      return (
+                        <tr
+                          key={c.cluster_id}
+                          onClick={() => setActiveClusterFilter(activeClusterFilter === c.cluster_id ? null : c.cluster_id)}
+                          style={{
+                            borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
+                            backgroundColor: isSelected ? `color-mix(in srgb, ${color} 10%, transparent)` : 'transparent',
+                            cursor: 'pointer',
+                            transition: 'background-color 120ms ease',
+                          }}
+                        >
+                          <td style={{ padding: '0.85rem 1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                              <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--foreground)' }}>Cluster {c.cluster_id + 1}</strong>
+                            </div>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', fontWeight: 600, color: 'var(--foreground)' }}>
+                            {c.archetype}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                            <strong>{c.percentage}%</strong> <span style={{ color: 'var(--foreground-muted)', fontSize: '0.78rem' }}>({c.household_count} HH)</span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                            {c.features.mean_load.toFixed(3)} kW
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--accent-amber)' }}>
+                            {c.features.peak_load.toFixed(3)} kW
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: 'var(--foreground-muted)' }}>
+                            {c.peak_window}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                            {c.features.peak_to_average_ratio.toFixed(2)}&times;
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: 'var(--foreground-muted)', fontSize: '0.84rem', maxWidth: '300px' }}>
+                            {c.description}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Behavioral Features Specification Reference */}
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', backgroundColor: 'var(--surface-raised)', margin: '0 -1.5rem -1.35rem -1.5rem', padding: '1.25rem 1.5rem', borderRadius: '0 0 var(--radius-md) var(--radius-md)' }}>
+              <div style={{ fontSize: '0.76rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+                Standardized Behavioral Feature Set (K = 4)
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.65rem', fontSize: '0.82rem' }}>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Mean load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Average overall consumption baseline</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Maximum half-hour demand point</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak-to-average ratio:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Volatility and peaking intensity</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Variability (Std Dev):</strong> <span style={{ color: 'var(--foreground-muted)' }}>Dispersion of load across intervals</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Ramp-rate behavior:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Average rate of change between intervals</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Day/night consumption:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Ratio of daytime to overnight demand</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Weekday/weekend contrast:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Difference between workdays and weekends</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak timing:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Modal half-hour interval of daily peak</span></div>
+              </div>
+            </div>
           </section>
         </div>
       )}
@@ -1758,15 +1726,15 @@ const ClusterDailyProfilesSvg: React.FC<{
                 x2={padding.left + chartW}
                 y2={y}
                 stroke="var(--border)"
-                strokeDasharray="3 3"
+                strokeDasharray="2 3"
                 strokeWidth={1}
-                opacity={0.55}
+                opacity={0.35}
               />
               <text
                 x={padding.left - 10}
                 y={y + 4}
                 textAnchor="end"
-                fontSize={12}
+                fontSize={11}
                 fontFamily="var(--font-mono)"
                 fill="var(--foreground-subtle)"
               >
@@ -1786,7 +1754,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               x={x}
               y={padding.top + chartH + 20}
               textAnchor="middle"
-              fontSize={12}
+              fontSize={11}
               fontFamily="var(--font-mono)"
               fill="var(--foreground-subtle)"
             >
@@ -1804,7 +1772,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               d={l.path}
               fill="none"
               stroke={l.color}
-              strokeWidth={isDimmed ? 1.2 : activeClusterFilter === l.id ? 2.6 : 1.9}
+              strokeWidth={isDimmed ? 1.0 : activeClusterFilter === l.id ? 2.2 : 1.5}
               opacity={isDimmed ? 0.2 : 1}
               strokeLinecap="round"
               strokeLinejoin="round"

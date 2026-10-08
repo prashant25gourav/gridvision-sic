@@ -307,7 +307,7 @@ export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = ({
         <div className="workspace-kpi-card">
           <div className="workspace-kpi-header">
             <span className="workspace-kpi-label">FORECAST HORIZON</span>
-            <Clock size={16} className="workspace-kpi-icon" style={{ color: 'var(--accent-indigo)' }} />
+            <Clock size={16} className="workspace-kpi-icon" style={{ color: 'var(--foreground-muted)' }} />
           </div>
           <div className="workspace-kpi-value">
             24 Hours

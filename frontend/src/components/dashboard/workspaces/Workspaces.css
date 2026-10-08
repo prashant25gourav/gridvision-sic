@@ -181,10 +181,10 @@
   flex-shrink: 0;
 }
 
-.segment-c0 { background-color: var(--accent-emerald); }
-.segment-c1 { background-color: var(--accent-amber); }
-.segment-c2 { background-color: var(--accent-blue); }
-.segment-c3 { background-color: var(--accent-rose); }
+.segment-c0 { background-color: #d97706; }
+.segment-c1 { background-color: #475569; }
+.segment-c2 { background-color: var(--accent-emerald, #059669); }
+.segment-c3 { background-color: #0f766e; }
 
 .segment-info {
   display: flex;

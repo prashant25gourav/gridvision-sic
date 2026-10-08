@@ -168,7 +168,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
         >
           <defs>
             <linearGradient id="loadAreaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity="0.04" />
               <stop offset="100%" stopColor="var(--accent-emerald)" stopOpacity="0.0" />
             </linearGradient>
           </defs>
@@ -178,7 +178,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
             x={padding.left}
             y={padding.top - 8}
             fill="var(--foreground-subtle)"
-            fontSize="12"
+            fontSize="11"
             fontFamily="var(--font-mono)"
             textAnchor="start"
           >
@@ -196,15 +196,15 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                   x2={padding.left + chartW}
                   y2={y}
                   stroke="var(--border)"
-                  strokeDasharray="3 3"
+                  strokeDasharray="2 3"
                   strokeWidth="1"
-                  opacity="0.65"
+                  opacity="0.4"
                 />
                 <text
                   x={padding.left - 8}
                   y={y + 4}
                   fill="var(--foreground-subtle)"
-                  fontSize="12"
+                  fontSize="11"
                   textAnchor="end"
                   fontFamily="var(--font-mono)"
                 >
@@ -233,9 +233,9 @@ export const LoadChart: React.FC<LoadChartProps> = ({
               d={baselinePath}
               fill="none"
               stroke="var(--accent-amber)"
-              strokeWidth="1.75"
+              strokeWidth="1.25"
               strokeDasharray="4 3"
-              opacity="0.85"
+              opacity="0.9"
             />
           )}
 
@@ -244,7 +244,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
             d={actualPath}
             fill="none"
             stroke="var(--accent-emerald)"
-            strokeWidth="1.9"
+            strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />

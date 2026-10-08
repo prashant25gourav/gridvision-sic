@@ -1,16 +1,6 @@
 import React, { useEffect } from 'react';
-import {
-  ArrowDown,
-  ArrowRight,
-  Bot,
-  LineChart,
-  ShieldAlert,
-  Users,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import type { DashboardSection } from '../../types/dashboard';
-import { CapstoneVisual } from './CapstoneVisual';
 import { ResearchVisual } from './ResearchVisual';
 import './OverviewGateway.css';
 
@@ -57,698 +47,458 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
   };
 
   return (
-    <div className="overview-page-container">
+    <article className="overview-page-container">
       <div className="overview-inner">
         {/* ========================================================================= */}
-        {/* 1. HERO / INTRODUCTION                                                    */}
+        {/* 1. EDITORIAL INTRODUCTION                                                 */}
         {/* ========================================================================= */}
-        <header className="overview-hero-section">
-          <div className="overview-hero-badge">
-            <span>SMART ELECTRICITY ANALYTICS</span>
+        <header className="overview-editorial-hero">
+          <div className="editorial-meta-line">
+            <span className="editorial-kicker">GRIDVISION &bull; SMART ENERGY ANALYTICS &amp; AI COPILOT</span>
+            <span className="editorial-version-tag">VERIFIED COHORT DATA</span>
           </div>
-          
-          <h1 className="overview-hero-title">GRIDVISION</h1>
 
-          <p className="overview-hero-statement">
-            Smart electricity analytics for understanding demand, consumption behaviour, forecasting and unusual activity.
+          <h1 className="editorial-headline">GRIDVISION</h1>
+
+          <div className="editorial-strapline">
+            &ldquo;From smart-meter data to actionable electricity intelligence.&rdquo;
+          </div>
+
+          <p className="editorial-lede">
+            GridVision transforms high-frequency electricity consumption data into practical
+            analytical insight. It combines behavioral segmentation, demand forecasting, anomaly
+            detection and grounded AI assistance to help users understand how electricity
+            consumption changes across households and over time.
           </p>
 
-          <p className="overview-hero-subtext">
-            GridVision transforms raw half-hourly smart-meter data into clear operational demand intelligence,
-            interpretable behavioral archetypes, and grounded natural-language assistance.
-          </p>
-
-          <div className="overview-hero-cta-group">
+          <div className="editorial-hero-actions">
             <button
               type="button"
-              className="overview-hero-btn primary"
+              className="editorial-btn primary"
               onClick={onLaunchDashboard}
             >
               <span>Launch Live Dashboard</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </button>
             <button
               type="button"
-              className="overview-hero-btn secondary"
+              className="editorial-btn text-link"
               onClick={() => scrollToSection('overview-problem')}
             >
-              <span>Explore Platform Tour</span>
-              <ArrowDown size={18} />
+              <span>Read System Explainer</span>
+              <ArrowDown size={14} />
             </button>
           </div>
         </header>
 
-        {/* Dual Gateway Visual Cards */}
-        <div className="overview-gateway-cards" role="region" aria-label="Two sides of GridVision">
-          <article
-            className="overview-gateway-card"
-            onClick={() => scrollToSection('overview-capabilities')}
-            tabIndex={0}
-            role="button"
-            aria-label="Explore Core Capabilities"
-          >
-            <div className="overview-gateway-card-visual">
-              <CapstoneVisual />
-            </div>
-            <div className="overview-gateway-card-body">
-              <span className="overview-gateway-card-eyebrow">OPERATIONAL APPLICATION</span>
-              <h2 className="overview-gateway-card-title">Demand Intelligence &amp; AI Copilot</h2>
-              <p className="overview-gateway-card-desc">
-                Understand grid load, predict upcoming consumption, classify household archetypes, and screen anomalies.
-              </p>
-              <div className="overview-gateway-card-footer">
-                <span className="overview-gateway-card-link">Explore Capabilities <ArrowDown size={14} /></span>
-              </div>
-            </div>
-          </article>
-
-          <article
-            className="overview-gateway-card"
-            onClick={() => scrollToSection('overview-research')}
-            tabIndex={0}
-            role="button"
-            aria-label="Explore Research Study"
-          >
-            <div className="overview-gateway-card-visual">
-              <ResearchVisual />
-            </div>
-            <div className="overview-gateway-card-body">
-              <span className="overview-gateway-card-eyebrow">RESEARCH STUDY</span>
-              <h2 className="overview-gateway-card-title">Behavioral Mobility &amp; Forecast Errors</h2>
-              <p className="overview-gateway-card-desc">
-                Investigating whether household behavioural pattern transitions correlate with subsequent extreme forecast failures.
-              </p>
-              <div className="overview-gateway-card-footer">
-                <span className="overview-gateway-card-link">Explore Research <ArrowDown size={14} /></span>
-              </div>
-            </div>
-          </article>
-        </div>
-
         {/* ========================================================================= */}
-        {/* 2. STICKY QUICK JUMP NAVIGATION BAR                                       */}
+        {/* EDITORIAL SECTION INDEX (Minimalist Quick Jump)                           */}
         {/* ========================================================================= */}
-        <nav className="overview-quick-nav" aria-label="Quick jump to sections">
-          <span className="overview-quick-nav-label">JUMP TO:</span>
-          {[
-            { id: 'overview-problem', label: '1. The Problem' },
-            { id: 'overview-capabilities', label: '2. What It Does' },
-            { id: 'overview-product-showcase', label: '3. Product Showcase' },
-            { id: 'overview-workflow', label: '4. How A User Uses It' },
-            { id: 'overview-copilot', label: '5. AI Copilot' },
-            { id: 'overview-research', label: '6. Behind the Product' },
-          ].map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="overview-quick-nav-btn"
-              onClick={() => scrollToSection(item.id)}
-            >
-              {item.label}
+        <nav className="editorial-index-bar" aria-label="Overview Section Index">
+          <span className="index-bar-label">SECTION INDEX:</span>
+          <div className="index-bar-links">
+            <button type="button" onClick={() => scrollToSection('overview-problem')}>
+              01 Why GridVision
             </button>
-          ))}
+            <span className="index-divider">/</span>
+            <button type="button" onClick={() => scrollToSection('overview-dataset')}>
+              02 Data Explainer
+            </button>
+            <span className="index-divider">/</span>
+            <button type="button" onClick={() => scrollToSection('overview-workflow')}>
+              03 How GridVision Works
+            </button>
+            <span className="index-divider">/</span>
+            <button type="button" onClick={() => scrollToSection('overview-explore')}>
+              04 Explore the Grid
+            </button>
+            <span className="index-divider">/</span>
+            <button type="button" onClick={() => scrollToSection('overview-research')}>
+              05 Behind the Product
+            </button>
+          </div>
         </nav>
 
         {/* ========================================================================= */}
-        {/* 3. THE PROBLEM                                                            */}
+        {/* 2. WHY GRIDVISION?                                                        */}
         {/* ========================================================================= */}
-        <section id="overview-problem" className="overview-content-section" aria-label="The Problem">
-          <span className="overview-section-eyebrow">THE CHALLENGE</span>
-          <h2 className="overview-section-title">Smart Meter Data Needs Usable Intelligence</h2>
-          <p className="overview-section-lead">
-            Smart meters generate massive amounts of half-hourly consumption readings, but raw data alone is hard to interpret.
-          </p>
-
-          <div className="overview-problem-flow">
-            <div className="overview-problem-step">
-              <div className="overview-step-number">01</div>
-              <div className="overview-step-content">
-                <h3 className="overview-step-title">High-Volume Meter Stream</h3>
-                <p className="overview-step-text">
-                  Smart meters record electricity readings every 30 minutes, producing thousands of data points per household.
-                </p>
-              </div>
+        <section id="overview-problem" className="editorial-section" aria-label="Why GridVision">
+          <div className="section-number-header">
+            <span className="section-index-num">01</span>
+            <div className="section-header-text">
+              <span className="section-eyebrow">THE OPERATIONAL CHALLENGE</span>
+              <h2 className="section-heading">Why GridVision?</h2>
             </div>
+          </div>
 
-            <div className="overview-flow-connector">
-              <ArrowDown size={20} />
-            </div>
+          <div className="editorial-prose-block">
+            <p className="editorial-callout-quote">
+              Smart meters produce enormous volumes of consumption measurements.
+              The challenge is not simply collecting those readings — it is understanding
+              the patterns hidden inside them.
+            </p>
 
-            <div className="overview-problem-step">
-              <div className="overview-step-number">02</div>
-              <div className="overview-step-content">
-                <h3 className="overview-step-title">Raw Numbers Lack Context</h3>
-                <p className="overview-step-text">
-                  Isolated kilowatt-hour values don&apos;t reveal when peaks occur, who drives them, or whether demand is unusual.
-                </p>
-              </div>
-            </div>
+            <p className="editorial-body-text">
+              Raw half-hourly kilowatt values alone do not inform a grid operator when peak stress will occur,
+              which customer cohorts drive ramps, or whether an observed fluctuation represents an equipment defect,
+              a lifestyle shift, or benign seasonal variation. GridVision bridges this gap with structured analytical
+              methods:
+            </p>
 
-            <div className="overview-flow-connector">
-              <ArrowDown size={20} />
-            </div>
-
-            <div className="overview-problem-step">
-              <div className="overview-step-number">03</div>
-              <div className="overview-step-content">
-                <h3 className="overview-step-title">Operational Decision Needs</h3>
-                <p className="overview-step-text">
-                  Utilities need to anticipate upcoming demand, screen abnormal usage, and understand distinct consumer habits.
-                </p>
-              </div>
-            </div>
-
-            <div className="overview-flow-connector">
-              <ArrowDown size={20} />
-            </div>
-
-            <div className="overview-problem-step highlight">
-              <div className="overview-step-number">04</div>
-              <div className="overview-step-content">
-                <h3 className="overview-step-title">GridVision Usable Intelligence</h3>
-                <p className="overview-step-text">
-                  Transforms raw readings into clean demand forecasts, behavioral archetypes, and grounded insights.
-                </p>
-              </div>
-            </div>
+            <ul className="editorial-points-list">
+              <li>
+                <span className="point-bullet" />
+                <div className="point-content">
+                  <strong>Understand how demand changes throughout the day:</strong> Track half-hourly aggregate load shapes, identify morning ramps, isolate evening peaks, and evaluate weekday versus weekend contrasts.
+                </div>
+              </li>
+              <li>
+                <span className="point-bullet" />
+                <div className="point-content">
+                  <strong>Identify households with similar consumption behavior:</strong> Segment heterogeneous consumer populations into interpretable behavioral archetypes based on recurring load levels, diurnal timing, and variability.
+                </div>
+              </li>
+              <li>
+                <span className="point-bullet" />
+                <div className="point-content">
+                  <strong>Detect unusual consumption patterns:</strong> Screen anomalous household windows with statistical thresholding, isolating erratic spikes and abnormal consumption signatures before they compound.
+                </div>
+              </li>
+              <li>
+                <span className="point-bullet" />
+                <div className="point-content">
+                  <strong>Forecast upcoming electricity demand:</strong> Generate day-ahead demand predictions across 48 discrete dispatch intervals to support reserve planning and system reliability.
+                </div>
+              </li>
+              <li>
+                <span className="point-bullet" />
+                <div className="point-content">
+                  <strong>Ask questions about the data through a grounded AI Copilot:</strong> Query metrics, household profiles, and system runbooks in natural language, backed strictly by verified calculations.
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. WHAT GRIDVISION DOES                                                   */}
+        {/* 3. DATA EXPLAINER                                                         */}
         {/* ========================================================================= */}
-        <section id="overview-capabilities" className="overview-content-section" aria-label="What GridVision Does">
-          <span className="overview-section-eyebrow">CONNECTED PLATFORM</span>
-          <h2 className="overview-section-title">What GridVision Does</h2>
-          <p className="overview-section-lead">
-            Five core capabilities connected into one unified analytical system.
+        <section id="overview-dataset" className="editorial-section" aria-label="Data Explainer">
+          <div className="section-number-header">
+            <span className="section-index-num">02</span>
+            <div className="section-header-text">
+              <span className="section-eyebrow">DATA FOUNDATION</span>
+              <h2 className="section-heading">From meter readings to usable signals</h2>
+            </div>
+          </div>
+
+          <div className="editorial-prose-block">
+            <p className="editorial-body-text">
+              GridVision works with 48 half-hour readings per day, organized into 56-day analytical
+              windows. From the source population of 5,566 households, the final working sample
+              contains 620 households and 6,191 usable windows.
+            </p>
+
+            {/* Typographic highlights - NOT large cards, but clean inline statistical metrics */}
+            <div className="editorial-stats-row">
+              <div className="editorial-stat-item">
+                <span className="stat-number">5,566</span>
+                <span className="stat-label">Source households in metadata</span>
+              </div>
+              <div className="editorial-stat-divider" />
+              <div className="editorial-stat-item">
+                <span className="stat-number">4,443</span>
+                <span className="stat-label">Flat-rate tariff cohort</span>
+              </div>
+              <div className="editorial-stat-divider" />
+              <div className="editorial-stat-item highlight">
+                <span className="stat-number">620</span>
+                <span className="stat-label">Quality-filtered working sample</span>
+              </div>
+              <div className="editorial-stat-divider" />
+              <div className="editorial-stat-item highlight">
+                <span className="stat-number">6,191</span>
+                <span className="stat-label">Usable 56-day analysis windows</span>
+              </div>
+              <div className="editorial-stat-divider" />
+              <div className="editorial-stat-item">
+                <span className="stat-number">48</span>
+                <span className="stat-label">Half-hour slots per diurnal cycle</span>
+              </div>
+            </div>
+
+            <p className="editorial-body-footnote">
+              To guarantee scientific and operational integrity, all data undergoes rigorous
+              completeness filtering and zero-leakage window partitioning. No synthetic readings
+              or fabricated profiles are permitted.
+            </p>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 4. HOW GRIDVISION WORKS                                                   */}
+        {/* ========================================================================= */}
+        <section id="overview-workflow" className="editorial-section" aria-label="How GridVision Works">
+          <div id="overview-capabilities" />
+          <div className="section-number-header">
+            <span className="section-index-num">03</span>
+            <div className="section-header-text">
+              <span className="section-eyebrow">ANALYTICAL WORKFLOW</span>
+              <h2 className="section-heading">How GridVision turns readings into intelligence</h2>
+            </div>
+          </div>
+
+          <p className="editorial-body-text">
+            GridVision processes electricity consumption through an ordered seven-stage pipeline.
+            Each transformation step preserves methodological traceability and produces reproducible
+            analytical artifacts.
           </p>
 
-          <div className="overview-journey-stack">
-            {/* Capability 1 */}
-            <div id="overview-demand" className="overview-journey-card">
-              <div className="overview-journey-badge">01 &bull; DEMAND</div>
-              <div className="overview-journey-icon">
-                <LineChart size={24} style={{ color: 'var(--accent-emerald)' }} />
+          {/* Technical Process Diagram */}
+          <div className="technical-pipeline-flow">
+            {[
+              {
+                step: '01',
+                title: 'SMART-METER READINGS',
+                desc: 'Raw half-hourly kilowatt-hour consumption streams recorded across participating households.',
+              },
+              {
+                step: '02',
+                title: 'QUALITY CONTROL & WINDOWING',
+                desc: 'Screening for missing data, zero-consumption outliers, and slicing into 56-day analytical epochs.',
+              },
+              {
+                step: '03',
+                title: 'BEHAVIORAL FEATURES',
+                desc: 'Extraction of 8 standardized metrics: mean load, peak load, peak-to-average ratio, variability, ramp behavior, day/night split, weekday contrast, and peak timing.',
+              },
+              {
+                step: '04',
+                title: 'HOUSEHOLD SEGMENTATION',
+                desc: 'Unsupervised clustering (K = 4) grouping households into stable, interpretable diurnal consumption archetypes.',
+              },
+              {
+                step: '05',
+                title: 'DEMAND FORECASTING',
+                desc: 'Supervised machine-learning models predicting 24-hour day-ahead demand in 30-minute intervals.',
+              },
+              {
+                step: '06',
+                title: 'ANOMALY DETECTION',
+                desc: 'Residual and threshold screening isolating statistically extreme consumption events and structural pattern shifts.',
+              },
+              {
+                step: '07',
+                title: 'AI COPILOT',
+                desc: 'Grounded retrieval-augmented assistant answering operational inquiries directly against verified data and system runbooks.',
+              },
+            ].map((node, idx, arr) => (
+              <React.Fragment key={node.step}>
+                <div className="pipeline-node">
+                  <div className="pipeline-node-marker">
+                    <span className="node-num">{node.step}</span>
+                  </div>
+                  <div className="pipeline-node-body">
+                    <h3 className="pipeline-node-title">{node.title}</h3>
+                    <p className="pipeline-node-desc">{node.desc}</p>
+                  </div>
+                </div>
+                {idx < arr.length - 1 && (
+                  <div className="pipeline-connector-line">
+                    <div className="connector-stem" />
+                    <span className="connector-arrow">&darr;</span>
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. WHAT THE USER CAN EXPLORE                                              */}
+        {/* ========================================================================= */}
+        <section id="overview-explore" className="editorial-section" aria-label="Explore the Grid">
+          <div className="section-number-header">
+            <span className="section-index-num">04</span>
+            <div className="section-header-text">
+              <span className="section-eyebrow">PLATFORM WORKSPACES</span>
+              <h2 className="section-heading">Explore the Grid</h2>
+            </div>
+          </div>
+
+          <p className="editorial-body-text">
+            Each section of GridVision focuses on a specific aspect of electricity operations.
+            Navigate directly to any workspace to inspect live data and analysis:
+          </p>
+
+          <div className="editorial-explore-list">
+            {/* 01 Demand Analysis */}
+            <div id="overview-demand" className="editorial-explore-item">
+              <div className="explore-item-header">
+                <span className="explore-item-num">01</span>
+                <div className="explore-item-titles">
+                  <h3 className="explore-item-name">Demand Analysis</h3>
+                  <p className="explore-item-summary">
+                    Understand daily demand curves, weekday/weekend behavior and longer-term patterns.
+                  </p>
+                </div>
               </div>
-              <div className="overview-journey-body">
-                <h3 className="overview-journey-title">Understand Demand</h3>
-                <p className="overview-journey-desc">
-                  See how electricity consumption changes throughout the day, week, and observation period.
-                  Track peak timing, morning ramps, and seasonal differences.
-                </p>
-              </div>
+              <button
+                type="button"
+                className="explore-item-action"
+                onClick={() => handleOpenSection('demand')}
+              >
+                <span>Open Demand Analysis</span>
+                <ArrowRight size={15} />
+              </button>
             </div>
 
-            <div className="overview-journey-connector">
-              <ArrowDown size={18} />
-            </div>
-
-            {/* Capability 2 */}
-            <div id="overview-forecasting" className="overview-journey-card">
-              <div className="overview-journey-badge">02 &bull; FORECASTING</div>
-              <div className="overview-journey-icon">
-                <TrendingUp size={24} style={{ color: 'var(--accent-emerald)' }} />
-              </div>
-              <div className="overview-journey-body">
-                <h3 className="overview-journey-title">Forecast Demand</h3>
-                <p className="overview-journey-desc">
-                  Estimate upcoming demand 24 hours ahead in 30-minute intervals and evaluate forecast reliability to schedule reserves effectively.
-                </p>
-              </div>
-            </div>
-
-            <div className="overview-journey-connector">
-              <ArrowDown size={18} />
-            </div>
-
-            {/* Capability 3 */}
-            <div id="overview-anomalies" className="overview-journey-card">
-              <div className="overview-journey-badge">03 &bull; ANOMALIES</div>
-              <div className="overview-journey-icon">
-                <ShieldAlert size={24} style={{ color: 'var(--accent-rose)' }} />
-              </div>
-              <div className="overview-journey-body">
-                <h3 className="overview-journey-title">Find Unusual Activity</h3>
-                <p className="overview-journey-desc">
-                  Identify consumption patterns that stand out from expected behaviour, ranked by severity to prioritize inspection and maintenance.
-                </p>
-              </div>
-            </div>
-
-            <div className="overview-journey-connector">
-              <ArrowDown size={18} />
-            </div>
-
-            {/* Capability 4 */}
-            <div id="overview-consumers" className="overview-journey-card">
+            {/* 02 Consumer Intelligence */}
+            <div id="overview-consumers" className="editorial-explore-item">
               <div id="overview-segmentation" />
-              <div className="overview-journey-badge">04 &bull; CONSUMERS</div>
-              <div className="overview-journey-icon">
-                <Users size={24} style={{ color: 'var(--accent-cyan, #06b6d4)' }} />
-              </div>
-              <div className="overview-journey-body">
-                <h3 className="overview-journey-title">Understand Consumers</h3>
-                <p className="overview-journey-desc">
-                  Explore household consumption behaviour across standardized archetypes and identify consumers requiring attention.
-                </p>
-              </div>
-            </div>
-
-            <div className="overview-journey-connector">
-              <ArrowDown size={18} />
-            </div>
-
-            {/* Capability 5 */}
-            <div className="overview-journey-card">
-              <div className="overview-journey-badge">05 &bull; COPILOT</div>
-              <div className="overview-journey-icon">
-                <Bot size={24} style={{ color: 'var(--accent-amber)' }} />
-              </div>
-              <div className="overview-journey-body">
-                <h3 className="overview-journey-title">Ask Copilot</h3>
-                <p className="overview-journey-desc">
-                  Ask questions in natural language and receive grounded explanations derived directly from verified data and operational runbooks.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 5. SHOW THE PRODUCT                                                       */}
-        {/* ========================================================================= */}
-        <section id="overview-product-showcase" className="overview-content-section" aria-label="Show the Product">
-          <span className="overview-section-eyebrow">VISUAL SHOWCASE</span>
-          <h2 className="overview-section-title">See the Product in Action</h2>
-          <p className="overview-section-lead">
-            Visual modules from GridVision with real data insights.
-          </p>
-
-          <div className="overview-showcase-grid">
-            {/* Showcase 1: Demand Trends */}
-            <div className="overview-showcase-item">
-              <div className="overview-showcase-header">
-                <span className="overview-showcase-tag">DEMAND TRENDS</span>
-                <h3 className="overview-showcase-heading">Electricity Demand Dynamics</h3>
-                <p className="overview-showcase-statement">
-                  &ldquo;See when electricity demand rises and when the daily peak occurs.&rdquo;
-                </p>
-              </div>
-              <div className="overview-showcase-preview">
-                <div className="overview-mini-chart-box">
-                  <div className="overview-mini-stats">
-                    <div>
-                      <span className="mini-stat-label">Daily Peak Time</span>
-                      <strong className="mini-stat-val">19:30 &bull; Evening</strong>
-                    </div>
-                    <div>
-                      <span className="mini-stat-label">Peak to Average</span>
-                      <strong className="mini-stat-val">2.31&times;</strong>
-                    </div>
-                    <div>
-                      <span className="mini-stat-label">Ramp Window</span>
-                      <strong className="mini-stat-val">16:30 &ndash; 20:30</strong>
-                    </div>
-                  </div>
-                  <div className="overview-mini-curve">
-                    <CapstoneVisual />
-                  </div>
+              <div className="explore-item-header">
+                <span className="explore-item-num">02</span>
+                <div className="explore-item-titles">
+                  <h3 className="explore-item-name">Consumer Intelligence</h3>
+                  <p className="explore-item-summary">
+                    Explore household profiles, rankings, behavioral segments and consumption characteristics across K = 4 archetypes.
+                  </p>
                 </div>
               </div>
-              <div className="overview-showcase-action">
-                <button
-                  type="button"
-                  className="overview-showcase-btn"
-                  onClick={() => handleOpenSection('demand')}
-                >
-                  <span>Open Demand Analysis</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+              <button
+                type="button"
+                className="explore-item-action"
+                onClick={() => handleOpenSection('consumers')}
+              >
+                <span>Open Consumer Intelligence</span>
+                <ArrowRight size={15} />
+              </button>
             </div>
 
-            {/* Showcase 2: Day-Ahead Forecasting */}
-            <div className="overview-showcase-item">
-              <div className="overview-showcase-header">
-                <span className="overview-showcase-tag">SUPERVISED FORECASTING</span>
-                <h3 className="overview-showcase-heading">Day-Ahead Demand Horizon</h3>
-                <p className="overview-showcase-statement">
-                  &ldquo;See what demand is expected to look like next.&rdquo;
-                </p>
-              </div>
-              <div className="overview-showcase-preview">
-                <div className="overview-mini-chart-box">
-                  <div className="overview-mini-stats">
-                    <div>
-                      <span className="mini-stat-label">Horizon</span>
-                      <strong className="mini-stat-val">24 Hours (48 slots)</strong>
-                    </div>
-                    <div>
-                      <span className="mini-stat-label">Evaluation MAE</span>
-                      <strong className="mini-stat-val">0.027 kW</strong>
-                    </div>
-                    <div>
-                      <span className="mini-stat-label">Forecast Method</span>
-                      <strong className="mini-stat-val">Supervised Boosting</strong>
-                    </div>
-                  </div>
-                  <div className="overview-forecast-bars">
-                    {[
-                      { time: '04:00', actual: 0.19, forecast: 0.20 },
-                      { time: '08:00', actual: 0.38, forecast: 0.37 },
-                      { time: '12:00', actual: 0.42, forecast: 0.41 },
-                      { time: '16:00', actual: 0.51, forecast: 0.49 },
-                      { time: '20:00', actual: 0.79, forecast: 0.77 },
-                      { time: '23:30', actual: 0.33, forecast: 0.34 },
-                    ].map((slot) => (
-                      <div key={slot.time} className="overview-slot-row">
-                        <span className="overview-slot-time">{slot.time}</span>
-                        <div className="overview-slot-bar-track">
-                          <div
-                            className="overview-slot-bar actual"
-                            style={{ width: `${slot.actual * 100}%` }}
-                            title={`Observed: ${slot.actual} kW`}
-                          />
-                          <div
-                            className="overview-slot-bar forecast"
-                            style={{ width: `${slot.forecast * 100}%` }}
-                            title={`Forecast: ${slot.forecast} kW`}
-                          />
-                        </div>
-                        <span className="overview-slot-val">{slot.actual.toFixed(2)} kW</span>
-                      </div>
-                    ))}
-                    <div className="overview-slot-legend">
-                      <span><strong style={{ color: 'var(--accent-emerald)' }}>&bull;</strong> Observed</span>
-                      <span><strong style={{ color: 'var(--accent-amber)' }}>&bull;</strong> Forecast</span>
-                    </div>
-                  </div>
+            {/* 03 Anomaly Analysis */}
+            <div id="overview-anomalies" className="editorial-explore-item">
+              <div className="explore-item-header">
+                <span className="explore-item-num">03</span>
+                <div className="explore-item-titles">
+                  <h3 className="explore-item-name">Anomaly Analysis</h3>
+                  <p className="explore-item-summary">
+                    Investigate unusual consumption patterns, severity scores, and affected consumers requiring operational attention.
+                  </p>
                 </div>
               </div>
-              <div className="overview-showcase-action">
-                <button
-                  type="button"
-                  className="overview-showcase-btn"
-                  onClick={() => handleOpenSection('forecasting')}
-                >
-                  <span>Open Demand Forecasting</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+              <button
+                type="button"
+                className="explore-item-action"
+                onClick={() => handleOpenSection('anomalies')}
+              >
+                <span>Open Anomaly Analysis</span>
+                <ArrowRight size={15} />
+              </button>
             </div>
 
-            {/* Showcase 3: Consumer Intelligence */}
-            <div className="overview-showcase-item">
-              <div className="overview-showcase-header">
-                <span className="overview-showcase-tag">BEHAVIORAL ARCHETYPES</span>
-                <h3 className="overview-showcase-heading">Consumer Profiles &amp; Clusters</h3>
-                <p className="overview-showcase-statement">
-                  &ldquo;Investigate individual consumption behaviour.&rdquo;
-                </p>
-              </div>
-              <div className="overview-showcase-preview">
-                <div className="overview-mini-clusters">
-                  <div className="overview-cluster-pill" style={{ borderColor: '#f59e0b' }}>
-                    <div className="cluster-header">
-                      <span className="cluster-badge" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b' }}>Cluster 1</span>
-                      <span className="cluster-share">38% of consumers</span>
-                    </div>
-                    <strong className="cluster-name">Evening Peaker</strong>
-                    <span className="cluster-desc">Sharp peak around 19:00–21:00 with low daytime load</span>
-                  </div>
-
-                  <div className="overview-cluster-pill" style={{ borderColor: '#06b6d4' }}>
-                    <div className="cluster-header">
-                      <span className="cluster-badge" style={{ backgroundColor: 'rgba(6, 182, 212, 0.15)', color: '#06b6d4' }}>Cluster 2</span>
-                      <span className="cluster-share">29% of consumers</span>
-                    </div>
-                    <strong className="cluster-name">Baseload Steady</strong>
-                    <span className="cluster-desc">Flat diurnal consumption profile with constant refrigeration/electronics</span>
-                  </div>
-
-                  <div className="overview-cluster-pill" style={{ borderColor: '#10b981' }}>
-                    <div className="cluster-header">
-                      <span className="cluster-badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981' }}>Cluster 3</span>
-                      <span className="cluster-share">18% of consumers</span>
-                    </div>
-                    <strong className="cluster-name">Daytime Active</strong>
-                    <span className="cluster-desc">Elevated daytime load from home occupancy or domestic appliances</span>
-                  </div>
-
-                  <div className="overview-cluster-pill" style={{ borderColor: '#a855f7' }}>
-                    <div className="cluster-header">
-                      <span className="cluster-badge" style={{ backgroundColor: 'rgba(168, 85, 247, 0.15)', color: '#a855f7' }}>Cluster 4</span>
-                      <span className="cluster-share">15% of consumers</span>
-                    </div>
-                    <strong className="cluster-name">Dual Peaker</strong>
-                    <span className="cluster-desc">Distinct peaks during morning departure and evening return</span>
-                  </div>
+            {/* 04 Forecasting */}
+            <div id="overview-forecasting" className="editorial-explore-item">
+              <div className="explore-item-header">
+                <span className="explore-item-num">04</span>
+                <div className="explore-item-titles">
+                  <h3 className="explore-item-name">Forecasting</h3>
+                  <p className="explore-item-summary">
+                    Examine expected demand, peak forecasts, error evaluations (MAE / RMSE), and day-ahead load projections.
+                  </p>
                 </div>
               </div>
-              <div className="overview-showcase-action">
-                <button
-                  type="button"
-                  className="overview-showcase-btn"
-                  onClick={() => handleOpenSection('consumers')}
-                >
-                  <span>Open Consumer Intelligence</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+              <button
+                type="button"
+                className="explore-item-action"
+                onClick={() => handleOpenSection('forecasting')}
+              >
+                <span>Open Demand Forecasting</span>
+                <ArrowRight size={15} />
+              </button>
             </div>
 
-            {/* Showcase 4: Anomaly Screening */}
-            <div className="overview-showcase-item">
-              <div className="overview-showcase-header">
-                <span className="overview-showcase-tag">OUTLIER SCREENING</span>
-                <h3 className="overview-showcase-heading">Abnormal Pattern Detection</h3>
-                <p className="overview-showcase-statement">
-                  &ldquo;Find unusual consumption patterns.&rdquo;
-                </p>
-              </div>
-              <div className="overview-showcase-preview">
-                <div className="overview-mini-anomaly-box">
-                  <div className="overview-anomaly-event">
-                    <div className="anomaly-event-top">
-                      <span className="anomaly-consumer-id">Consumer 045 (MAC000045)</span>
-                      <span className="anomaly-severity-badge extreme">EXTREME</span>
-                    </div>
-                    <div className="anomaly-pattern-title">Unusually sharp demand surge</div>
-                    <p className="anomaly-event-note">
-                      Peak demand was 3.8&times; above historical household baseline during evening window.
-                    </p>
-                  </div>
-
-                  <div className="overview-anomaly-event">
-                    <div className="anomaly-event-top">
-                      <span className="anomaly-consumer-id">Consumer 112 (MAC000112)</span>
-                      <span className="anomaly-severity-badge elevated">ELEVATED</span>
-                    </div>
-                    <div className="anomaly-pattern-title">Weekday vs weekend reversal</div>
-                    <p className="anomaly-event-note">
-                      Reversal of normal workweek routines with high daytime weekend demand.
-                    </p>
-                  </div>
+            {/* 05 AI Copilot */}
+            <div id="overview-copilot" className="editorial-explore-item">
+              <div className="explore-item-header">
+                <span className="explore-item-num">05</span>
+                <div className="explore-item-titles">
+                  <h3 className="explore-item-name">AI Copilot</h3>
+                  <p className="explore-item-summary">
+                    Ask questions and receive grounded answers using GridVision&apos;s analytical tools, verified metrics, and operational knowledge base.
+                  </p>
                 </div>
               </div>
-              <div className="overview-showcase-action">
-                <button
-                  type="button"
-                  className="overview-showcase-btn"
-                  onClick={() => handleOpenSection('anomalies')}
-                >
-                  <span>Open Anomaly Analysis</span>
-                  <ArrowRight size={14} />
-                </button>
+              <button
+                type="button"
+                className="explore-item-action"
+                onClick={() => handleOpenSection('copilot')}
+              >
+                <span>Open AI Copilot</span>
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 6. BEHIND THE PRODUCT (RESEARCH STUDY)                                    */}
+        {/* ========================================================================= */}
+        <section id="overview-research" className="editorial-section research-subdued" aria-label="Behind the Product Research">
+          <div className="section-number-header">
+            <span className="section-index-num">05</span>
+            <div className="section-header-text">
+              <span className="section-eyebrow">RESEARCH STUDY</span>
+              <h2 className="section-heading">Behind the Product: Behavioral Mobility &amp; Forecast Errors</h2>
+            </div>
+          </div>
+
+          <div className="editorial-prose-block">
+            <p className="editorial-body-text">
+              Beyond real-time grid monitoring, GridVision incorporates an empirical research study
+              examining whether household transitions between behavioral consumption archetypes
+              correlate with subsequent extreme forecast failures.
+            </p>
+
+            <div className="editorial-research-diagram">
+              <div className="research-stage">
+                <span className="stage-tag">STEP 1</span>
+                <strong>Consumption Behavior</strong>
+                <span className="stage-note">30-min load curves</span>
+              </div>
+              <span className="research-stage-arrow">&rarr;</span>
+              <div className="research-stage">
+                <span className="stage-tag">STEP 2</span>
+                <strong>Behavioral Mobility</strong>
+                <span className="stage-note">Transitions across 56-day windows</span>
+              </div>
+              <span className="research-stage-arrow">&rarr;</span>
+              <div className="research-stage">
+                <span className="stage-tag">STEP 3</span>
+                <strong>Forecast Tail Errors</strong>
+                <span className="stage-note">95th &amp; 99th percentile errors</span>
+              </div>
+              <span className="research-stage-arrow">&rarr;</span>
+              <div className="research-stage">
+                <span className="stage-tag">STEP 4</span>
+                <strong>Clustered Logistics</strong>
+                <span className="stage-note">Odds ratios &amp; significance</span>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* ========================================================================= */}
-        {/* 6. HOW A USER USES GRIDVISION                                             */}
-        {/* ========================================================================= */}
-        <section id="overview-workflow" className="overview-content-section" aria-label="How a User Uses GridVision">
-          <span className="overview-section-eyebrow">USER JOURNEY</span>
-          <h2 className="overview-section-title">How a User Uses GridVision</h2>
-          <p className="overview-section-lead">
-            A simple, intuitive workflow from high-level grid monitoring to targeted investigation.
-          </p>
-
-          <div className="overview-workflow-steps">
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">01</div>
-              <h3 className="workflow-card-title">Monitor Demand</h3>
-              <p className="workflow-card-text">
-                Check current grid load, identify morning and evening peaks, and compare against historical averages.
-              </p>
-            </div>
-
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">02</div>
-              <h3 className="workflow-card-title">Understand Patterns</h3>
-              <p className="workflow-card-text">
-                Compare weekday versus weekend profiles and track seasonal shifts across 14 observation windows.
-              </p>
-            </div>
-
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">03</div>
-              <h3 className="workflow-card-title">Identify Households</h3>
-              <p className="workflow-card-text">
-                Filter and rank consumers by average demand, peak load, and load factor to pinpoint high-impact accounts.
-              </p>
-            </div>
-
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">04</div>
-              <h3 className="workflow-card-title">Investigate Unusual Activity</h3>
-              <p className="workflow-card-text">
-                Review flagged anomalies, examine the detected deviation pattern, and inspect the individual 24-hour load curve.
-              </p>
-            </div>
-
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">05</div>
-              <h3 className="workflow-card-title">Check Forecasts</h3>
-              <p className="workflow-card-text">
-                Evaluate day-ahead 24-hour demand predictions and review model reliability metrics across holdout periods.
-              </p>
-            </div>
-
-            <div className="overview-workflow-card">
-              <div className="workflow-step-num">06</div>
-              <h3 className="workflow-card-title">Ask Copilot</h3>
-              <p className="workflow-card-text">
-                Ask operational questions in plain language to get grounded answers backed directly by real data.
-              </p>
+            <div className="editorial-visual-wrapper">
+              <ResearchVisual />
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. AI COPILOT                                                             */}
+        {/* BACKWARD COMPATIBILITY ANCHOR TARGETS                                     */}
         {/* ========================================================================= */}
-        <section id="overview-copilot" className="overview-content-section" aria-label="AI Copilot">
-          <span className="overview-section-eyebrow">GROUNDED ASSISTANCE</span>
-          <h2 className="overview-section-title">Ask the AI Copilot</h2>
-          <p className="overview-section-lead">
-            Ask GridVision questions about demand, households, anomalies and forecasts.
-          </p>
-
-          <div className="overview-copilot-container">
-            <div className="overview-copilot-info">
-              <p className="overview-copilot-desc">
-                The Copilot gives operators direct conversational access to all platform metrics,
-                cluster definitions, and operational procedures without requiring SQL or complex filters.
-                Every response is strictly grounded in real dataset numbers.
-              </p>
-
-              <div className="overview-copilot-prompts-label">Realistic questions supported by GridVision:</div>
-
-              <div className="overview-copilot-prompts">
-                {[
-                  'What is the current demand?',
-                  'Which households need attention?',
-                  'Why is this household flagged?',
-                  'How reliable is the forecast?',
-                ].map((query) => (
-                  <button
-                    key={query}
-                    type="button"
-                    className="overview-copilot-prompt-pill"
-                    onClick={() => handleOpenSection('copilot')}
-                  >
-                    <Sparkles size={14} style={{ color: 'var(--accent-amber)' }} />
-                    <span>&ldquo;{query}&rdquo;</span>
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ marginTop: '1.5rem' }}>
-                <button
-                  type="button"
-                  className="overview-hero-btn primary"
-                  onClick={() => handleOpenSection('copilot')}
-                >
-                  <Bot size={18} />
-                  <span>Open AI Copilot</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 8. RESEARCH — BEHIND THE PRODUCT                                          */}
-        {/* ========================================================================= */}
-        <section id="overview-research" className="overview-content-section research-section" aria-label="Research Study">
-          <span className="overview-section-eyebrow" style={{ color: 'var(--foreground-muted)' }}>
-            BEHIND THE PRODUCT
-          </span>
-          <h2 className="overview-section-title">Research: Behavioral Mobility &amp; Forecast Errors</h2>
-          <p className="overview-section-lead">
-            GridVision also includes a research study examining whether changes in household behavioural patterns
-            are associated with subsequent extreme forecast errors.
-          </p>
-
-          {/* Simple visual connection flow */}
-          <div className="overview-research-flow">
-            <div className="research-flow-node">
-              <span className="research-flow-label">01</span>
-              <strong>Consumption Behaviour</strong>
-              <span className="research-flow-sub">Half-hourly smart-meter load</span>
-            </div>
-            <div className="research-flow-arrow">&rarr;</div>
-            <div className="research-flow-node">
-              <span className="research-flow-label">02</span>
-              <strong>Behavioural Patterns Over Time</strong>
-              <span className="research-flow-sub">Cluster mobility across windows</span>
-            </div>
-            <div className="research-flow-arrow">&rarr;</div>
-            <div className="research-flow-node">
-              <span className="research-flow-label">03</span>
-              <strong>Forecast Performance</strong>
-              <span className="research-flow-sub">Tail error occurrences (95th/99th)</span>
-            </div>
-            <div className="research-flow-arrow">&rarr;</div>
-            <div className="research-flow-node">
-              <span className="research-flow-label">04</span>
-              <strong>Research Analysis</strong>
-              <span className="research-flow-sub">Clustered logistic regression</span>
-            </div>
-          </div>
-
-          <div className="overview-research-visual-box">
-            <ResearchVisual />
-          </div>
-
-          <div className="overview-research-actions">
-            <button
-              type="button"
-              className="overview-hero-btn secondary"
-              onClick={() => handleOpenSection('overview')}
-            >
-              <span>Explore Research Findings</span>
-              <ArrowRight size={16} />
-            </button>
-            <button
-              type="button"
-              className="overview-hero-btn secondary"
-              onClick={() => handleOpenSection('overview')}
-            >
-              <span>Explore Methodology</span>
-              <ArrowRight size={16} />
-            </button>
-          </div>
-        </section>
-
-        {/* Backward-compatibility Anchor Targets */}
+        <div id="overview-product-showcase" style={{ display: 'none' }} />
         <div id="overview-stability" style={{ display: 'none' }} />
         <div id="overview-architecture" style={{ display: 'none' }} />
         <div id="overview-limitations" style={{ display: 'none' }} />
       </div>
-    </div>
+    </article>
   );
 };

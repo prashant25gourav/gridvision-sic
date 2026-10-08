@@ -72,7 +72,7 @@ export const SegmentationWorkspace: React.FC = () => {
   const activeCluster = clusters.find((c) => c.cluster_id === selectedClusterId) || clusters[0];
   const silhouetteSweep = data?.silhouette_sweep || { '3': 0.389, '4': 0.4021, '5': 0.2833, '6': 0.2336, '7': 0.1856, '8': 0.205 };
 
-  const clusterColors = ['var(--accent-emerald)', 'var(--accent-amber)', 'var(--accent-blue)', 'var(--accent-rose)'];
+  const clusterColors = ['#d97706', '#475569', '#059669', '#0f766e'];
 
   // Feature definitions
   const featureDefs = [
