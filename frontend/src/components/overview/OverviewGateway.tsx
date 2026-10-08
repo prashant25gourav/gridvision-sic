@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { ArrowDown, ArrowRight, LayoutDashboard, Activity, Users, AlertTriangle, TrendingUp, Sparkles } from 'lucide-react';
+import React from 'react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import type { DashboardSection } from '../../types/dashboard';
-import { ResearchVisual } from './ResearchVisual';
 import './OverviewGateway.css';
 
 interface OverviewGatewayProps {
@@ -16,25 +15,10 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
   onLaunchDashboard = () => {},
   onNavigateSection,
 }) => {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hashId = window.location.hash.replace('#', '');
-      const el = document.getElementById(hashId);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 120);
-      }
-    }
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
+  const scrollTo = (elementId: string) => {
+    const el = document.getElementById(elementId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `#${sectionId}`);
-      }
     }
   };
 
@@ -50,1034 +34,403 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
     <article className="overview-page-container">
       <div className="overview-inner">
         {/* ========================================================================= */}
-        {/* MASTHEAD HERO                                                             */}
+        {/* 1. HERO SECTION                                                           */}
         {/* ========================================================================= */}
-        <header className="overview-editorial-hero">
-          <div className="editorial-meta-line">
-            <span className="editorial-kicker">SYSTEM REFERENCE MANUAL &bull; TECHNICAL SPECIFICATION</span>
-            <span className="editorial-version-tag">STABLE 1.0 &bull; VERIFIED COHORT</span>
+        <header className="overview-hero">
+          <span className="overview-brand-kicker">GRIDVISION</span>
+
+          <h1 className="overview-hero-title">Smart Energy Analytics &amp; AI Copilot</h1>
+
+          <div className="overview-hero-tagline">
+            &ldquo;From smart-meter data to actionable electricity intelligence.&rdquo;
           </div>
 
-          <h1 className="editorial-headline">GridVision System Reference</h1>
-
-          <div className="editorial-strapline">
-            A comprehensive textbook guide to methodology, telemetry, analytics pipelines, and dashboard operations.
-          </div>
-
-          <p className="editorial-lede">
-            GridVision is an operational electricity intelligence platform designed for utility operators,
-            grid engineers, and energy analysts. It transforms raw high-frequency smart meter readings into
-            interpretable behavioral archetypes, system load profiles, anomaly detections, and day-ahead demand
-            forecasts through an automated, reproducible analytical pipeline.
+          <p className="overview-hero-lede">
+            GridVision transforms high-frequency electricity consumption data into practical analytical
+            insight. It combines demand analysis, behavioral segmentation, forecasting, anomaly detection
+            and a grounded AI Copilot to help users understand electricity consumption across households
+            and over time.
           </p>
 
-          <div className="editorial-hero-actions">
+          <div className="overview-hero-actions">
             <button
               type="button"
-              className="editorial-btn primary"
+              className="overview-btn-primary"
               onClick={onLaunchDashboard}
             >
-              <span>Launch Live Dashboard</span>
+              <span>Launch Dashboard</span>
               <ArrowRight size={16} />
             </button>
             <button
               type="button"
-              className="editorial-btn text-link"
-              onClick={() => scrollToSection('sec-intro')}
+              className="overview-btn-text"
+              onClick={() => scrollTo('overview-intro')}
             >
-              <span>Read Documentation</span>
+              <span>Learn How It Works</span>
               <ArrowDown size={14} />
             </button>
           </div>
         </header>
 
         {/* ========================================================================= */}
-        {/* NAVIGATION INDEX BAR                                                      */}
+        {/* 2. SUB-NAVIGATION                                                         */}
         {/* ========================================================================= */}
-        <nav className="editorial-index-bar" aria-label="Reference Table of Contents">
-          <span className="index-bar-label">CHAPTER INDEX:</span>
-          <div className="index-bar-links">
-            <button type="button" onClick={() => scrollToSection('sec-intro')}>
-              § 1.0 Introduction
-            </button>
-            <span className="index-divider">/</span>
-            <button type="button" onClick={() => scrollToSection('sec-dataset')}>
-              § 2.0 Dataset &amp; Telemetry
-            </button>
-            <span className="index-divider">/</span>
-            <button type="button" onClick={() => scrollToSection('sec-workflow')}>
-              § 3.0 Processing Workflow
-            </button>
-            <span className="index-divider">/</span>
-            <button type="button" onClick={() => scrollToSection('sec-features')}>
-              § 4.0 Dashboard Features
-            </button>
-            <span className="index-divider">/</span>
-            <button type="button" onClick={() => scrollToSection('sec-research')}>
-              § 5.0 Research Appendix
-            </button>
-          </div>
+        <nav className="overview-subnav" aria-label="Page navigation">
+          <button type="button" onClick={() => scrollTo('overview-intro')}>
+            Introduction
+          </button>
+          <span className="overview-subnav-divider">/</span>
+          <button type="button" onClick={() => scrollTo('overview-dataset')}>
+            Dataset &amp; Smart-Meter Data
+          </button>
+          <span className="overview-subnav-divider">/</span>
+          <button type="button" onClick={() => scrollTo('overview-how-it-works')}>
+            How GridVision Works
+          </button>
+          <span className="overview-subnav-divider">/</span>
+          <button type="button" onClick={() => scrollTo('overview-workspaces')}>
+            What You Can Explore
+          </button>
+          <span className="overview-subnav-divider">/</span>
+          <button type="button" onClick={() => scrollTo('overview-copilot')}>
+            AI Copilot
+          </button>
         </nav>
 
         {/* ========================================================================= */}
-        {/* 1. INTRODUCTION                                                           */}
+        {/* 3. INTRODUCTION                                                           */}
         {/* ========================================================================= */}
-        <section id="sec-intro" className="editorial-section" aria-label="Introduction">
-          <div className="section-number-header">
-            <span className="section-index-num">§ 1.0</span>
-            <div className="section-header-text">
-              <span className="section-eyebrow">FOUNDATIONS &amp; OBJECTIVES</span>
-              <h2 className="section-heading">Introduction</h2>
-            </div>
-          </div>
+        <section id="overview-intro" className="overview-section" aria-label="Introduction">
+          <h2 className="overview-section-title">Introduction</h2>
 
-          <div className="editorial-prose-block">
-            <p className="editorial-body-text">
-              Modern power distribution networks are undergoing a fundamental transformation driven by the electrification
-              of heating and transport, the proliferation of distributed energy resources, and the widespread rollout of
-              advanced metering infrastructure (AMI). While modern smart meters capture half-hourly kilowatt-hour readings
-              at scale, utility operators frequently struggle to translate these high-volume time-series streams into actionable
-              operational intelligence.
-            </p>
-
-            <div className="textbook-callout">
-              <strong>Core Engineering Objective:</strong> Bridge the operational divide between raw meter telemetry and grid
-              dispatch decisions through automated behavioral clustering, empirical diurnal profiling, anomaly screening, and
-              day-ahead forecasting.
-            </div>
-
-            <h3 className="module-subheading" style={{ marginTop: '1rem' }}>Key Architectural Principles</h3>
-            <ul className="textbook-points-list">
-              <li>
-                <span className="point-number">1.1</span>
-                <div className="point-body">
-                  <strong>Strict Empirical Grounding:</strong> All analyses, distributions, and feature vectors are derived
-                  directly from real-world smart meter records without synthetic profile generation or imputed data fabrication.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">1.2</span>
-                <div className="point-body">
-                  <strong>Temporal Non-Contamination:</strong> Longitudinal evaluation relies on strictly partitioned,
-                  non-overlapping observation epochs with zero future-data leakage across model training, clustering, and testing phases.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">1.3</span>
-                <div className="point-body">
-                  <strong>Interpretable Analytics:</strong> Every customer segmentation and anomaly score is supported by transparent,
-                  standardized electrical engineering metrics rather than opaque black-box representations.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">1.4</span>
-                <div className="point-body">
-                  <strong>Verified Operator Assistance:</strong> The embedded AI Copilot retrieves information strictly from computed
-                  artifacts and runbooks, guaranteeing factual answers with cited calculations.
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 2. DATASET                                                                */}
-        {/* ========================================================================= */}
-        <section id="sec-dataset" className="editorial-section" aria-label="Dataset Specifications">
-          <div className="section-number-header">
-            <span className="section-index-num">§ 2.0</span>
-            <div className="section-header-text">
-              <span className="section-eyebrow">DATA ARCHITECTURE &amp; PREPROCESSING</span>
-              <h2 className="section-heading">Dataset &amp; Smart Meter Telemetry</h2>
-            </div>
-          </div>
-
-          <div className="editorial-prose-block">
-            <p className="editorial-body-text">
-              GridVision is evaluated on smart meter records from the landmark <strong>Low Carbon London (LCL)</strong> project
-              conducted by UK Power Networks. This trial monitored thousands of residential consumers in Greater London,
-              recording consumption at high temporal resolution under standard flat-rate and dynamic tariffs.
-            </p>
-
-            <div className="textbook-table-wrapper">
-              <table className="textbook-table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '28%' }}>Parameter</th>
-                    <th style={{ width: '24%' }}>Specification</th>
-                    <th>Analytical Significance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Sampling Interval</strong></td>
-                    <td className="mono">30 Minutes</td>
-                    <td>Yields 48 discrete observation slots per diurnal cycle (00:00 to 23:30).</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Telemetry Unit</strong></td>
-                    <td className="mono">kWh / half-hour</td>
-                    <td>Converted to continuous power using <span className="mono">kW = kWh × 2</span> for power-flow analysis.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Census Population</strong></td>
-                    <td className="mono">5,566 Households</td>
-                    <td>Total smart meters deployed during the UK Power Networks trial.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Flat-Rate Cohort</strong></td>
-                    <td className="mono">4,443 Households</td>
-                    <td>Households on standard tariffs without external price-elastic distortion.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Balanced Working Sample</strong></td>
-                    <td className="mono">570 Households</td>
-                    <td>Rigorous balanced sub-cohort verified for continuous recording across all study windows.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Observation Epoch</strong></td>
-                    <td className="mono">56 Days (8 Weeks)</td>
-                    <td>Length of non-overlapping longitudinal analytical windows (W01 to W14).</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Total Usable Windows</strong></td>
-                    <td className="mono">6,191 Windows</td>
-                    <td>Total validated household-window instances analyzed across the longitudinal study.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <h3 className="module-subheading">Data Sanitization &amp; Quality Control Rules</h3>
-            <ul className="textbook-points-list">
-              <li>
-                <span className="point-number">QC-1</span>
-                <div className="point-body">
-                  <strong>Completeness Gate:</strong> An analytical window requires &ge; 90% non-missing half-hourly observations.
-                  Windows failing this threshold are rejected to prevent sampling bias.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">QC-2</span>
-                <div className="point-body">
-                  <strong>Non-Negativity Verification:</strong> Readings must strictly satisfy <span className="mono">kWh &ge; 0</span>.
-                  Spurious negative records from meter reboot transients are screened out.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">QC-3</span>
-                <div className="point-body">
-                  <strong>Zero-Variance Rejection:</strong> Continuous flatline series indicating vacated premises or disconnected
-                  CT sensors are identified and isolated.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">QC-4</span>
-                <div className="point-body">
-                  <strong>UTC Timestamp Alignment:</strong> All timestamps are normalized to UTC to prevent phase shifts across
-                  British Summer Time (BST) transitions.
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 3. WORKFLOW & FLOWCHART                                                   */}
-        {/* ========================================================================= */}
-        <section id="sec-workflow" className="editorial-section" aria-label="Analytical Workflow">
-          <div className="section-number-header">
-            <span className="section-index-num">§ 3.0</span>
-            <div className="section-header-text">
-              <span className="section-eyebrow">PROCESSING PIPELINE</span>
-              <h2 className="section-heading">Analytical Workflow</h2>
-            </div>
-          </div>
-
-          <div className="editorial-prose-block">
-            <p className="editorial-body-text">
-              GridVision processes raw electricity telemetry through an ordered 5-stage pipeline.
-              Data transforms deterministically from raw telemetry streams into standardized behavioral dimensions,
-              branching into specialized analytics engines before publishing to the dashboard and AI copilot.
-            </p>
-
-            {/* FLOWCHART SVG */}
-            <div className="textbook-flowchart-container">
-              <svg
-                viewBox="0 0 880 340"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-                aria-label="GridVision End-to-End Analytical Workflow Flowchart"
-              >
-                <defs>
-                  <marker id="flowArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--foreground-muted)" />
-                  </marker>
-                  <marker id="flowArrowActive" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--accent-emerald, #059669)" />
-                  </marker>
-                </defs>
-
-                {/* Stage 1: Ingestion */}
-                <g transform="translate(30, 20)">
-                  <rect x="0" y="0" width="220" height="52" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="110" y="22" textAnchor="middle" fill="var(--foreground)" fontSize="11" fontWeight="700" fontFamily="var(--font-mono)">
-                    STAGE 1: RAW INGESTION
-                  </text>
-                  <text x="110" y="38" textAnchor="middle" fill="var(--foreground-muted)" fontSize="9.5" fontFamily="var(--font-sans)">
-                    5,566 Meters &bull; 30-min kWh Streams
-                  </text>
-                </g>
-
-                {/* Arrow 1 -> 2 */}
-                <line x1="250" y1="46" x2="310" y2="46" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-
-                {/* Stage 2: QC & Windowing */}
-                <g transform="translate(315, 20)">
-                  <rect x="0" y="0" width="250" height="52" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="125" y="22" textAnchor="middle" fill="var(--foreground)" fontSize="11" fontWeight="700" fontFamily="var(--font-mono)">
-                    STAGE 2: QC &amp; WINDOWING
-                  </text>
-                  <text x="125" y="38" textAnchor="middle" fill="var(--foreground-muted)" fontSize="9.5" fontFamily="var(--font-sans)">
-                    Completeness Filter &bull; 56-Day Epochs (W01–W14)
-                  </text>
-                </g>
-
-                {/* Arrow 2 -> 3 */}
-                <line x1="565" y1="46" x2="625" y2="46" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-
-                {/* Stage 3: Feature Engineering */}
-                <g transform="translate(630, 20)">
-                  <rect x="0" y="0" width="220" height="52" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="110" y="22" textAnchor="middle" fill="var(--foreground)" fontSize="11" fontWeight="700" fontFamily="var(--font-mono)">
-                    STAGE 3: FEATURES
-                  </text>
-                  <text x="110" y="38" textAnchor="middle" fill="var(--foreground-muted)" fontSize="9.5" fontFamily="var(--font-sans)">
-                    8 Standardized Behavioral Dimensions
-                  </text>
-                </g>
-
-                {/* Branching Trunk from Stage 3 to Parallel Engines */}
-                <path d="M 740 72 L 740 100 L 110 100 L 110 125" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-                <path d="M 330 100 L 330 125" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-                <path d="M 550 100 L 550 125" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-                <path d="M 770 100 L 770 125" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrow)" />
-
-                {/* STAGE 4: 4 PARALLEL ANALYTICS ENGINES */}
-                {/* Engine A: Demand Analysis */}
-                <g transform="translate(20, 130)">
-                  <rect x="0" y="0" width="180" height="74" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="90" y="22" textAnchor="middle" fill="var(--accent-emerald, #059669)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
-                    DEMAND PROFILING
-                  </text>
-                  <text x="90" y="40" textAnchor="middle" fill="var(--foreground)" fontSize="10" fontWeight="600" fontFamily="var(--font-sans)">
-                    Diurnal 48-Slot Curves
-                  </text>
-                  <text x="90" y="58" textAnchor="middle" fill="var(--foreground-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
-                    Weekday / Weekend / Peaks
-                  </text>
-                </g>
-
-                {/* Engine B: Consumer Intelligence */}
-                <g transform="translate(240, 130)">
-                  <rect x="0" y="0" width="180" height="74" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="90" y="22" textAnchor="middle" fill="var(--accent-emerald, #059669)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
-                    CLUSTERING (K = 4)
-                  </text>
-                  <text x="90" y="40" textAnchor="middle" fill="var(--foreground)" fontSize="10" fontWeight="600" fontFamily="var(--font-sans)">
-                    Consumer Intelligence
-                  </text>
-                  <text x="90" y="58" textAnchor="middle" fill="var(--foreground-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
-                    4 Behavioral Archetypes
-                  </text>
-                </g>
-
-                {/* Engine C: Anomaly Analysis */}
-                <g transform="translate(460, 130)">
-                  <rect x="0" y="0" width="180" height="74" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="90" y="22" textAnchor="middle" fill="var(--accent-emerald, #059669)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
-                    ISOLATION FOREST
-                  </text>
-                  <text x="90" y="40" textAnchor="middle" fill="var(--foreground)" fontSize="10" fontWeight="600" fontFamily="var(--font-sans)">
-                    Anomaly Detection
-                  </text>
-                  <text x="90" y="58" textAnchor="middle" fill="var(--foreground-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
-                    Spike &amp; Dropout Screening
-                  </text>
-                </g>
-
-                {/* Engine D: Forecasting */}
-                <g transform="translate(680, 130)">
-                  <rect x="0" y="0" width="180" height="74" rx="4" fill="var(--surface-raised)" stroke="var(--border)" strokeWidth="1.5" />
-                  <text x="90" y="22" textAnchor="middle" fill="var(--accent-emerald, #059669)" fontSize="10.5" fontWeight="700" fontFamily="var(--font-mono)">
-                    HYBRID FORECASTER
-                  </text>
-                  <text x="90" y="40" textAnchor="middle" fill="var(--foreground)" fontSize="10" fontWeight="600" fontFamily="var(--font-sans)">
-                    ARIMA + GBDT Trees
-                  </text>
-                  <text x="90" y="58" textAnchor="middle" fill="var(--foreground-muted)" fontSize="8.5" fontFamily="var(--font-mono)">
-                    Day-Ahead (48 Intervals)
-                  </text>
-                </g>
-
-                {/* Converging Lines to Stage 5 */}
-                <path d="M 110 204 L 110 238 L 440 238 L 440 258" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" />
-                <path d="M 330 204 L 330 238" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" />
-                <path d="M 550 204 L 550 238" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" />
-                <path d="M 770 204 L 770 238 L 440 238 L 440 258" fill="none" stroke="var(--border-strong)" strokeWidth="1.5" markerEnd="url(#flowArrowActive)" />
-
-                {/* STAGE 5: GROUNDED AI COPILOT & DASHBOARD */}
-                <g transform="translate(120, 260)">
-                  <rect x="0" y="0" width="640" height="56" rx="4" fill="var(--surface)" stroke="var(--accent-emerald, #059669)" strokeWidth="1.5" />
-                  <text x="320" y="24" textAnchor="middle" fill="var(--foreground)" fontSize="12" fontWeight="700" fontFamily="var(--font-mono)">
-                    STAGE 5: OPERATIONAL DASHBOARD &amp; GROUNDED AI COPILOT
-                  </text>
-                  <text x="320" y="42" textAnchor="middle" fill="var(--foreground-muted)" fontSize="10" fontFamily="var(--font-sans)">
-                    Interactive Telemetry Exploration &bull; Deterministic Metric Lookups &bull; Verified Retrieval (RAG)
-                  </text>
-                </g>
-              </svg>
-            </div>
-
-            <h3 className="module-subheading">Pipeline Execution Stages</h3>
-            <ul className="textbook-points-list">
-              <li>
-                <span className="point-number">STEP 1</span>
-                <div className="point-body">
-                  <strong>Telemetry Ingestion:</strong> Continuous streams of half-hourly kWh readings are aggregated, validated,
-                  and converted to instantaneous load (kW).
-                </div>
-              </li>
-              <li>
-                <span className="point-number">STEP 2</span>
-                <div className="point-body">
-                  <strong>Temporal Windowing:</strong> Readings are partitioned into non-overlapping 56-day (8-week) observation
-                  windows (W01 to W14). Each window captures 2,688 half-hour slots per consumer.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">STEP 3</span>
-                <div className="point-body">
-                  <strong>Behavioral Feature Extraction:</strong> For every household-window pair, 8 standardized features are
-                  computed: Mean Load, Peak Load, Peak-to-Average Ratio, Variability (&sigma;), Ramp Rate, Day/Night Ratio,
-                  Weekday/Weekend Differential, and Peak Timing Hour.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">STEP 4</span>
-                <div className="point-body">
-                  <strong>Parallel Engine Execution:</strong> Standardized features and load curves simultaneously feed four
-                  analytical models: diurnal aggregation, K-Means clustering, Isolation Forest anomaly scoring, and hybrid demand forecasting.
-                </div>
-              </li>
-              <li>
-                <span className="point-number">STEP 5</span>
-                <div className="point-body">
-                  <strong>Operational Delivery:</strong> Processed results are published to the web dashboard and indexed into the
-                  grounded AI Copilot knowledge base for natural language queries.
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 4. DASHBOARD INDIVIDUAL FEATURES                                          */}
-        {/* ========================================================================= */}
-        <section id="sec-features" className="editorial-section" aria-label="System Features">
-          <div className="section-number-header">
-            <span className="section-index-num">§ 4.0</span>
-            <div className="section-header-text">
-              <span className="section-eyebrow">MODULE REFERENCE</span>
-              <h2 className="section-heading">Dashboard Features &amp; Operations</h2>
-            </div>
-          </div>
-
-          <p className="editorial-body-text">
-            Each feature in GridVision is organized according to the dashboard sidebar sequence:
-            <strong> Demand Snapshot</strong>, <strong>Demand Analysis</strong>, <strong>Consumer Intelligence</strong>,
-            <strong> Anomaly Analysis</strong>, <strong>Forecasting</strong>, and <strong>AI Copilot</strong>.
-            Refer to the technical specifications below for operational runbooks, formulas, and metric interpretations.
+          <p className="overview-prose">
+            Smart meters generate large volumes of electricity readings every day. The challenge is not
+            simply collecting those measurements — it is turning them into information that people can
+            understand and act on.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.1 DEMAND SNAPSHOT                                                  */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-snapshot" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-01</span>
-                  <h3 className="module-title">Demand Snapshot</h3>
-                </div>
-                <span className="module-category-tag">SNAPSHOT GROUP</span>
-              </div>
+          <p className="overview-prose">
+            GridVision brings several analytical views together in one platform: demand patterns, household
+            consumption behavior, future demand, unusual activity and natural-language exploration.
+          </p>
 
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Provide immediate high-level situational awareness across the active
-                  observation window. Serves as the executive summary cockpit for grid planners and control-room dispatchers.
-                </p>
+          <ul className="overview-feature-list">
+            <li>
+              <span className="overview-bullet-dot" />
+              <span><strong>Understand daily patterns:</strong> See how electricity demand changes throughout the day.</span>
+            </li>
+            <li>
+              <span className="overview-bullet-dot" />
+              <span><strong>Compare consumption:</strong> Group and compare behavior across participating households.</span>
+            </li>
+            <li>
+              <span className="overview-bullet-dot" />
+              <span><strong>Forecast future demand:</strong> Predict upcoming electricity demand across dispatch intervals.</span>
+            </li>
+            <li>
+              <span className="overview-bullet-dot" />
+              <span><strong>Identify unusual activity:</strong> Surface unusual consumption patterns for review.</span>
+            </li>
+            <li>
+              <span className="overview-bullet-dot" />
+              <span><strong>Explore with AI:</strong> Query metrics and findings through a grounded AI Copilot.</span>
+            </li>
+          </ul>
+        </section>
 
-                <div className="textbook-table-wrapper">
-                  <table className="textbook-table">
-                    <thead>
-                      <tr>
-                        <th style={{ width: '25%' }}>Indicator</th>
-                        <th style={{ width: '25%' }}>Formula / Unit</th>
-                        <th>Operational Meaning</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Total Energy</strong></td>
-                        <td className="mono">MWh / Window</td>
-                        <td>Cumulative electrical energy consumed across all cohort meters during the 56-day epoch.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Mean Demand</strong></td>
-                        <td className="mono">kW / Consumer</td>
-                        <td>Continuous average electrical draw per household. Indicates baseline cohort intensity.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>System Peak Demand</strong></td>
-                        <td className="mono">kW (with Timestamp)</td>
-                        <td>Highest instantaneous concurrent load recorded, identifying peak distribution stress.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Load Factor</strong></td>
-                        <td className="mono">(Mean / Peak) × 100%</td>
-                        <td>System asset utilization efficiency. Higher values signify uniform demand; lower values indicate sharp peak vulnerability.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+        {/* ========================================================================= */}
+        {/* 4. DATASET & SMART-METER DATA                                             */}
+        {/* ========================================================================= */}
+        <section id="overview-dataset" className="overview-section" aria-label="Dataset & Smart-Meter Data">
+          <h2 className="overview-section-title">Dataset &amp; Smart-Meter Data</h2>
 
-                <h4 className="module-subheading">Operator Runbook</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">1</span>
-                    <div className="point-body">
-                      Select the desired observation epoch from the <strong>Observation Window selector</strong> (W01 to W14)
-                      at the top right of the workspace.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">2</span>
-                    <div className="point-body">
-                      Verify whether the cohort peak falls within the expected evening dispatch period (18:00–21:00) or represents an off-peak anomaly.
-                    </div>
-                  </li>
-                </ul>
+          <p className="overview-prose">
+            GridVision uses smart-meter data from the Low Carbon London project, conducted by UK Power Networks.
+          </p>
 
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('overview')}
-                >
-                  <LayoutDashboard size={15} />
-                  <span>Open Demand Snapshot Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+          <p className="overview-prose">
+            Each day contains 48 half-hour electricity readings. GridVision organizes these readings into 56-day
+            analytical windows so that consumption can be studied consistently over time.
+          </p>
+
+          {/* Clean typographic stats */}
+          <div className="overview-data-stats">
+            <div className="overview-stat-col">
+              <span className="overview-stat-number">5,566</span>
+              <span className="overview-stat-label">Households in source metadata</span>
             </div>
-
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.2 DEMAND ANALYSIS                                                  */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-demand" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-02</span>
-                  <h3 className="module-title">Demand Analysis</h3>
-                </div>
-                <span className="module-category-tag">ANALYTICS GROUP</span>
-              </div>
-
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Decompose daily consumption into granular half-hourly load curves,
-                  isolating morning and evening ramp rates, weekday versus weekend contrasts, and longitudinal seasonal drift.
-                </p>
-
-                <div className="textbook-table-wrapper">
-                  <table className="textbook-table">
-                    <thead>
-                      <tr>
-                        <th style={{ width: '25%' }}>Analytical View</th>
-                        <th style={{ width: '25%' }}>Resolution</th>
-                        <th>Methodological Purpose</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Diurnal Profile</strong></td>
-                        <td className="mono">48 Slots (30 min)</td>
-                        <td>Averaged 24-hour demand shape showing diurnal ramps, afternoon plateaus, and evening peak durations.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Weekday vs. Weekend</strong></td>
-                        <td className="mono">Bimodal Curve</td>
-                        <td>Contrasts commercial/workday routines against domestic weekend load profiles.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Longitudinal Evolution</strong></td>
-                        <td className="mono">W01 to W14 (Bi-monthly)</td>
-                        <td>Tracks multi-season baseline shifts, heating electrification surges in winter, and summer baseload drops.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h4 className="module-subheading">Operator Runbook</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">1</span>
-                    <div className="point-body">
-                      Use the top tab toggles to switch between <strong>24-Hour Diurnal</strong>, <strong>Weekday vs. Weekend</strong>,
-                      and <strong>Longitudinal Trends</strong>.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">2</span>
-                    <div className="point-body">
-                      Hover over discrete 30-minute intervals to inspect exact kilowatt levels and evaluate ramping requirements.
-                    </div>
-                  </li>
-                </ul>
-
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('demand')}
-                >
-                  <Activity size={15} />
-                  <span>Open Demand Analysis Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+            <div className="overview-stat-col">
+              <span className="overview-stat-number">4,443</span>
+              <span className="overview-stat-label">Flat-rate (Std) households</span>
             </div>
-
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.3 CONSUMER INTELLIGENCE                                            */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-consumers" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-03</span>
-                  <h3 className="module-title">Consumer Intelligence</h3>
-                </div>
-                <span className="module-category-tag">ANALYTICS GROUP</span>
-              </div>
-
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Segment heterogeneous consumers into interpretable behavioral archetypes
-                  using unsupervised machine learning, provide cohort rankings, and enable individual meter telemetry drilldowns.
-                </p>
-
-                <h4 className="module-subheading">The 4 Behavioral Archetypes</h4>
-                <div className="textbook-table-wrapper">
-                  <table className="textbook-table">
-                    <thead>
-                      <tr>
-                        <th style={{ width: '18%' }}>Archetype</th>
-                        <th style={{ width: '16%' }}>Peak Window</th>
-                        <th style={{ width: '14%' }}>Peak Demand</th>
-                        <th>Behavioral Profile &amp; Grid Impact</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong style={{ color: '#f59e0b' }}>Cluster 1: Evening Peaker</strong></td>
-                        <td className="mono">18:00 – 21:00</td>
-                        <td className="mono">1.385 kW</td>
-                        <td>Dominant residential cohort (~41.8%). Characterized by strong post-work cooking and lighting surges.</td>
-                      </tr>
-                      <tr>
-                        <td><strong style={{ color: '#3b82f6' }}>Cluster 2: Baseload Steady</strong></td>
-                        <td className="mono">Consistent</td>
-                        <td className="mono">2.546 kW</td>
-                        <td>Flat, high-volume baseload (~19.5%). Steady refrigeration or continuous heating with minimal diurnal swings.</td>
-                      </tr>
-                      <tr>
-                        <td><strong style={{ color: '#10b981' }}>Cluster 3: Daytime Active</strong></td>
-                        <td className="mono">09:00 – 16:00</td>
-                        <td className="mono">1.969 kW</td>
-                        <td>Midday peak (~16.2%). Corresponds to remote work, home occupancy, or daytime EV/appliance scheduling.</td>
-                      </tr>
-                      <tr>
-                        <td><strong style={{ color: '#a855f7' }}>Cluster 4: Dual Peaker</strong></td>
-                        <td className="mono">07:30 &amp; 19:30</td>
-                        <td className="mono">2.134 kW</td>
-                        <td>Bimodal consumption (~22.5%). Pronounced morning wake-up routine coupled with secondary evening dinner peak.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h4 className="module-subheading">Workspace Capabilities</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">TAB 1</span>
-                    <div className="point-body">
-                      <strong>Consumer Rankings:</strong> Ranks all meters by Mean Demand or Peak Demand to identify high-draw consumers.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">TAB 2</span>
-                    <div className="point-body">
-                      <strong>Load Factor Ranking:</strong> Sorts consumers by load factor percentage to locate volatile peaking households.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">TAB 3</span>
-                    <div className="point-body">
-                      <strong>Peak-to-Average (P2A):</strong> Isolates extreme spiking behavior with graphical bar rankings.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">TAB 4</span>
-                    <div className="point-body">
-                      <strong>Consumer Clusters:</strong> Interactive cards and clean diurnal profile overlays with distinctive cluster color-coding.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">TAB 5</span>
-                    <div className="point-body">
-                      <strong>Consumer Profiles Directory:</strong> Search any meter (e.g. <span className="mono">MAC000045</span>)
-                      to inspect its 24-hour diurnal profile and assigned cluster.
-                    </div>
-                  </li>
-                </ul>
-
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('consumers')}
-                >
-                  <Users size={15} />
-                  <span>Open Consumer Intelligence Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+            <div className="overview-stat-col">
+              <span className="overview-stat-number">620</span>
+              <span className="overview-stat-label">Final working sample</span>
             </div>
-
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.4 ANOMALY ANALYSIS                                                 */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-anomalies" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-04</span>
-                  <h3 className="module-title">Anomaly Analysis</h3>
-                </div>
-                <span className="module-category-tag">ANALYTICS GROUP</span>
-              </div>
-
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Detect erratic consumption departures, meter hardware faults,
-                  unauthorized tap events, and sudden behavioral transitions using unsupervised Isolation Forest algorithms.
-                </p>
-
-                <div className="textbook-callout amber">
-                  <strong>Algorithmic Method:</strong> Multi-dimensional isolation tree ensembles recursively isolate data points.
-                  Points requiring fewer random partitions receive higher anomaly scores:
-                  <span className="mono" style={{ display: 'block', marginTop: '0.4rem' }}>
-                    s(x, n) = 2^(-E(h(x)) / c(n))
-                  </span>
-                </div>
-
-                <div className="textbook-table-wrapper">
-                  <table className="textbook-table">
-                    <thead>
-                      <tr>
-                        <th style={{ width: '25%' }}>Anomaly Category</th>
-                        <th style={{ width: '25%' }}>Signature Pattern</th>
-                        <th>Operational Remediation</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>Extreme Peaking</strong></td>
-                        <td className="mono">P2A &gt; 12.0×</td>
-                        <td>Flag for transformer branch load assessment and potential circuit breaker stress.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Sudden Dropout</strong></td>
-                        <td className="mono">Demand &rarr; 0 kW sustained</td>
-                        <td>Inspect meter hardware connection, communications link, or property vacancy.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Structural Drift</strong></td>
-                        <td className="mono">Cluster transition jump</td>
-                        <td>Update customer behavioral baseline for accurate downstream tariff and forecasting models.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h4 className="module-subheading">Operator Runbook</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">1</span>
-                    <div className="point-body">
-                      Inspect the cohort anomaly rate across observation windows to track system-wide anomaly frequency.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">2</span>
-                    <div className="point-body">
-                      Select flagged anomalous households from the table to inspect their exact feature departure and severity score.
-                    </div>
-                  </li>
-                </ul>
-
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('anomalies')}
-                >
-                  <AlertTriangle size={15} />
-                  <span>Open Anomaly Analysis Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+            <div className="overview-stat-col">
+              <span className="overview-stat-number">6,191</span>
+              <span className="overview-stat-label">Usable household windows</span>
             </div>
-
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.5 FORECASTING                                                      */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-forecasting" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-05</span>
-                  <h3 className="module-title">Demand Forecasting</h3>
-                </div>
-                <span className="module-category-tag">ANALYTICS GROUP</span>
-              </div>
-
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Predict day-ahead half-hourly electricity demand across 48 discrete
-                  dispatch intervals to guide generation reserve scheduling and feeder management.
-                </p>
-
-                <h4 className="module-subheading">Two-Stage Hybrid Architecture</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">STAGE 1</span>
-                    <div className="point-body">
-                      <strong>Statistical Baseline (ARIMA / Seasonal Naive):</strong> Captures recurring daily diurnal periodicity
-                      and weekly inertia without risk of overfitting.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">STAGE 2</span>
-                    <div className="point-body">
-                      <strong>Residual Gradient Boosting (GBDT / LightGBM):</strong> Learns non-linear temperature sensitivities,
-                      calendar effects, and high-frequency autoregressive error residuals.
-                    </div>
-                  </li>
-                </ul>
-
-                <div className="textbook-table-wrapper">
-                  <table className="textbook-table">
-                    <thead>
-                      <tr>
-                        <th style={{ width: '25%' }}>Evaluation Metric</th>
-                        <th style={{ width: '25%' }}>Formula</th>
-                        <th>Standard Benchmark Goal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>MAE</strong> (Mean Absolute Error)</td>
-                        <td className="mono">(1/N) &Sigma; |y - &ycirc;|</td>
-                        <td>Lower is better; evaluates average deviation magnitude in kW.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>RMSE</strong> (Root Mean Squared)</td>
-                        <td className="mono">&radic;((1/N) &Sigma; (y - &ycirc;)&sup2;)</td>
-                        <td>Penalizes large outlier forecast errors; essential for peak capacity sizing.</td>
-                      </tr>
-                      <tr>
-                        <td><strong>MAPE</strong> (Percentage Error)</td>
-                        <td className="mono">(100%/N) &Sigma; |(y - &ycirc;) / y|</td>
-                        <td>Normalizes performance across seasons; target &lt; 5.0% on aggregate cohort load.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h4 className="module-subheading">Operator Runbook</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">1</span>
-                    <div className="point-body">
-                      Evaluate predicted demand curve against actual load curves across the 48 daily time slots.
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">2</span>
-                    <div className="point-body">
-                      Review upper and lower 95% confidence intervals to ensure adequate operational spinning reserves.
-                    </div>
-                  </li>
-                </ul>
-
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('forecasting')}
-                >
-                  <TrendingUp size={15} />
-                  <span>Open Forecasting Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+            <div className="overview-stat-col">
+              <span className="overview-stat-number">56 Days</span>
+              <span className="overview-stat-label">Analytical window length</span>
             </div>
+          </div>
 
-            {/* --------------------------------------------------------------------- */}
-            {/* 4.6 AI COPILOT                                                       */}
-            {/* --------------------------------------------------------------------- */}
-            <div id="feat-copilot" className="module-manual-entry">
-              <div className="module-header-row">
-                <div className="module-title-group">
-                  <span className="module-code-badge">MOD-06</span>
-                  <h3 className="module-title">AI Copilot</h3>
-                </div>
-                <span className="module-category-tag">INTELLIGENCE GROUP</span>
+          <p className="overview-prose">
+            The final working sample contains 620 households and 6,191 usable household windows.
+            Data quality checks are applied before a household window is included in analysis.
+          </p>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. HOW GRIDVISION WORKS                                                   */}
+        {/* ========================================================================= */}
+        <section id="overview-how-it-works" className="overview-section" aria-label="How GridVision Works">
+          <h2 className="overview-section-title">How GridVision Works</h2>
+
+          <p className="overview-prose">
+            GridVision processes raw electricity readings through a structured analytical pipeline,
+            extracting standardized behavioral features before passing them to specialized analytical models.
+          </p>
+
+          {/* Educational Visual Flow */}
+          <div className="workflow-pipeline-wrapper">
+            <div className="workflow-pipeline-card">
+              <div className="workflow-step-box">
+                <div className="workflow-step-title">SMART-METER DATA</div>
+                <div className="workflow-step-desc">48 half-hour readings per day across participating households</div>
               </div>
 
-              <div className="editorial-prose-block">
-                <p className="editorial-body-text">
-                  <strong>Operational Objective:</strong> Natural language decision support for utility operators and analysts.
-                  Answers complex operational queries, retrieves specific consumer metrics, and explains pipeline formulas
-                  with strict mathematical grounding.
-                </p>
+              <div className="workflow-arrow-down">&darr;</div>
 
-                <div className="textbook-callout">
-                  <strong>Zero-Hallucination Retrieval (RAG):</strong> The Copilot does not invent data. All numerical outputs
-                  and statistical summaries are retrieved deterministically from computed backend pipeline artifacts and official runbooks.
+              <div className="workflow-step-box">
+                <div className="workflow-step-title">QUALITY CHECKS &amp; WINDOWING</div>
+                <div className="workflow-step-desc">Screening for completeness and partitioning into 56-day observation periods</div>
+              </div>
+
+              <div className="workflow-arrow-down">&darr;</div>
+
+              <div className="workflow-step-box">
+                <div className="workflow-step-title">BEHAVIORAL FEATURES</div>
+                <div className="workflow-step-desc">8 standardized metrics characterizing load volume, timing, and variability</div>
+              </div>
+
+              <div className="workflow-arrow-down">&darr;</div>
+
+              <div className="workflow-step-box" style={{ maxWidth: '620px' }}>
+                <div className="workflow-step-title" style={{ marginBottom: '0.65rem' }}>ANALYTICAL MODELS</div>
+                <div className="workflow-models-grid">
+                  <div className="workflow-model-item">
+                    <strong>Demand Analysis</strong>
+                    Diurnal load curves &amp; weekday contrasts
+                  </div>
+                  <div className="workflow-model-item">
+                    <strong>K-Means Segmentation</strong>
+                    Household behavioral archetypes (K = 4)
+                  </div>
+                  <div className="workflow-model-item">
+                    <strong>Demand Forecasting</strong>
+                    Global gradient-boosted demand prediction
+                  </div>
+                  <div className="workflow-model-item">
+                    <strong>Isolation Forest</strong>
+                    Detection of unusual consumption patterns
+                  </div>
                 </div>
+              </div>
 
-                <h4 className="module-subheading">Example Operator Inquiries</h4>
-                <ul className="textbook-points-list">
-                  <li>
-                    <span className="point-number">&bull;</span>
-                    <div className="point-body">
-                      <em>&ldquo;What is the peak demand and peak window for Cluster 1 in Window W14?&rdquo;</em>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">&bull;</span>
-                    <div className="point-body">
-                      <em>&ldquo;How does the load factor of Baseload Steady compare to Evening Peaker?&rdquo;</em>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">&bull;</span>
-                    <div className="point-body">
-                      <em>&ldquo;Which consumers showed the highest anomaly score in Window W12?&rdquo;</em>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="point-number">&bull;</span>
-                    <div className="point-body">
-                      <em>&ldquo;Explain how the 8 standardized behavioral features are calculated.&rdquo;</em>
-                    </div>
-                  </li>
-                </ul>
+              <div className="workflow-arrow-down">&darr;</div>
 
-                <button
-                  type="button"
-                  className="module-action-btn"
-                  onClick={() => handleOpenSection('copilot')}
-                >
-                  <Sparkles size={15} />
-                  <span>Open AI Copilot Workspace</span>
-                  <ArrowRight size={14} />
-                </button>
+              <div className="workflow-step-box" style={{ borderColor: 'var(--accent-emerald, #059669)' }}>
+                <div className="workflow-step-title" style={{ color: 'var(--accent-emerald, #059669)' }}>
+                  DASHBOARD + AI COPILOT
+                </div>
+                <div className="workflow-step-desc">
+                  Interactive visual workspaces and grounded natural-language exploration
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 5. RESEARCH APPENDIX                                                      */}
+        {/* 6. WHAT YOU CAN EXPLORE                                                   */}
         {/* ========================================================================= */}
-        <section id="sec-research" className="editorial-section" aria-label="Research Appendix">
-          <div className="section-number-header">
-            <span className="section-index-num">§ 5.0</span>
-            <div className="section-header-text">
-              <span className="section-eyebrow">EMPIRICAL STUDY APPENDIX</span>
-              <h2 className="section-heading">Behavioral Mobility &amp; Forecast Tail Errors</h2>
+        <section id="overview-workspaces" className="overview-section" aria-label="What You Can Explore">
+          <h2 className="overview-section-title">What You Can Explore</h2>
+
+          <p className="overview-prose">
+            The GridVision dashboard provides interactive workspaces to examine each analytical layer directly.
+          </p>
+
+          {/* 1. Demand Analysis */}
+          <div className="overview-workspace-item">
+            <div className="overview-workspace-header">
+              <h3 className="overview-workspace-title">Demand Analysis</h3>
+              <button
+                type="button"
+                className="overview-open-btn"
+                onClick={() => handleOpenSection('demand')}
+              >
+                <span>Open Demand Analysis</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <p className="overview-prose">
+              Demand Analysis shows how electricity consumption changes throughout the day, across weekdays
+              and weekends, and across the available observation windows.
+            </p>
+            <div className="overview-feature-pills">
+              <span className="overview-pill">48 Half-Hour Slots / Day</span>
+              <span className="overview-pill">Diurnal Demand Profiles</span>
+              <span className="overview-pill">Weekday vs. Weekend Comparison</span>
+              <span className="overview-pill">Longitudinal Window Trends</span>
             </div>
           </div>
 
-          <div className="research-appendix-container">
-            <p className="editorial-body-text">
-              Beyond standard grid monitoring, GridVision includes an empirical longitudinal research investigation:
-              <strong> Does household mobility between behavioral consumption archetypes predict subsequent extreme
-              forecast failures?</strong>
+          {/* 2. Consumer Intelligence */}
+          <div className="overview-workspace-item">
+            <div className="overview-workspace-header">
+              <h3 className="overview-workspace-title">Consumer Intelligence</h3>
+              <button
+                type="button"
+                className="overview-open-btn"
+                onClick={() => handleOpenSection('consumers')}
+              >
+                <span>Open Consumer Intelligence</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <p className="overview-prose">
+              GridVision groups households with similar electricity-consumption behavior using K-Means clustering (K = 4).
+              Households are characterized across 8 standardized behavioral dimensions:
             </p>
-
-            <ul className="textbook-points-list">
+            <ul className="overview-feature-list" style={{ marginTop: '0.25rem' }}>
               <li>
-                <span className="point-number">STEP 1</span>
-                <div className="point-body">
-                  <strong>Consumption Clustering:</strong> Households are clustered into 4 archetypes (C0 to C3) across
-                  14 consecutive 56-day observation windows.
-                </div>
+                <span className="overview-bullet-dot" />
+                <span><strong>Mean load &amp; peak load:</strong> Baseline draw and maximum half-hour demand point.</span>
               </li>
               <li>
-                <span className="point-number">STEP 2</span>
-                <div className="point-body">
-                  <strong>Mobility Tracking:</strong> Household transitions between clusters are tracked over time.
-                  Households exhibiting frequent transitions are categorized as behaviorally unstable.
-                </div>
+                <span className="overview-bullet-dot" />
+                <span><strong>Peak-to-average ratio &amp; variability:</strong> Volatility and dispersion across observation intervals.</span>
               </li>
               <li>
-                <span className="point-number">STEP 3</span>
-                <div className="point-body">
-                  <strong>Tail Error Evaluation:</strong> Day-ahead forecast errors in the 95th and 99th percentiles are identified.
-                </div>
+                <span className="overview-bullet-dot" />
+                <span><strong>Ramp-rate &amp; day/night ratio:</strong> Interval rate of change and daytime-to-overnight consumption balance.</span>
               </li>
               <li>
-                <span className="point-number">STEP 4</span>
-                <div className="point-body">
-                  <strong>Clustered Logistics:</strong> Logistic regression models evaluate odds ratios to determine whether
-                  cluster transitions significantly elevate tail forecast risk.
-                </div>
+                <span className="overview-bullet-dot" />
+                <span><strong>Weekday/weekend contrast &amp; peak timing:</strong> Workday differential and typical time of day for peak usage.</span>
               </li>
             </ul>
+            <p className="overview-prose" style={{ marginTop: '0.4rem' }}>
+              The workspace includes cluster archetype comparisons, consumer rankings by load factor and peak intensity,
+              and individual household profile searches.
+            </p>
+          </div>
 
-            <div className="editorial-visual-wrapper">
-              <ResearchVisual />
+          {/* 3. Anomaly Detection */}
+          <div className="overview-workspace-item">
+            <div className="overview-workspace-header">
+              <h3 className="overview-workspace-title">Anomaly Detection</h3>
+              <button
+                type="button"
+                className="overview-open-btn"
+                onClick={() => handleOpenSection('anomalies')}
+              >
+                <span>Open Anomaly Detection</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <p className="overview-prose">
+              GridVision uses Isolation Forest to identify unusual electricity-consumption patterns.
+              Across the verified analytical windows, <strong>310 anomalies</strong> were detected.
+              Unusual observations are surfaced for further investigation, helping analysts spot unexpected
+              demand surges or departures from baseline behavior.
+            </p>
+          </div>
+
+          {/* 4. Demand Forecasting */}
+          <div className="overview-workspace-item">
+            <div className="overview-workspace-header">
+              <h3 className="overview-workspace-title">Demand Forecasting</h3>
+              <button
+                type="button"
+                className="overview-open-btn"
+                onClick={() => handleOpenSection('forecasting')}
+              >
+                <span>Open Demand Forecasting</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <p className="overview-prose">
+              GridVision uses a global gradient-boosted forecasting model to predict future half-hour electricity
+              demand from historical consumption patterns, benchmarked against seasonal-naive baselines.
+            </p>
+            <div className="overview-feature-pills">
+              <span className="overview-pill">Forecast MAE: 0.081 kW</span>
+              <span className="overview-pill">14,805,504 Half-Hour Predictions Generated</span>
+              <span className="overview-pill">Day-Ahead Half-Hourly Dispatch Horizon</span>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* BACKWARD COMPATIBILITY ANCHOR TARGETS                                     */}
+        {/* 7. AI COPILOT                                                             */}
         {/* ========================================================================= */}
+        <section id="overview-copilot" className="overview-section" aria-label="AI Copilot">
+          <h2 className="overview-section-title">AI Copilot</h2>
+
+          <p className="overview-prose">
+            Ask GridVision questions in natural language. The Copilot combines project knowledge with
+            deterministic analytical tools so that numerical answers are grounded in the system&apos;s computed results.
+          </p>
+
+          <p className="overview-prose">
+            Analysts can query aggregate demand statistics, compare behavioral clusters, check anomaly counts,
+            or inspect specific observation windows without writing database queries.
+          </p>
+
+          <button
+            type="button"
+            className="overview-btn-primary"
+            onClick={() => handleOpenSection('copilot')}
+            style={{ alignSelf: 'flex-start', marginTop: '0.25rem' }}
+          >
+            <span>Open AI Copilot</span>
+            <ArrowRight size={15} />
+          </button>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 8. OPEN DASHBOARD CALL TO ACTION                                          */}
+        {/* ========================================================================= */}
+        <section className="overview-bottom-cta">
+          <h3 className="overview-bottom-title">Explore the Live Platform</h3>
+          <p className="overview-prose">
+            Navigate through all workspaces, inspect half-hourly load curves, and interact with the data directly.
+          </p>
+          <button
+            type="button"
+            className="overview-btn-primary"
+            onClick={onLaunchDashboard}
+          >
+            <span>Open Dashboard</span>
+            <ArrowRight size={16} />
+          </button>
+        </section>
+
+        {/* Backward-compatibility anchors */}
         <div id="overview-problem" style={{ display: 'none' }} />
-        <div id="overview-dataset" style={{ display: 'none' }} />
         <div id="overview-workflow" style={{ display: 'none' }} />
-        <div id="overview-capabilities" style={{ display: 'none' }} />
         <div id="overview-explore" style={{ display: 'none' }} />
         <div id="overview-demand" style={{ display: 'none' }} />
         <div id="overview-consumers" style={{ display: 'none' }} />
         <div id="overview-segmentation" style={{ display: 'none' }} />
         <div id="overview-anomalies" style={{ display: 'none' }} />
         <div id="overview-forecasting" style={{ display: 'none' }} />
-        <div id="overview-copilot" style={{ display: 'none' }} />
         <div id="overview-research" style={{ display: 'none' }} />
-        <div id="overview-product-showcase" style={{ display: 'none' }} />
-        <div id="overview-stability" style={{ display: 'none' }} />
-        <div id="overview-architecture" style={{ display: 'none' }} />
-        <div id="overview-limitations" style={{ display: 'none' }} />
       </div>
     </article>
   );

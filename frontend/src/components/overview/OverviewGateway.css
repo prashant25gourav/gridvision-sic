@@ -1,4 +1,4 @@
-/* OverviewGateway.css — Technical Reference Manual & Textbook Guide for GridVision */
+/* OverviewGateway.css — Clean, Educational Product Introduction for GridVision */
 
 .overview-page-container {
   width: 100%;
@@ -8,93 +8,76 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3.5rem 2rem 6rem 2rem;
+  padding: 3.5rem 2rem 5rem 2rem;
   box-sizing: border-box;
   transition: background-color var(--transition-theme), color var(--transition-theme);
 }
 
 .overview-inner {
   width: 100%;
-  max-width: 980px;
+  max-width: 860px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 4rem;
+  gap: 3.5rem;
 }
 
 /* ========================================================= */
-/* 1. EDITORIAL / MANUAL HERO MASTHEAD                       */
+/* 1. HERO SECTION                                           */
 /* ========================================================= */
-.overview-editorial-hero {
+.overview-hero {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 2.25rem;
+  border-bottom: 1px solid var(--border);
 }
 
-.editorial-meta-line {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.editorial-kicker {
+.overview-brand-kicker {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-emerald, #059669);
+  margin-bottom: 0.85rem;
 }
 
-.editorial-version-tag {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  color: var(--foreground-muted);
-  border: 1px solid var(--border);
-  padding: 0.15rem 0.55rem;
-  border-radius: 2px;
-}
-
-.editorial-headline {
+.overview-hero-title {
   font-family: var(--font-sans);
-  font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+  font-size: clamp(2.4rem, 4.2vw, 3.25rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
   color: var(--foreground);
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.65rem 0;
 }
 
-.editorial-strapline {
+.overview-hero-tagline {
   font-family: var(--font-sans);
   font-size: clamp(1.15rem, 2vw, 1.35rem);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--foreground-muted);
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  max-width: 860px;
+  line-height: 1.4;
+  margin: 0 0 1.25rem 0;
 }
 
-.editorial-lede {
+.overview-hero-lede {
   font-size: 1.05rem;
   line-height: 1.7;
   color: var(--foreground);
-  max-width: 880px;
+  max-width: 820px;
   margin: 0 0 2rem 0;
 }
 
-.editorial-hero-actions {
+.overview-hero-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
-.editorial-btn {
+.overview-btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -102,390 +85,340 @@
   font-weight: 600;
   padding: 0.65rem 1.4rem;
   border-radius: var(--radius-sm);
+  background-color: var(--accent-emerald, #059669);
+  color: #ffffff;
+  border: 1px solid var(--accent-emerald, #059669);
   cursor: pointer;
   transition: all 160ms ease;
   text-decoration: none;
 }
 
-.editorial-btn.primary {
-  background-color: var(--accent-emerald, #059669);
-  color: #ffffff;
-  border: 1px solid var(--accent-emerald, #059669);
-}
-
-.editorial-btn.primary:hover {
+.overview-btn-primary:hover {
   background-color: #047857;
   border-color: #047857;
 }
 
-.editorial-btn.text-link {
-  background: transparent;
+.overview-btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 500;
   color: var(--foreground-muted);
+  background: transparent;
   border: none;
+  cursor: pointer;
   padding: 0.65rem 0.5rem;
+  transition: color 150ms ease;
 }
 
-.editorial-btn.text-link:hover {
+.overview-btn-text:hover {
   color: var(--foreground);
 }
 
 /* ========================================================= */
-/* EDITORIAL INDEX BAR                                       */
+/* 2. SUB-NAVIGATION BAR                                     */
 /* ========================================================= */
-.editorial-index-bar {
+.overview-subnav {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 0;
+  gap: 0.85rem;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
   color: var(--foreground-muted);
   flex-wrap: wrap;
 }
 
-.index-bar-label {
-  font-weight: 700;
-  color: var(--foreground-subtle);
-  letter-spacing: 0.08em;
-}
-
-.index-bar-links {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.index-bar-links button {
+.overview-subnav button {
   background: transparent;
   border: none;
   font-family: inherit;
   font-size: inherit;
   color: var(--foreground-muted);
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
-  transition: color 150ms ease;
+  padding: 0.25rem 0.45rem;
+  border-radius: var(--radius-sm);
+  transition: color 150ms ease, background-color 150ms ease;
 }
 
-.index-bar-links button:hover {
+.overview-subnav button:hover {
   color: var(--accent-emerald, #059669);
 }
 
-.index-divider {
+.overview-subnav-divider {
   color: var(--border-strong);
 }
 
 /* ========================================================= */
-/* EDITORIAL SECTIONS                                        */
+/* 3. SECTION CONTENT                                        */
 /* ========================================================= */
-.editorial-section {
+.overview-section {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  padding-bottom: 3.5rem;
+  gap: 1.35rem;
+  padding-bottom: 2.75rem;
   border-bottom: 1px solid var(--border);
 }
 
-.editorial-section:last-of-type {
+.overview-section:last-of-type {
   border-bottom: none;
   padding-bottom: 0;
 }
 
-.section-number-header {
+.overview-section-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.overview-prose {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--foreground-muted);
+  margin: 0;
+}
+
+.overview-prose strong {
+  color: var(--foreground);
+}
+
+/* Clean, un-carded bullet lists */
+.overview-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.overview-feature-list li {
   display: flex;
   align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--foreground-muted);
+}
+
+.overview-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald, #059669);
+  margin-top: 0.55rem;
+  flex-shrink: 0;
+}
+
+.overview-feature-list li strong {
+  color: var(--foreground);
+}
+
+/* ========================================================= */
+/* 4. DATASET STATS LINE                                     */
+/* ========================================================= */
+.overview-data-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1.25rem;
+  padding: 1.25rem 0;
+  margin: 0.75rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
-.section-index-num {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--accent-emerald, #059669);
-  padding-top: 0.15rem;
-}
-
-.section-header-text {
+.overview-stat-col {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.section-eyebrow {
+.overview-stat-number {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1.55rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.overview-stat-label {
+  font-size: 0.82rem;
   color: var(--foreground-subtle);
-}
-
-.section-heading {
-  font-family: var(--font-sans);
-  font-size: clamp(1.6rem, 2.8vw, 2.15rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--foreground);
-  margin: 0;
-}
-
-.editorial-prose-block {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.editorial-body-text {
-  font-size: 1.02rem;
-  line-height: 1.7;
-  color: var(--foreground-muted);
-  margin: 0;
-  max-width: 880px;
-}
-
-.editorial-body-text strong {
-  color: var(--foreground);
+  line-height: 1.35;
 }
 
 /* ========================================================= */
-/* TEXTBOOK REFERENCE TABLES                                 */
+/* 5. HOW GRIDVISION WORKS — CLEAN WORKFLOW DIAGRAM          */
 /* ========================================================= */
-.textbook-table-wrapper {
+.workflow-pipeline-wrapper {
+  margin: 0.75rem 0;
   width: 100%;
-  overflow-x: auto;
+}
+
+.workflow-pipeline-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background-color: var(--surface);
-  margin: 0.5rem 0 1rem 0;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.textbook-table {
+.workflow-step-box {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  text-align: left;
-}
-
-.textbook-table th {
-  padding: 0.75rem 1rem;
+  max-width: 520px;
+  padding: 0.85rem 1.25rem;
   background-color: var(--surface-raised);
-  border-bottom: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--foreground-subtle);
-}
-
-.textbook-table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--foreground-muted);
-}
-
-.textbook-table tr:last-child td {
-  border-bottom: none;
-}
-
-.textbook-table td strong {
-  color: var(--foreground);
-}
-
-.textbook-table .mono {
-  font-family: var(--font-mono);
-  font-size: 0.86rem;
-  color: var(--foreground);
-}
-
-/* ========================================================= */
-/* TEXTBOOK MANUAL POINTS LIST                               */
-/* ========================================================= */
-.textbook-points-list {
-  list-style: none;
-  padding: 0;
-  margin: 0.5rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-}
-
-.textbook-points-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.85rem;
-}
-
-.point-number {
-  font-family: var(--font-mono);
-  font-size: 0.80rem;
-  font-weight: 700;
-  color: var(--accent-emerald, #059669);
-  background-color: color-mix(in srgb, var(--accent-emerald, #059669) 12%, transparent);
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-  margin-top: 0.2rem;
-}
-
-.point-body {
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--foreground-muted);
-}
-
-.point-body strong {
-  color: var(--foreground);
-}
-
-/* ========================================================= */
-/* TEXTBOOK CALLOUT / MANUAL NOTE                            */
-/* ========================================================= */
-.textbook-callout {
-  padding: 1rem 1.25rem;
-  background-color: var(--surface);
-  border-left: 3px solid var(--accent-emerald, #059669);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--foreground-muted);
-  margin: 0.5rem 0;
-}
-
-.textbook-callout strong {
-  color: var(--foreground);
-}
-
-.textbook-callout.amber {
-  border-left-color: var(--accent-amber, #f59e0b);
-}
-
-/* ========================================================= */
-/* TECHNICAL FLOWCHART CONTAINER                             */
-/* ========================================================= */
-.textbook-flowchart-container {
-  width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  background-color: var(--surface);
-  padding: 1.5rem 1rem;
-  overflow-x: auto;
-  box-sizing: border-box;
-  margin: 1rem 0;
-}
-
-/* ========================================================= */
-/* DASHBOARD MODULE MANUAL ENTRIES (§ 4.0)                   */
-/* ========================================================= */
-.module-manual-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 2rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  text-align: center;
   transition: border-color 150ms ease;
 }
 
-.module-manual-entry:hover {
-  border-color: var(--border-strong);
+.workflow-step-box:hover {
+  border-color: var(--accent-emerald, #059669);
 }
 
-.module-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.module-title-group {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.module-code-badge {
+.workflow-step-title {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--accent-emerald, #059669);
-  background-color: color-mix(in srgb, var(--accent-emerald, #059669) 14%, transparent);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-sm);
   letter-spacing: 0.05em;
+  color: var(--foreground);
+  margin-bottom: 0.2rem;
 }
 
-.module-title {
+.workflow-step-desc {
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+}
+
+.workflow-arrow-down {
+  color: var(--foreground-subtle);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.workflow-models-grid {
+  width: 100%;
+  max-width: 620px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .workflow-models-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workflow-model-item {
+  padding: 0.65rem 0.85rem;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--foreground);
+  text-align: center;
+}
+
+.workflow-model-item strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent-emerald, #059669);
+  margin-bottom: 0.15rem;
+}
+
+/* ========================================================= */
+/* 6. WHAT YOU CAN EXPLORE — WORKSPACE ENTRIES               */
+/* ========================================================= */
+.overview-workspace-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.overview-workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.overview-workspace-title {
   font-family: var(--font-sans);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--foreground);
   margin: 0;
 }
 
-.module-category-tag {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+.overview-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--foreground-subtle);
+  color: var(--accent-emerald, #059669);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.overview-open-btn:hover {
+  background-color: var(--surface-raised);
+  border-color: var(--accent-emerald, #059669);
+}
+
+.overview-feature-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.overview-pill {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--foreground-muted);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
 }
 
-.module-action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: var(--accent-emerald, #059669);
-  border: 1px solid var(--accent-emerald, #059669);
-  padding: 0.5rem 1.1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 150ms ease;
-  align-self: flex-start;
-  margin-top: 0.5rem;
-}
-
-.module-action-btn:hover {
-  background-color: #047857;
-  border-color: #047857;
-}
-
-.module-subheading {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--foreground-subtle);
-  margin: 0.5rem 0 0.25rem 0;
-}
-
 /* ========================================================= */
-/* RESEARCH APPENDIX STYLES                                  */
+/* 7. BOTTOM CALL TO ACTION                                  */
 /* ========================================================= */
-.research-appendix-container {
+.overview-bottom-cta {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background-color: var(--surface);
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 2.25rem 0 1rem 0;
+  border-top: 1px solid var(--border-strong);
 }
 
-.editorial-visual-wrapper {
-  margin-top: 1rem;
+.overview-bottom-title {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
 }
