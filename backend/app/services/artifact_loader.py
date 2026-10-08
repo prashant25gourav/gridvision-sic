@@ -779,7 +779,7 @@ class ArtifactStore:
                 "archetype": "Baseload Steady",
                 "household_count": cluster_counts.get(1, 0),
                 "percentage": round((cluster_counts.get(1, 0) / total_hh) * 100, 1) if total_hh else 0,
-                "peak_window": "Consistent / Low Variance",
+                "peak_window": "Consistent",
                 "description": "Low-variance baseload consumption with steady demand throughout the day.",
                 "features": {
                     "mean_load": cluster_means[1]["mean_load"],

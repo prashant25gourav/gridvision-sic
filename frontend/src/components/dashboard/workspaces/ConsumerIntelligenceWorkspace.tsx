@@ -1172,7 +1172,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           Peak Window
                         </span>
                         <strong style={{ fontSize: '0.90rem', color: 'var(--foreground)' }}>
-                          {c.peak_window}
+                          {c.peak_window.replace(/\s*\/\s*low variance/i, '').replace(/low variance/i, '').trim()}
                         </strong>
                       </div>
                     </div>
