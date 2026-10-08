@@ -224,7 +224,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
                 title="Learn how anomaly detection works on the Overview page"
               >
-                <span>About Anomaly Analysis</span>
+                <span>Learn about anomaly analysis</span>
                 <ArrowRight size={14} />
               </button>
             )}
@@ -357,7 +357,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.74rem',
+                    fontSize: '0.84rem',
                     fontWeight: 700,
                     color: isSelected ? 'var(--accent-amber)' : count === 0 ? 'var(--foreground-subtle)' : 'var(--foreground)',
                   }}
@@ -382,7 +382,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.68rem',
+                    fontSize: '0.78rem',
                     fontWeight: isSelected ? 700 : 500,
                     color: isSelected ? 'var(--accent-amber)' : 'var(--foreground-subtle)',
                   }}
@@ -416,7 +416,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
               No high-severity anomalies detected in observation window {selectedWindow}.
             </div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--foreground-subtle)' }}>
                   <th style={{ padding: '0.65rem 0.75rem' }}>Consumer</th>
@@ -453,7 +453,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                         <span style={{ fontWeight: 600, color: 'var(--foreground)' }}>
                           {formatConsumerId(row.household_id)}
                         </span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--foreground-subtle)', marginLeft: '0.5rem' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--foreground-subtle)', marginLeft: '0.5rem' }}>
                           {row.household_id}
                         </span>
                       </td>
@@ -464,7 +464,7 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.68rem',
+                            fontSize: '0.74rem',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             padding: '0.18rem 0.55rem',

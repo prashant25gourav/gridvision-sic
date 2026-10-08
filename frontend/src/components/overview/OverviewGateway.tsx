@@ -2,11 +2,9 @@ import React, { useEffect } from 'react';
 import {
   ArrowDown,
   ArrowRight,
-  Zap,
   Bot,
   LineChart,
   ShieldAlert,
-  FileCode2,
   Scale,
   Users,
   Activity,
@@ -148,24 +146,9 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
           </article>
         </div>
 
-        {/* Quick Jump Bar for Section Navigation */}
-        <nav
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.45rem',
-            justifyContent: 'center',
-            margin: '2.5rem 0 0.5rem 0',
-            padding: '0.65rem 1.15rem',
-            backgroundColor: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-full)',
-          }}
-          aria-label="Quick jump to sections"
-        >
-          <span style={{ fontSize: '0.74rem', color: 'var(--foreground-subtle)', fontWeight: 700, alignSelf: 'center', marginRight: '0.4rem', letterSpacing: '0.06em' }}>
-            SECTIONS:
-          </span>
+        {/* Quick Jump Navigation Bar for Section Browsing */}
+        <nav className="overview-nav-bar" aria-label="Quick jump to sections">
+          <span className="overview-nav-label">SECTIONS:</span>
           {[
             { id: 'overview-problem', label: '1. The Problem' },
             { id: 'overview-capabilities', label: '2. What It Does' },
@@ -173,7 +156,7 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
             { id: 'overview-forecasting', label: '4. Forecasting' },
             { id: 'overview-segmentation', label: '5. Consumer Profiles' },
             { id: 'overview-anomalies', label: '6. Anomaly Screening' },
-            { id: 'overview-stability', label: '7. Stability & Reliability' },
+            { id: 'overview-stability', label: '7. Stability & Tiers' },
             { id: 'overview-copilot', label: '8. AI Copilot' },
             { id: 'overview-architecture', label: '9. Architecture' },
             { id: 'overview-research', label: '10. Related Research' },
@@ -182,26 +165,8 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
             <button
               key={item.id}
               type="button"
+              className="overview-nav-item"
               onClick={() => scrollToSection(item.id)}
-              style={{
-                fontSize: '0.76rem',
-                fontWeight: 600,
-                color: 'var(--foreground-muted)',
-                background: 'none',
-                border: 'none',
-                padding: '0.25rem 0.55rem',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer',
-                transition: 'all 150ms ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--foreground)';
-                e.currentTarget.style.backgroundColor = 'var(--surface-raised)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--foreground-muted)';
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
             >
               {item.label}
             </button>
@@ -214,47 +179,65 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-problem"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="The Practical Challenge"
         >
           <div id="overview-demand" />
-          <div id="overview-motivation">
-            <span className="section-kicker" style={{ color: 'var(--accent-amber)' }}>
-              THE PRACTICAL CHALLENGE
-            </span>
-            <h2 className="section-heading">
-              1. Beyond Simple Electricity Totals
-            </h2>
-            <p className="section-subheading">
-              Electricity consumption changes continuously over time and differs substantially between consumers.
+          <div id="overview-motivation" />
+
+          <span className="section-kicker" style={{ color: 'var(--accent-amber)' }}>
+            THE PRACTICAL CHALLENGE
+          </span>
+          <h2 className="section-heading">
+            1. Beyond Simple Electricity Totals
+          </h2>
+          <p className="section-subheading">
+            Electricity consumption changes continuously over time and differs substantially between consumers.
+            Traditional monthly metering merely records aggregate consumption after the fact, leaving distribution engineers blind to load dynamics.
+          </p>
+
+          <p className="editorial-prose">
+            Modern residential electricity demand is characterized by rapid, nonlinear fluctuations driven by electric space heating, heat pumps, electric vehicles, and varied domestic routines. Because alternating current cannot be stored cost-free at scale on the distribution network, supply and demand must match continuously. To schedule generation, manage feeder congestion, and plan peak reserves, grid operators need granular, anticipatory insights rather than retroactive billing sums.
+          </p>
+
+          <div className="editorial-text-panel">
+            <h3 className="editorial-panel-title">
+              <HelpCircle size={22} style={{ color: 'var(--accent-amber)' }} />
+              <span>The Five Core Questions Distribution Operators Must Answer</span>
+            </h3>
+            <p className="editorial-prose" style={{ margin: 0 }}>
+              A truly operational demand intelligence system must answer far more than <em>&ldquo;How much total energy was consumed?&rdquo;</em> It must reliably resolve:
             </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.75rem' }}>
-                <Zap size={20} style={{ color: 'var(--accent-amber)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>The Core Grid Problem</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-amber)', fontSize: '0.92rem' }}>01.</span>
+                <span style={{ fontSize: '0.96rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                  <strong>What demand is expected next?</strong> Day-ahead half-hourly trajectories for scheduling generation dispatch, storage charging, and reserve margins.
+                </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Modern residential electricity demand is characterized by rapid, nonlinear fluctuations driven by electric heating, heat pumps, electric vehicles, and varied occupancy routines. Traditional utility metering simply records how much energy was consumed after the fact, leaving grid operators with limited foresight into upcoming peaks or individual load behaviors.
-              </p>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.75rem' }}>
-                <HelpCircle size={20} style={{ color: 'var(--accent-emerald)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Questions Operators Must Answer</h3>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-amber)', fontSize: '0.92rem' }}>02.</span>
+                <span style={{ fontSize: '0.96rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                  <strong>What type of consumption behavior does each consumer exhibit?</strong> Identifying whether a consumer is an Evening Peaker, a steady baseload account, or a daytime-active household to tailor tariffs and demand-side incentives.
+                </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                A truly useful system must answer far more than <em>&ldquo;How much electricity is being used?&rdquo;</em> It must help operators answer:
-              </p>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                <li><strong>What demand is likely next?</strong> (Day-ahead capacity planning &amp; peak timing)</li>
-                <li><strong>What type of consumption behavior does a consumer exhibit?</strong> (Evening peaker, steady baseload)</li>
-                <li><strong>Is the current behavior unusual?</strong> (Unexplained spikes, meter freezes, or dropouts)</li>
-                <li><strong>How reliable is the consumer&apos;s behavior over time?</strong> (Consistent habits vs erratic shifting)</li>
-                <li><strong>Can an operator query the system directly?</strong> (Natural-language answers without searching tables)</li>
-              </ul>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-amber)', fontSize: '0.92rem' }}>03.</span>
+                <span style={{ fontSize: '0.96rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                  <strong>Is current consumption unusual or aberrant?</strong> Screening anomalous deviation events to isolate communication failures, stuck meters, or unexpected physical demand surges before they escalate.
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-amber)', fontSize: '0.92rem' }}>04.</span>
+                <span style={{ fontSize: '0.96rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                  <strong>How consistent is each consumer&apos;s routine over time?</strong> Measuring behavioral stability across seasons to assess whether an account represents dependable demand-response flexibility or volatile risk.
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-amber)', fontSize: '0.92rem' }}>05.</span>
+                <span style={{ fontSize: '0.96rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                  <strong>Can operators query the system directly in natural language?</strong> Providing an authoritative natural-language interface that retrieves verified metrics and domain procedures without hallucination.
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -265,134 +248,213 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-capabilities"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Core Capabilities"
         >
-          <div id="capstone-section">
-            <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
-              CORE CAPABILITIES
-            </span>
-            <h2 className="section-heading">
-              2. What GridVision Does
-            </h2>
-            <p className="section-subheading">
-              Five complementary analytical capabilities designed to provide comprehensive demand intelligence.
-            </p>
-          </div>
+          <div id="capstone-section" />
 
-          <div className="capability-grid">
-            <div className="capability-card">
-              <div className="capability-icon-wrap" style={{ color: 'var(--accent-emerald)' }}>
-                <LineChart size={20} />
+          <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
+            CORE CAPABILITIES
+          </span>
+          <h2 className="section-heading">
+            2. What GridVision Does
+          </h2>
+          <p className="section-subheading">
+            Five complementary analytical capabilities designed to provide comprehensive demand intelligence across the distribution network.
+          </p>
+
+          <div className="capability-stack">
+            <div className="capability-row">
+              <div className="capability-row-icon" style={{ color: 'var(--accent-emerald)' }}>
+                <LineChart size={24} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Forecast Demand</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-                Predict upcoming electricity demand from historical consumption patterns across a 24-hour day-ahead horizon to schedule generation and peak capacity reserves.
-              </p>
+              <div className="capability-row-content">
+                <h3 className="capability-row-title">Forecast Demand Ahead of Time</h3>
+                <p className="capability-row-desc">
+                  Predicts upcoming electricity demand trajectories across a 24-hour day-ahead horizon in 30-minute intervals. By utilizing supervised gradient boosting on historical consumption and calendar indicators, GridVision enables operators to anticipate peak ramping and schedule adequate reserve capacity.
+                </p>
+              </div>
             </div>
 
-            <div className="capability-card">
-              <div className="capability-icon-wrap" style={{ color: 'var(--accent-cyan)' }}>
-                <Users size={20} />
+            <div className="capability-row">
+              <div className="capability-row-icon" style={{ color: 'var(--accent-blue)' }}>
+                <Users size={24} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Understand Consumers</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-                Group consumers with similar behavioral consumption characteristics into distinct, interpretable load profiles that reveal recurring daily routines.
-              </p>
+              <div className="capability-row-content">
+                <h3 className="capability-row-title">Understand Consumer Behavioral Archetypes</h3>
+                <p className="capability-row-desc">
+                  Groups consumers with similar behavioral load patterns into interpretable, standardized consumption archetypes (such as Evening Peakers, Baseload Steady, and Daytime Active). This reveals recurring daily habits without exposing private personal details or requiring intrusive in-home sensors.
+                </p>
+              </div>
             </div>
 
-            <div className="capability-card">
-              <div className="capability-icon-wrap" style={{ color: 'var(--accent-rose)' }}>
-                <ShieldAlert size={20} />
+            <div className="capability-row">
+              <div className="capability-row-icon" style={{ color: 'var(--accent-rose)' }}>
+                <ShieldAlert size={24} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Detect Unusual Behavior</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-                Screen observations that differ substantially from normal consumption baselines to quickly highlight unusual consumption events requiring investigation.
-              </p>
+              <div className="capability-row-content">
+                <h3 className="capability-row-title">Detect Unusual Consumption Behavior</h3>
+                <p className="capability-row-desc">
+                  Screens observations that deviate substantially from established consumption baselines using multi-dimensional tree isolation. Unusual events are stratified by severity so distribution teams can quickly prioritize inspections, distinguish communication dropouts from true physical surges, and investigate meter abnormalities.
+                </p>
+              </div>
             </div>
 
-            <div className="capability-card">
-              <div className="capability-icon-wrap" style={{ color: 'var(--accent-amber)' }}>
-                <Activity size={20} />
+            <div className="capability-row">
+              <div className="capability-row-icon" style={{ color: 'var(--accent-amber)' }}>
+                <Activity size={24} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Assess Behavioral Stability</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-                Track whether a consumer&apos;s behavioral load archetype remains persistent over time or transitions between different consumption patterns.
-              </p>
+              <div className="capability-row-content">
+                <h3 className="capability-row-title">Assess Behavioral Stability &amp; Reliability</h3>
+                <p className="capability-row-desc">
+                  Tracks whether a consumer&apos;s behavioral load archetype remains persistent over consecutive observation periods or transitions frequently between different profiles. Accounts are classified into operational reliability tiers (Stable, Moderate, Elevated Risk) to assess demand-response predictability.
+                </p>
+              </div>
             </div>
 
-            <div className="capability-card">
-              <div className="capability-icon-wrap" style={{ color: 'var(--accent-purple)' }}>
-                <Bot size={20} />
+            <div className="capability-row">
+              <div className="capability-row-icon" style={{ color: 'var(--accent-purple, #a855f7)' }}>
+                <Bot size={24} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Ask the System</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-                Use the AI Copilot to ask questions about forecasts, consumer profiles, anomalies, and operational guidance in conversational natural language.
-              </p>
+              <div className="capability-row-content">
+                <h3 className="capability-row-title">Ask the System in Natural Language (AI Copilot)</h3>
+                <p className="capability-row-desc">
+                  Enables engineers and analysts to query the platform conversationally. The Copilot orchestrates deterministic backend analytics tools and retrieves operational runbooks using local cosine similarity, enforcing strict numeric verification to ensure all answers are grounded in real data.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. HOW THE SYSTEM WORKS                                                   */}
+        {/* 4. HOW THE SYSTEM WORKS (PIPELINE & FLOWCHART)                           */}
         {/* ========================================================================= */}
         <section
           id="overview-workflow"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="How the System Works"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-cyan)' }}>
-              END-TO-END PIPELINE
-            </span>
-            <h2 className="section-heading">
-              3. How the System Works
-            </h2>
-            <p className="section-subheading">
-              From raw smart-meter readings to grounded operational answers through structured, complementary machine learning.
-            </p>
+          <span className="section-kicker" style={{ color: 'var(--accent-blue)' }}>
+            END-TO-END PIPELINE
+          </span>
+          <h2 className="section-heading">
+            3. How the System Works
+          </h2>
+          <p className="section-subheading">
+            From raw smart-meter readings to grounded operational answers through structured, complementary machine learning and deterministic artifact contracts.
+          </p>
+
+          {/* Simple Illustrative Flowchart */}
+          <div className="flowchart-container">
+            <div className="flowchart-header">
+              <h3 className="flowchart-title">GridVision Information &amp; Analytical Flow</h3>
+              <p className="flowchart-subtitle">
+                How data flows from physical smart meters through preprocessing and specialized machine learning to grounded operator decisions.
+              </p>
+            </div>
+
+            <div className="pipeline-diagram">
+              {/* Step 1 */}
+              <div className="pipeline-node">
+                <div className="pipeline-node-main">
+                  <span className="pipeline-step-badge">STEP 1</span>
+                  <div>
+                    <h4 className="pipeline-node-title">Smart-Meter Consumption Stream</h4>
+                    <p className="pipeline-node-detail">Half-hourly electricity consumption readings from London residential trials (UKPN Low Carbon London)</p>
+                  </div>
+                </div>
+                <span className="pipeline-node-tag">30-min kWh data</span>
+              </div>
+
+              <div className="pipeline-arrow"><ArrowDown size={18} /></div>
+
+              {/* Step 2 */}
+              <div className="pipeline-node">
+                <div className="pipeline-node-main">
+                  <span className="pipeline-step-badge">STEP 2</span>
+                  <div>
+                    <h4 className="pipeline-node-title">Data Preparation &amp; Quality Gate</h4>
+                    <p className="pipeline-node-detail">Quality audit verifying &ge;95% slot completeness, standardizing to kilowatts (kW), and aligning into 56-day observation windows</p>
+                  </div>
+                </div>
+                <span className="pipeline-node-tag">&ge;95% Complete</span>
+              </div>
+
+              <div className="pipeline-arrow"><ArrowDown size={18} /></div>
+
+              {/* Step 3 */}
+              <div className="pipeline-node">
+                <div className="pipeline-node-main">
+                  <span className="pipeline-step-badge">STEP 3</span>
+                  <div>
+                    <h4 className="pipeline-node-title">Feature Engineering &amp; Lag Construction</h4>
+                    <p className="pipeline-node-detail">Constructing autoregressive lags (t-48, t-336) and extracting 8 standardized behavioral indicators without lookahead leakage</p>
+                  </div>
+                </div>
+                <span className="pipeline-node-tag">8 Behavioral Metrics</span>
+              </div>
+
+              <div className="pipeline-arrow"><ArrowDown size={18} /></div>
+
+              {/* Step 4: Parallel ML Models */}
+              <div className="pipeline-parallel-group">
+                <div className="pipeline-parallel-card forecasting">
+                  <span className="pipeline-card-engine" style={{ color: 'var(--accent-emerald)' }}>SUPERVISED LEARNING</span>
+                  <h4 className="pipeline-card-title">Day-Ahead Forecaster</h4>
+                  <p className="pipeline-card-desc">
+                    LightGBM gradient-boosted decision trees predicting 24h demand trajectory across half-hourly intervals.
+                  </p>
+                </div>
+
+                <div className="pipeline-parallel-card segmentation">
+                  <span className="pipeline-card-engine" style={{ color: 'var(--accent-blue)' }}>UNSUPERVISED CLUSTERING</span>
+                  <h4 className="pipeline-card-title">Behavioral Profiler</h4>
+                  <p className="pipeline-card-desc">
+                    Standardized K-Means with Hungarian centroid alignment tracking archetypes across observation windows.
+                  </p>
+                </div>
+
+                <div className="pipeline-parallel-card anomalies">
+                  <span className="pipeline-card-engine" style={{ color: 'var(--accent-rose)' }}>OUTLIER SCREENING</span>
+                  <h4 className="pipeline-card-title">Anomaly Detector</h4>
+                  <p className="pipeline-card-desc">
+                    Isolation Forest screening multi-dimensional behavioral deviations and stratifying alerts by severity.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pipeline-arrow"><ArrowDown size={18} /></div>
+
+              {/* Step 5 */}
+              <div className="pipeline-node">
+                <div className="pipeline-node-main">
+                  <span className="pipeline-step-badge">STEP 5</span>
+                  <div>
+                    <h4 className="pipeline-node-title">Verified Parquet Artifact Storage &amp; FastAPI Engine</h4>
+                    <p className="pipeline-node-detail">Deterministic analytical artifacts served via sub-millisecond in-memory cache and REST endpoints</p>
+                  </div>
+                </div>
+                <span className="pipeline-node-tag">FastAPI Service</span>
+              </div>
+
+              <div className="pipeline-arrow"><ArrowDown size={18} /></div>
+
+              {/* Step 6 */}
+              <div className="pipeline-node">
+                <div className="pipeline-node-main">
+                  <span className="pipeline-step-badge">STEP 6</span>
+                  <div>
+                    <h4 className="pipeline-node-title">AI Copilot Orchestrator &amp; Operational Dashboards</h4>
+                    <p className="pipeline-node-detail">Strict numeric grounding verification combining deterministic tools and TF-IDF operational runbooks</p>
+                  </div>
+                </div>
+                <span className="pipeline-node-tag">Actionable Insights</span>
+              </div>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>STAGE 1</span>
-                <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 600 }}>Data Ingestion &amp; Cleaning</h4>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Half-hourly smart meter readings are ingested from historical London trials (UKPN Low Carbon London), validated for data quality (&ge;95% slot completeness), standardized to kilowatts (kW), and organized into synchronized 56-day observation windows.
-              </p>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>STAGE 2</span>
-                <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 600 }}>Feature Engineering</h4>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Time-series lag features (e.g., consumption at the same time yesterday and last week) and 8 behavioral indicators (average load, peak load, ramping rate, day-night ratio, weekday contrast) are constructed without future lookahead bias.
-              </p>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-amber)' }}>STAGE 3</span>
-                <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 600 }}>Complementary ML Tasks</h4>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Rather than forcing a single model to do everything, specialized models address separate analytical tasks: supervised gradient boosting for forecasting, distance-based clustering for profiling, and isolation trees for anomaly screening.
-              </p>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-purple)' }}>STAGE 4</span>
-                <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 600 }}>Grounded Orchestration</h4>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The AI Copilot connects these precomputed model outputs with domain knowledge bases using deterministic tool calls and strict numeric verification, giving operators conversational answers that never invent or hallucinate metrics.
-              </p>
-            </div>
-          </div>
+          <p className="editorial-prose">
+            Rather than forcing a single massive model to perform every analytical task, GridVision deliberately separates tasks into specialized, verifiable stages: supervised regression for temporal prediction, geometric distance clustering for behavioral archetypes, and recursive tree isolation for outlier screening. This design ensures that every metric presented to an operator is deterministic, explainable, and fully auditable.
+          </p>
         </section>
 
         {/* ========================================================================= */}
@@ -401,57 +463,41 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-forecasting"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Day-Ahead Demand Forecasting"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
-              SUPERVISED MACHINE LEARNING
-            </span>
-            <h2 className="section-heading">
-              4. Day-Ahead Demand Forecasting
-            </h2>
-            <p className="section-subheading">
-              Estimating 24-hour lookahead electricity demand across half-hourly time intervals using supervised gradient boosting.
-            </p>
-          </div>
+          <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
+            SUPERVISED MACHINE LEARNING
+          </span>
+          <h2 className="section-heading">
+            4. Day-Ahead Demand Forecasting
+          </h2>
+          <p className="section-subheading">
+            Estimating 24-hour lookahead electricity demand across half-hourly time intervals using supervised gradient boosting.
+          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>The Forecasting Purpose</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Electricity cannot be stored cost-free on the grid at scale; supply and demand must balance continuously. Day-ahead forecasting provides grid operators and retailers with anticipated demand trajectories 24 hours into the future, enabling cost-effective power scheduling and peak-load mitigation.
-              </p>
-            </div>
+          <p className="editorial-prose">
+            <strong>The Operational Motivation:</strong> In power systems, supply and demand must balance continuously. Day-ahead load forecasting provides distribution engineers and energy suppliers with anticipated consumption trajectories 24 hours into the future, enabling cost-effective generator unit commitment, battery storage scheduling, and peak-load reserve allocation.
+          </p>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>How GridVision Approaches It</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                GridVision formulates forecasting as <strong>supervised regression</strong> using historical and calendar-based features, with <strong>LightGBM</strong> providing the nonlinear prediction model.
-              </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                LightGBM is well suited to this setting because electricity demand depends on nonlinear interactions between recent consumption patterns and time-related features, while tree-based predictions remain relatively efficient and explainable.
-              </p>
-            </div>
-          </div>
+          <p className="editorial-prose">
+            <strong>The LightGBM Formulation:</strong> GridVision formulates forecasting as a supervised regression task using <strong>LightGBM (Light Gradient Boosting Machine)</strong>. LightGBM is uniquely suited to smart-meter tabular time-series data: it captures complex nonlinear interactions between recent consumption patterns and cyclical calendar features while maintaining sub-second inference speeds and transparent feature importance.
+          </p>
 
-          <div className="technical-approach-box">
-            <div className="technical-approach-title">
-              <Cpu size={14} />
-              <span>Technical Approach</span>
+          <div className="technical-callout-panel">
+            <div className="technical-callout-header">
+              <Cpu size={16} />
+              <span>Feature Engineering &amp; Evaluation Integrity</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.55 }}>
-              <div>
-                <strong style={{ color: 'var(--foreground)', display: 'block', marginBottom: '0.2rem' }}>Autoregressive Lag Features</strong>
-                Historical consumption values at lag t-48 (same half-hour yesterday) and lag t-336 (same half-hour previous week) capture persistent diurnal and weekly rhythms.
-              </div>
-              <div>
-                <strong style={{ color: 'var(--foreground)', display: 'block', marginBottom: '0.2rem' }}>Calendar &amp; Time Indicators</strong>
-                Half-hour index (0 to 47), day of week, and weekend indicators provide structural cyclical information without requiring weather data.
-              </div>
-              <div>
-                <strong style={{ color: 'var(--foreground)', display: 'block', marginBottom: '0.2rem' }}>Forward-Only Evaluation</strong>
-                Evaluated strictly out-of-sample across calendar windows to prevent lookahead leakage, outperforming standard seasonal-naive baselines.
-              </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <p className="technical-callout-content">
+                <strong>Autoregressive Lag Features:</strong> Historical consumption readings at lag <em>t-48</em> (the exact same half-hour interval on the previous day) and lag <em>t-336</em> (the exact same half-hour interval on the previous week) capture recurring diurnal habits and weekly work/weekend cycles.
+              </p>
+              <p className="technical-callout-content">
+                <strong>Calendar &amp; Cyclical Indicators:</strong> Half-hour interval indices (0 to 47), day-of-week indices (0 to 6), and binary weekend flags provide structural cyclical rhythms without relying on external weather telemetry that may fail in remote deployment environments.
+              </p>
+              <p className="technical-callout-content">
+                <strong>Forward-Only Evaluation Protocol:</strong> Models are trained on historical observation windows and evaluated strictly forward-in-time on subsequent holdout windows. This eliminates future lookahead bias, ensuring that reported accuracy metrics (MAE, RMSE) reflect real-world operational performance.
+              </p>
             </div>
           </div>
         </section>
@@ -462,84 +508,77 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-segmentation"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Consumer Intelligence and Load Profiling"
         >
-          <div id="overview-consumers">
-            <span className="section-kicker" style={{ color: 'var(--accent-cyan)' }}>
-              UNSUPERVISED MACHINE LEARNING
-            </span>
-            <h2 className="section-heading">
-              5. Consumer Intelligence &amp; Load Profiling
-            </h2>
-            <p className="section-subheading">
-              Grouping consumers with similar behavioral load patterns into interpretable, standardized consumption archetypes.
-            </p>
-          </div>
+          <div id="overview-consumers" />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Why Segmentation Matters</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Not every consumer behaves the same way. Treating all consumers as identical hides peak timing and demand-response flexibility. By grouping consumers based on how and when they use power, utilities can design targeted tariffs and understand local feeder stress.
+          <span className="section-kicker" style={{ color: 'var(--accent-blue)' }}>
+            UNSUPERVISED MACHINE LEARNING
+          </span>
+          <h2 className="section-heading">
+            5. Consumer Intelligence &amp; Load Profiling
+          </h2>
+          <p className="section-subheading">
+            Grouping consumers with similar behavioral load patterns into interpretable, standardized consumption archetypes.
+          </p>
+
+          <p className="editorial-prose">
+            <strong>Why Behavioral Segmentation Matters:</strong> Treating all residential consumers as identical baseload accounts obscures localized peak timing and hides demand-side flexibility. By characterizing consumers according to <em>how</em> and <em>when</em> they use power, utilities can design targeted demand-response tariffs, identify feeder stress points, and support tailored energy efficiency programs.
+          </p>
+
+          <p className="editorial-prose">
+            <strong>Behavioral Representation:</strong> Rather than clustering raw high-dimensional 48-slot load curves directly (which suffer from the curse of dimensionality and phase shifting), GridVision extracts 8 standardized behavioral indicators for every consumer in each 56-day observation window: average consumption, peak consumption, variance, peak-to-average ratio, ramping rate, day-to-night ratio, weekday-to-weekend contrast, and peak timing.
+          </p>
+
+          {/* 4 Archetypes Display in 2x2 Grid */}
+          <div className="archetypes-grid">
+            <div className="archetype-panel" style={{ borderLeft: '4px solid var(--accent-amber)' }}>
+              <span className="archetype-badge" style={{ color: 'var(--accent-amber)' }}>ARCHETYPE 1</span>
+              <h4 className="archetype-title">Evening Peakers</h4>
+              <p className="archetype-timing">Peak Window: 17:30 – 21:30</p>
+              <p className="archetype-description">
+                Marked by dinner, entertainment, and appliance usage following the return from work or school. Represents standard working-household occupancy with low daytime demand.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Behavioral Representation &amp; Clustering</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                GridVision represents consumption behavior using 8 standardized features per window: average demand, peak demand, consumption variance, peak-to-average ratio, ramping rate, day/night ratio, weekday/weekend contrast, and peak timing.
-              </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Because these behavioral features have different numerical scales, they are standardized before distance-based clustering. <strong>K-Means</strong> groups consumers into interpretable profiles that capture typical daily routines.
-              </p>
-            </div>
-          </div>
-
-          {/* 4 Archetypes Display */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent-amber)' }}>
-              <span style={{ fontSize: '0.74rem', color: 'var(--accent-amber)', fontWeight: 700, textTransform: 'uppercase' }}>Archetype 1</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Evening Peakers</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Marked by dinner and entertainment consumption between 17:30 and 21:30. Typical working-household routine with low daytime occupancy.
+            <div className="archetype-panel" style={{ borderLeft: '4px solid var(--accent-emerald)' }}>
+              <span className="archetype-badge" style={{ color: 'var(--accent-emerald)' }}>ARCHETYPE 2</span>
+              <h4 className="archetype-title">Baseload Steady</h4>
+              <p className="archetype-timing">Peak Window: Continuous flat profile</p>
+              <p className="archetype-description">
+                Characterized by low-variance, stable 24-hour demand with a high load factor and negligible sharp ramping. High proportion of continuous background refrigeration or automated loads.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent-emerald)' }}>
-              <span style={{ fontSize: '0.74rem', color: 'var(--accent-emerald)', fontWeight: 700, textTransform: 'uppercase' }}>Archetype 2</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Baseload Steady</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Steady, low-variance electricity demand throughout 24 hours with a high load factor and minimal sharp peaks.
+            <div className="archetype-panel" style={{ borderLeft: '4px solid var(--accent-blue)' }}>
+              <span className="archetype-badge" style={{ color: 'var(--accent-blue)' }}>ARCHETYPE 3</span>
+              <h4 className="archetype-title">Daytime Active</h4>
+              <p className="archetype-timing">Peak Window: 09:00 – 16:00</p>
+              <p className="archetype-description">
+                Elevated daytime electricity consumption between morning and late afternoon, typical of home-based workers, retired occupants, or daytime solar self-consumption routines.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent-cyan)' }}>
-              <span style={{ fontSize: '0.74rem', color: 'var(--accent-cyan)', fontWeight: 700, textTransform: 'uppercase' }}>Archetype 3</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Daytime Active</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Elevated daytime electricity use between 09:00 and 16:00, characteristic of remote workers, retirees, or daytime appliance scheduling.
-              </p>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent-purple)' }}>
-              <span style={{ fontSize: '0.74rem', color: 'var(--accent-purple)', fontWeight: 700, textTransform: 'uppercase' }}>Archetype 4</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Dual Peakers</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Distinct bimodal peaks occurring during morning preparation (07:30) and evening cooking (19:30) with an afternoon lull.
+            <div className="archetype-panel" style={{ borderLeft: '4px solid var(--accent-purple, #a855f7)' }}>
+              <span className="archetype-badge" style={{ color: 'var(--accent-purple, #a855f7)' }}>ARCHETYPE 4</span>
+              <h4 className="archetype-title">Dual Peakers</h4>
+              <p className="archetype-timing">Peak Windows: 07:30 &amp; 19:30</p>
+              <p className="archetype-description">
+                Distinct bimodal consumption spikes during morning routine preparation and evening cooking, separated by a pronounced afternoon lull when occupants leave the dwelling.
               </p>
             </div>
           </div>
 
-          <div className="technical-approach-box">
-            <div className="technical-approach-title">
-              <Workflow size={14} />
+          <div className="technical-callout-panel">
+            <div className="technical-callout-header">
+              <Workflow size={16} />
               <span>Hungarian Centroid Alignment Protocol</span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-              Because K-Means cluster label assignments are permutation-invariant across independent runs, running clustering separately in each time window would arbitrarily scramble cluster numbers. GridVision applies <strong>Kuhn-Munkres Hungarian bipartite matching</strong> to connect cluster centroids between successive observation windows. This ensures that a label like &ldquo;Evening Peakers&rdquo; represents consistent real-world behavior over time.
+            <p className="technical-callout-content">
+              Because unsupervised K-Means cluster labels are permutation-invariant across independent runs, running clustering separately in consecutive observation windows would arbitrarily scramble cluster identifiers (e.g., Cluster 1 in Window 2 might represent what was Cluster 3 in Window 1).
             </p>
-            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.82rem', color: 'var(--foreground-subtle)' }}>
-              *Note: Cluster labels represent behavioral consumption profiles, not demographic categories.
+            <p className="technical-callout-content">
+              To solve this fundamental challenge, GridVision implements the <strong>Kuhn-Munkres Hungarian bipartite matching algorithm</strong> to align cluster centroids between successive observation windows by minimizing Euclidean distance in standardized feature space. This ensures that an archetype label like &ldquo;Evening Peakers&rdquo; corresponds to consistent real-world behavior over longitudinal time.
             </p>
           </div>
         </section>
@@ -550,43 +589,36 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-anomalies"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Consumption Anomaly Detection"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-rose)' }}>
-              UNSUPERVISED OUTLIER SCREENING
-            </span>
-            <h2 className="section-heading">
-              6. Consumption Anomaly Detection
-            </h2>
-            <p className="section-subheading">
-              Screening observations that differ substantially from normal consumption baselines to prioritize operational investigation.
-            </p>
-          </div>
+          <span className="section-kicker" style={{ color: 'var(--accent-rose)' }}>
+            UNSUPERVISED OUTLIER SCREENING
+          </span>
+          <h2 className="section-heading">
+            6. Consumption Anomaly Detection
+          </h2>
+          <p className="section-subheading">
+            Screening observations that differ substantially from normal consumption baselines to prioritize operational investigation.
+          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>The Purpose of Anomaly Screening</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Not every unusual consumption event is necessarily an error or a hardware fault, but unusual behavior deserves operator attention. Automated anomaly detection flags unusual load signatures without requiring pre-labeled training data.
-              </p>
-            </div>
+          <p className="editorial-prose">
+            <strong>The Purpose of Anomaly Screening:</strong> On large distribution networks comprising thousands of endpoints, human operators cannot inspect every individual meter trace. Automated anomaly screening isolates observations that display aberrant behavioral characteristics across the 8 behavioral dimensions, allowing grid engineers to triage potential issues before equipment damages occur.
+          </p>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Isolation Forest Formulation</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                GridVision uses <strong>Isolation Forest</strong> to identify observations that are unusually easy to separate from normal consumption patterns across the 8 behavioral feature dimensions. Anomalous observations require significantly fewer random splits to isolate within decision trees.
-              </p>
-            </div>
-          </div>
+          <p className="editorial-prose">
+            <strong>Isolation Forest Formulation:</strong> GridVision uses <strong>Isolation Forest</strong> to identify outliers without requiring pre-labeled training data. Because anomalies are few and structurally distinct, they are isolated near the roots of random decision trees with significantly shorter path lengths compared to typical normal observations.
+          </p>
 
-          <div className="technical-approach-box" style={{ borderLeft: '4px solid var(--accent-rose)' }}>
-            <div className="technical-approach-title" style={{ color: 'var(--accent-rose)' }}>
-              <AlertTriangle size={14} />
+          <div className="technical-callout-panel" style={{ borderLeft: '4px solid var(--accent-rose)' }}>
+            <div className="technical-callout-header" style={{ color: 'var(--accent-rose)' }}>
+              <AlertTriangle size={16} />
               <span>Responsible Operational Interpretation</span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-              <strong>An anomaly flag indicates unusual behavior; it does not by itself prove that something is wrong.</strong> Unusual usage can stem from valid residential routine changes (e.g., vacations, home remodeling, electric vehicle charging) as well as data dropouts, meter freezes, or unannounced equipment faults. GridVision stratifies alerts by deviation magnitude so operators can verify communication telemetry and feeder alerts before scheduling physical site inspections.
+            <p className="technical-callout-content">
+              <strong>An anomaly flag indicates unusual behavior; it does not by itself prove a hardware fault or equipment failure.</strong>
+            </p>
+            <p className="technical-callout-content">
+              Unusual demand can stem from legitimate residential activities—such as family gatherings, extended vacations, home renovations, or electric vehicle charging additions—as well as telemetry dropouts, stuck meters, or physical faults. GridVision stratifies alerts into High, Medium, and Low severity tiers, empowering operators to review communication health and feeder events before dispatching field crews.
             </p>
           </div>
         </section>
@@ -597,38 +629,54 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-stability"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Behavioral Stability and Reliability Tiers"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-amber)' }}>
-              LONGITUDINAL TRACKING
-            </span>
-            <h2 className="section-heading">
-              7. Behavioral Stability &amp; Reliability Tiers
-            </h2>
-            <p className="section-subheading">
-              Tracking how consistently a consumer remains associated with the same load archetype across successive observation periods.
-            </p>
-          </div>
+          <span className="section-kicker" style={{ color: 'var(--accent-amber)' }}>
+            LONGITUDINAL TRACKING
+          </span>
+          <h2 className="section-heading">
+            7. Behavioral Stability &amp; Reliability Tiers
+          </h2>
+          <p className="section-subheading">
+            Tracking how consistently a consumer remains associated with the same load archetype across successive observation periods.
+          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>What is Behavioral Stability?</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                A consumer&apos;s load profile can change over time. GridVision tracks how consistently that consumer remains associated with the same behavioral profile across successive periods.
-              </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Greater instability means the consumer&apos;s observed behavior transitions more frequently between different behavioral profiles (e.g., shifting between Evening Peaker and Daytime Active routines).
+          <p className="editorial-prose">
+            <strong>What is Behavioral Stability?</strong> A household&apos;s daily routine is not fixed permanently; changes in employment, seasonal heating, or occupancy alter consumption patterns over time. GridVision quantifies behavioral stability by tracking the transition frequency across longitudinal cluster assignments across 14 consecutive observation windows.
+          </p>
+
+          <p className="editorial-prose">
+            <strong>Operational Value for Demand Response:</strong> When planning demand-response events, utilities need to know which consumers can be counted upon to reduce load reliably during peak hours. GridVision translates stability metrics into operational Reliability Tiers:
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', margin: '0.5rem 0 1.5rem 0' }}>
+            <div className="editorial-text-panel" style={{ padding: '1.25rem 1.5rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <strong style={{ color: 'var(--accent-emerald)', fontSize: '1.02rem' }}>Tier 1: Stable Reliability</strong>
+                <span className="pipeline-node-tag">Transition Rate &le; 15%</span>
+              </div>
+              <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Consumers with deeply ingrained habits who remain within the same behavioral archetype window after window. Ideal for committed capacity contracts and predictable demand reduction.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Why Stability Matters Operationally</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Tracking stability provides an additional operational signal for understanding whether a consumer&apos;s historical behavioral profile remains a dependable representation of current demand.
+            <div className="editorial-text-panel" style={{ padding: '1.25rem 1.5rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <strong style={{ color: 'var(--accent-amber)', fontSize: '1.02rem' }}>Tier 2: Moderate Reliability</strong>
+                <span className="pipeline-node-tag">Transition Rate 16% – 35%</span>
+              </div>
+              <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Consumers whose routines shift seasonally (e.g., transition between Evening Peaker in winter and Daytime Active in summer). Suitable for flexible tariffs with adaptive parameters.
               </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                GridVision classifies accounts into operational reliability tiers (Stable, Moderate, and Elevated Risk), helping utility planners determine which accounts offer predictable flexibility for demand-response commitments versus those requiring safety margins.
+            </div>
+
+            <div className="editorial-text-panel" style={{ padding: '1.25rem 1.5rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <strong style={{ color: 'var(--accent-rose)', fontSize: '1.02rem' }}>Tier 3: Elevated Risk</strong>
+                <span className="pipeline-node-tag">Transition Rate &gt; 35%</span>
+              </div>
+              <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Consumers whose load profiles change frequently across windows. Planners should apply conservative safety margins when forecasting load contributions from these accounts.
               </p>
             </div>
           </div>
@@ -640,56 +688,54 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-copilot"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="The GridVision AI Copilot"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-purple)' }}>
-              GROUNDED NATURAL-LANGUAGE ASSISTANCE
-            </span>
-            <h2 className="section-heading">
-              8. The GridVision AI Copilot
-            </h2>
-            <p className="section-subheading">
-              A natural-language orchestration interface that queries verified analytics tools and domain knowledge without replacing underlying machine-learning models.
-            </p>
+          <span className="section-kicker" style={{ color: 'var(--accent-purple, #a855f7)' }}>
+            GROUNDED NATURAL-LANGUAGE ASSISTANCE
+          </span>
+          <h2 className="section-heading">
+            8. The GridVision AI Copilot
+          </h2>
+          <p className="section-subheading">
+            A natural-language orchestration interface that queries verified analytics tools and domain knowledge without replacing underlying machine-learning models.
+          </p>
+
+          <p className="editorial-prose">
+            <strong>An Orchestration Layer, Not an ML Predictor:</strong> The AI Copilot provides a natural-language bridge between human operators and complex energy data. <strong>The language model does not calculate forecasts or detect anomalies itself; rather, it orchestrates existing GridVision analytics engines</strong> by calling deterministic backend tools to fetch real data before composing responses.
+          </p>
+
+          <div className="editorial-text-panel">
+            <h3 className="editorial-panel-title">
+              <CheckCircle2 size={22} style={{ color: 'var(--accent-emerald)' }} />
+              <span>Two Strictly Separated Knowledge Channels</span>
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.25rem' }}>
+              <div>
+                <strong style={{ color: 'var(--foreground)', fontSize: '1.0rem', display: 'block', marginBottom: '0.25rem' }}>
+                  1. Analytics Tools (Deterministic Execution)
+                </strong>
+                <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                  Pre-registered Python functions (e.g. <code>get_forecast_evaluation</code>, <code>get_cluster_stability</code>, <code>get_anomaly_summary</code>) that query precomputed Parquet artifacts. If an operator asks <em>&ldquo;What is the MAE for Window 3?&rdquo;</em>, the Copilot executes the tool and retrieves the exact numeric metric rather than guessing.
+                </p>
+              </div>
+              <div>
+                <strong style={{ color: 'var(--foreground)', fontSize: '1.0rem', display: 'block', marginBottom: '0.25rem' }}>
+                  2. Domain Knowledge Retrieval (Local TF-IDF RAG)
+                </strong>
+                <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                  Operational standard operating procedures, meter inspection protocols, and electrical glossary definitions indexed using local TF-IDF cosine similarity. Requires zero external API connectivity and maintains total offline security.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <Bot size={20} style={{ color: 'var(--accent-purple)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>An Orchestration Layer, Not an ML Model</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The AI Copilot provides a natural-language interface to GridVision&apos;s analytics. <strong>The language model explains and orchestrates existing GridVision results; it does not replace the forecasting, clustering, or anomaly-detection models.</strong>
-              </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                When an operator asks a question, the Copilot routes the query to deterministic backend tools to query authentic data rather than relying on language model memory.
-              </p>
+          <div className="technical-callout-panel">
+            <div className="technical-callout-header">
+              <ShieldCheck size={16} />
+              <span>Strict Numeric Grounding Verification</span>
             </div>
-
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <CheckCircle2 size={20} style={{ color: 'var(--accent-emerald)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Two Complementary Knowledge Sources</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The Copilot draws upon two clearly separated sources:
-              </p>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                <li><strong>Analytics Tools:</strong> Deterministic backend functions that retrieve actual precomputed forecasts, cluster histories, anomaly flags, and stability indicators.</li>
-                <li><strong>Domain Knowledge (RAG):</strong> Technical operational runbooks, anomaly inspection procedures, and glossary definitions retrieved via local TF-IDF cosine similarity.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="technical-approach-box">
-            <div className="technical-approach-title">
-              <ShieldCheck size={14} />
-              <span>Strict Numeric Grounding Enforcement</span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-              Every numeric claim in the final Copilot answer is verified against tool outputs or retrieved passages from the current turn. If an ungrounded or fabricated number is introduced, the system flags the response as ungrounded. This ensures operators receive authoritative, traceable facts suitable for utility decision-making.
+            <p className="technical-callout-content">
+              To eliminate language model hallucinations in high-stakes utility operations, GridVision implements an automated <strong>Numeric Grounding Guard</strong>. Every integer, decimal, and percentage in the Copilot&apos;s answer is extracted and cross-checked against the tool execution outputs or retrieved runbook chunks from that specific turn. If an ungrounded or fabricated number is detected, the response is explicitly flagged.
             </p>
           </div>
         </section>
@@ -700,87 +746,50 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-architecture"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="System Architecture"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
-              SYSTEM ARCHITECTURE
-            </span>
-            <h2 className="section-heading">
-              9. End-to-End System Architecture
-            </h2>
-            <p className="section-subheading">
-              A clean modular design connecting data pipelines, machine-learning analytics, local retrieval, and dashboard presentation.
-            </p>
-          </div>
+          <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
+            SYSTEM ARCHITECTURE
+          </span>
+          <h2 className="section-heading">
+            9. End-to-End System Architecture
+          </h2>
+          <p className="section-subheading">
+            A clean modular design connecting data pipelines, machine-learning analytics, local retrieval, and dashboard presentation.
+          </p>
 
-          {/* Simple Clean Flow Diagram */}
-          <div className="workspace-card" style={{ padding: '1.75rem', marginBottom: '1.5rem', backgroundColor: 'var(--surface-raised)' }}>
-            <h4 style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: 600, color: 'var(--foreground)' }}>
-              End-to-End Information Flow
-            </h4>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.82rem',
-                color: 'var(--foreground-muted)',
-                lineHeight: 1.9,
-                backgroundColor: 'var(--surface)',
-                padding: '1.25rem 1.5rem',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                overflowX: 'auto',
-              }}
-            >
-              Smart-Meter Data (30-min readings across 14 observation windows)<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              Data Preparation &amp; Completeness Verification (&ge;95% slot threshold)<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              Feature Engineering (Autoregressive lags &amp; 8 standardized behavioral metrics)<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              ┌────────────────────────┬─────────────────────────┬────────────────────────┐<br />
-              │&nbsp;&nbsp;Day-Ahead Forecaster&nbsp;&nbsp;│&nbsp;&nbsp;Behavioral Clustering&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Anomaly Detection&nbsp;&nbsp;&nbsp;│<br />
-              │&nbsp;&nbsp;&nbsp;&nbsp;(LightGBM GBDT)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;(K-Means + Hungarian)&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;(Isolation Forest)&nbsp;&nbsp;&nbsp;│<br />
-              └────────────────────────┴─────────────────────────┴────────────────────────┘<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              Verified GridVision Parquet Artifacts (/data/artifacts/latest/)<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              FastAPI Analytics Service &amp; In-Memory Data Store<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              ┌──────────────────────────────────────────────────────────────────────────┐<br />
-              │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AI Copilot Orchestrator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br />
-              │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br />
-              │&nbsp;Analytics Tools (Tools.py)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Local RAG (Retriever.py)&nbsp;│<br />
-              │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br />
-              │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Strict Grounding Verification&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br />
-              └──────────────────────────────────────────────────────────────────────────┘<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br />
-              Operational Dashboard UI (React 19 + TypeScript + Vite)
-            </div>
-          </div>
+          <p className="editorial-prose">
+            The GridVision application is engineered as a production-grade decoupled architecture built entirely with open-source technologies:
+          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--accent-emerald)', textTransform: 'uppercase' }}>Frontend Application</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1rem', fontWeight: 600 }}>React 19 + TypeScript + Vite</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Componentized dashboard with persistent navigation, responsive CSS grid layouts, and interactive SVG load profiles built with sub-second bundle performance.
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', margin: '0.5rem 0 2rem 0' }}>
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>Frontend Presentation Tier</h4>
+                <span className="pipeline-node-tag">React 19 + TypeScript + Vite</span>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Componentized single-page application featuring responsive layout shells, custom interactive SVG time-series visualizations, dual light/dark themes, and client-side routing. Optimized for zero layout thrashing and presentation readability.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--accent-cyan)', textTransform: 'uppercase' }}>Backend API Service</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1rem', fontWeight: 600 }}>FastAPI + PyArrow + Scikit-Learn</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Asynchronous Python service serving precomputed artifacts from Parquet with sub-millisecond in-memory lookups and local offline TF-IDF RAG retrieval.
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>Backend Analytics Service</h4>
+                <span className="pipeline-node-tag">FastAPI + PyArrow + Scikit-Learn</span>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                High-performance asynchronous Python REST API serving verified analytics from immutable columnar Apache Parquet artifacts. Implements in-memory caching and offline TF-IDF RAG retrieval with sub-millisecond response latency.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.35rem' }}>
-              <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--accent-amber)', textTransform: 'uppercase' }}>Containerized Deployment</span>
-              <h4 style={{ margin: '0.35rem 0', fontSize: '1rem', fontWeight: 600 }}>Multi-Stage Docker Packaging</h4>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--foreground-muted)', lineHeight: 1.5 }}>
-                Unified single-container deployment packaging the compiled frontend bundle and Python backend, requiring zero external database or cloud API dependencies.
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>Containerized Packaging &amp; Deployment</h4>
+                <span className="pipeline-node-tag">Multi-Stage Docker</span>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Unified single-container deployment bundling the compiled static frontend and Python backend service. Operates entirely self-contained with zero external database or cloud subscription dependencies.
               </p>
             </div>
           </div>
@@ -793,71 +802,55 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
           id="overview-research"
           className="overview-full-section"
           aria-label="Related Research Study Technical Explanation"
-          style={{ width: '100%', scrollMarginTop: '88px', borderTop: '2px solid var(--border)', paddingTop: '4rem' }}
         >
-          <div id="research-section">
-            <span className="section-kicker" style={{ color: 'var(--accent-indigo)' }}>
-              ACADEMIC EXTENSION
-            </span>
-            <h2 className="section-heading">
-              10. Related Research: Temporal Cluster Instability &amp; Forecast Failure
-            </h2>
-            <p className="section-subheading">
-              A standalone empirical investigation conducted alongside the engineering capstone to test whether behavioral archetype transitions provide early warning of severe forecasting failures.
-            </p>
-          </div>
+          <div id="research-section" />
+
+          <span className="section-kicker" style={{ color: 'var(--accent-indigo)' }}>
+            ACADEMIC EXTENSION
+          </span>
+          <h2 className="section-heading">
+            10. Related Research: Temporal Cluster Instability &amp; Forecast Failure
+          </h2>
+          <p className="section-subheading">
+            A standalone empirical investigation conducted alongside the engineering capstone to test whether behavioral archetype transitions provide early warning of severe forecasting failures.
+          </p>
+
+          <p className="editorial-prose">
+            <strong>The Academic Research Question:</strong> In energy data science literature, many works propose dynamic customer segmentation to improve forecasting. We tested this premise empirically: <em>&ldquo;Does instability in a consumer&apos;s behavioral-cluster assignment help identify periods when the next forecast is more likely to fail badly, after accounting for the consumer&apos;s underlying consumption volatility?&rdquo;</em>
+          </p>
 
           {/* Headline Finding Banner */}
-          <div className="overview-research-verdict-card" style={{ marginBottom: '2rem' }}>
+          <div className="overview-research-verdict-card">
             <div className="verdict-card-inner">
-              <div className="verdict-badge" style={{ backgroundColor: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo)' }}>
-                <span>CENTRAL RESEARCH QUESTION &amp; VERDICT</span>
+              <div className="verdict-badge">
+                <span>CENTRAL RESEARCH FINDING &amp; EMPIRICAL VERDICT</span>
               </div>
               <h3 className="verdict-title">
-                &ldquo;Does instability in a consumer&apos;s behavioral-cluster assignment help identify periods when the next forecast is more likely to fail badly, after accounting for the consumer&apos;s underlying volatility?&rdquo;
+                Behavioral Cluster Instability is Not an Independent Predictor of Extreme Forecast Failure
               </h3>
               <p className="verdict-statement">
                 &ldquo;After controlling for baseline consumption volatility, temporal cluster instability was not independently associated with extreme load-forecast failure (Odds Ratio = 0.9183, p = 0.7481). The null hypothesis (H0) was supported.&rdquo;
               </p>
               <p className="verdict-subtext">
-                The analysis confirmed that while behavioral cluster shifts capture real-world routine adaptations, supervised machine-learning models adapt smoothly across behavioral regimes. High-frequency demand variability (consumption volatility) remains the dominant physical driver of forecast failure (Odds Ratio = 7.4459, p &lt; 0.0001).
+                Supervised gradient boosting models adapt smoothly across behavioral regime shifts. Underlying high-frequency demand volatility remains the dominant physical driver of extreme forecast errors (Odds Ratio = 7.4459, p &lt; 0.0001).
               </p>
             </div>
           </div>
 
-          {/* Research Logic Flow */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <Scale size={20} style={{ color: 'var(--accent-indigo)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>The Research Logic Flow</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The experiment evaluated the sequence:
+          <div className="editorial-text-panel">
+            <h3 className="editorial-panel-title">
+              <Scale size={22} style={{ color: 'var(--accent-indigo)' }} />
+              <span>Rigorous Experimental Protocol</span>
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <p className="editorial-prose" style={{ margin: 0 }}>
+                <strong>1. Prospective Threshold Definition:</strong> Extreme forecast failure was defined prospectively using the 95th percentile standardized error threshold (2.53438) calibrated on baseline training data to avoid post-hoc threshold manipulation.
               </p>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--foreground)', backgroundColor: 'var(--surface-raised)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', margin: '0.65rem 0', lineHeight: 1.6 }}>
-                Behavioral history<br />
-                &nbsp;&nbsp;↓<br />
-                Cluster assignments over time<br />
-                &nbsp;&nbsp;↓<br />
-                Measure longitudinal instability<br />
-                &nbsp;&nbsp;↓<br />
-                Examine following forecast period<br />
-                &nbsp;&nbsp;↓<br />
-                Test association with extreme forecast failure
-              </div>
-            </div>
-
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-                <FileCode2 size={20} style={{ color: 'var(--accent-purple)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Prospective Study Protocol</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                To avoid post-hoc threshold manipulation, extreme forecast failure was defined prospectively using the 95th percentile standardized error threshold (2.53438) established during initial calibration windows.
+              <p className="editorial-prose" style={{ margin: 0 }}>
+                <strong>2. Household-Clustered Standard Errors:</strong> Logistic regression models were estimated with <strong>cluster-robust standard errors grouped at the household level</strong> across 3,676 consumer-window observations. This correctly adjusts for longitudinal repeated measures and avoids pseudo-replication.
               </p>
-              <p style={{ margin: '0.65rem 0 0 0', fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Logistic regression models were estimated with <strong>cluster-robust standard errors grouped at the household level</strong> across 3,676 observations, preventing pseudo-replication bias.
+              <p className="editorial-prose" style={{ margin: 0 }}>
+                <strong>3. Clear Separation of Capstone vs Research:</strong> The capstone application uses clustering for operational consumer understanding, where it succeeds brilliantly. The research study evaluated whether that same clustering also predicted forecast breakdown—a distinct hypothesis that proved false. This honest reporting demonstrates genuine scientific integrity.
               </p>
             </div>
           </div>
@@ -869,39 +862,43 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-limitations"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px' }}
+          aria-label="Methodological Limitations and Scope"
         >
-          <div>
-            <span className="section-kicker" style={{ color: 'var(--accent-rose)' }}>
-              RESPONSIBLE INTERPRETATION
-            </span>
-            <h2 className="section-heading">
-              11. Methodological Limitations &amp; Scope
-            </h2>
-            <p className="section-subheading">
-              Important boundaries to consider when interpreting GridVision findings and transferring conclusions to other power systems.
-            </p>
-          </div>
+          <span className="section-kicker" style={{ color: 'var(--accent-rose)' }}>
+            RESPONSIBLE INTERPRETATION
+          </span>
+          <h2 className="section-heading">
+            11. Methodological Limitations &amp; Scope
+          </h2>
+          <p className="section-subheading">
+            Important boundaries to consider when interpreting GridVision findings and transferring conclusions to other power systems.
+          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Observational Design Context</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The research analysis is observational and prospective. <strong>Findings demonstrate associations, not causality.</strong> Behavioral cluster instability cannot be assumed to cause or prevent forecast failures.
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', margin: '0.5rem 0 2rem 0' }}>
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>
+                Observational Design &amp; Associational Boundaries
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                The research analysis is observational and prospective. <strong>Findings demonstrate statistical associations, not causal relationships.</strong> Behavioral cluster mobility cannot be assumed to cause or prevent forecast failures.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Seasonal Demand Expansion</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                Winter space-heating demand expansion induces absolute load and residual variance expansion that outpaces scale-invariant coefficient of variation (CV). Consequently, extreme absolute forecast residuals concentrate heavily in winter calendar windows.
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>
+                Seasonal Space-Heating Demand Expansion
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                Winter heating demand expansion induces absolute load and residual variance expansion that outpaces scale-invariant coefficient of variation (CV). Consequently, extreme absolute forecast residuals concentrate heavily in winter calendar periods.
               </p>
             </div>
 
-            <div className="workspace-card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.05rem', fontWeight: 600 }}>Cohort &amp; Pricing Environment</h3>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
-                The dataset represents 620 flat-rate residential households in Greater London. Findings reflect habitual lifestyle routines rather than automated response to dynamic time-of-use or critical-peak pricing structures.
+            <div className="editorial-text-panel" style={{ padding: '1.35rem 1.75rem', margin: 0 }}>
+              <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1.1rem', fontWeight: 600, color: 'var(--foreground)' }}>
+                Flat-Rate Tariff Environment Context
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.94rem', color: 'var(--foreground-muted)', lineHeight: 1.6 }}>
+                The trial cohort reflects residential households billed on flat electricity rates without automated home energy management systems (HEMS). Consumption routines reflect spontaneous human occupancy habits rather than automated price-responsive curtailment.
               </p>
             </div>
           </div>
@@ -913,37 +910,47 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
         <section
           id="overview-takeaway"
           className="overview-full-section"
-          style={{ width: '100%', scrollMarginTop: '88px', marginBottom: '2rem' }}
+          aria-label="Final Takeaway and Launch Dashboard"
+          style={{ marginBottom: '2rem' }}
         >
           <div
             style={{
-              padding: '2.5rem',
+              padding: '2.75rem',
               backgroundColor: 'var(--surface-raised)',
               border: '1px solid var(--border-strong)',
               borderRadius: 'var(--radius-lg)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.25rem',
+              gap: '1.35rem',
             }}
           >
             <div>
               <span className="section-kicker" style={{ color: 'var(--accent-emerald)' }}>
                 FINAL TAKEAWAY
               </span>
-              <h2 style={{ margin: '0.35rem 0 0.75rem 0', fontSize: '1.85rem', fontWeight: 600, color: 'var(--foreground)' }}>
+              <h2 style={{ margin: '0.4rem 0 0.85rem 0', fontSize: '2.0rem', fontWeight: 700, color: 'var(--foreground)' }}>
                 Operational Energy Intelligence Built on Rigorous Data Science
               </h2>
-              <p style={{ margin: 0, fontSize: '0.96rem', color: 'var(--foreground-muted)', lineHeight: 1.65, maxWidth: '880px' }}>
+              <p style={{ margin: 0, fontSize: '1.05rem', color: 'var(--foreground-muted)', lineHeight: 1.75, maxWidth: '920px' }}>
                 GridVision proves that modern smart-meter analytics do not need to choose between rigorous data science and intuitive operational utility. By formulating clean complementary tasks—supervised gradient boosting for forecasting, distance clustering for load profiling, isolation trees for anomaly screening, and strictly grounded language orchestration for human interaction—the platform empowers distribution engineers and energy analysts to make confident, data-driven decisions.
               </p>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
               <button
                 type="button"
                 className="overview-cta-btn"
                 onClick={onLaunchDashboard}
-                style={{ padding: '0.75rem 1.6rem', fontSize: '0.88rem' }}
+                style={{
+                  padding: '0.85rem 1.85rem',
+                  fontSize: '0.92rem',
+                  backgroundColor: 'var(--foreground)',
+                  color: 'var(--background)',
+                  borderRadius: 'var(--radius-sm)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.65rem',
+                }}
               >
                 <span>LAUNCH OPERATIONAL DASHBOARD</span>
                 <ArrowRight size={16} />

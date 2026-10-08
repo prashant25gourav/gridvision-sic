@@ -17,8 +17,7 @@ sys.path.insert(0, str(root / "backend"))
 
 from app.main import app
 from app.services.artifact_loader import store
-from app.services.rag.grounding import verify_numeric_grounding, extract_numeric_tokens
-from app.services.rag.agent import run_copilot_turn
+from app.services.rag.grounding import verify_numeric_grounding
 
 
 @pytest.fixture(scope="module")

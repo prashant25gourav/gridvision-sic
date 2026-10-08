@@ -1645,7 +1645,7 @@ const ClusterDailyProfilesSvg: React.FC<{
             );
           })}
         </div>
-        <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)' }}>
+        <span style={{ fontSize: '0.84rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)' }}>
           Unit: kW / consumer
         </span>
       </div>
@@ -1666,15 +1666,15 @@ const ClusterDailyProfilesSvg: React.FC<{
                 x2={padding.left + chartW}
                 y2={y}
                 stroke="var(--border)"
-                strokeDasharray="4 4"
+                strokeDasharray="3 3"
                 strokeWidth={1}
-                opacity={0.65}
+                opacity={0.55}
               />
               <text
                 x={padding.left - 10}
                 y={y + 4}
                 textAnchor="end"
-                fontSize={10}
+                fontSize={12}
                 fontFamily="var(--font-mono)"
                 fill="var(--foreground-subtle)"
               >
@@ -1694,7 +1694,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               x={x}
               y={padding.top + chartH + 20}
               textAnchor="middle"
-              fontSize={10}
+              fontSize={12}
               fontFamily="var(--font-mono)"
               fill="var(--foreground-subtle)"
             >
@@ -1712,7 +1712,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               d={l.path}
               fill="none"
               stroke={l.color}
-              strokeWidth={isDimmed ? 1.5 : activeClusterFilter === l.id ? 3 : 2.2}
+              strokeWidth={isDimmed ? 1.2 : activeClusterFilter === l.id ? 2.6 : 1.9}
               opacity={isDimmed ? 0.2 : 1}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1882,7 +1882,7 @@ const ConsumerDiurnalChart: React.FC<{
             </div>
           )}
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)' }}>
+        <span style={{ fontSize: '0.84rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)' }}>
           Unit: kW
         </span>
       </div>
@@ -1894,7 +1894,7 @@ const ConsumerDiurnalChart: React.FC<{
       >
         <defs>
           <linearGradient id="consumerAreaGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity={0.25} />
+            <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity={0.08} />
             <stop offset="100%" stopColor="var(--accent-emerald)" stopOpacity={0.0} />
           </linearGradient>
         </defs>
@@ -1910,15 +1910,15 @@ const ConsumerDiurnalChart: React.FC<{
                 x2={padding.left + chartW}
                 y2={y}
                 stroke="var(--border)"
-                strokeDasharray="4 4"
+                strokeDasharray="3 3"
                 strokeWidth={1}
-                opacity={0.6}
+                opacity={0.55}
               />
               <text
                 x={padding.left - 8}
                 y={y + 4}
                 textAnchor="end"
-                fontSize={10}
+                fontSize={12}
                 fontFamily="var(--font-mono)"
                 fill="var(--foreground-subtle)"
               >
@@ -1936,9 +1936,9 @@ const ConsumerDiurnalChart: React.FC<{
             <text
               key={idx}
               x={x}
-              y={padding.top + chartH + 18}
+              y={padding.top + chartH + 20}
               textAnchor="middle"
-              fontSize={10}
+              fontSize={12}
               fontFamily="var(--font-mono)"
               fill="var(--foreground-subtle)"
             >
@@ -1955,7 +1955,7 @@ const ConsumerDiurnalChart: React.FC<{
           d={actualPath}
           fill="none"
           stroke="var(--accent-emerald)"
-          strokeWidth={2.2}
+          strokeWidth={1.9}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -1966,7 +1966,7 @@ const ConsumerDiurnalChart: React.FC<{
             d={forecastPath}
             fill="none"
             stroke="var(--accent-cyan)"
-            strokeWidth={1.8}
+            strokeWidth={1.75}
             strokeDasharray="4 3"
             strokeLinecap="round"
             strokeLinejoin="round"

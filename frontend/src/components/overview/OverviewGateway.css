@@ -1,4 +1,4 @@
-/* OverviewGateway.css — Editorial Two-Panel Gateway for GridVision */
+/* OverviewGateway.css — Technical & Editorial Presentation Layout for GridVision */
 
 .overview-page-container {
   width: 100%;
@@ -8,22 +8,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2.25rem 2rem 3.5rem 2rem;
+  padding: 2.5rem 2rem 5rem 2rem;
+  box-sizing: border-box;
   transition: background-color var(--transition-theme), color var(--transition-theme);
 }
 
 .overview-inner {
   width: 100%;
-  max-width: 1380px;
+  max-width: 1140px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
-/* 1. Header Section: Minimal & Editorial */
+/* ========================================================= */
+/* 1. Header Section: Editorial Title & Lead Narrative      */
+/* ========================================================= */
 .overview-header {
   text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,50 +37,54 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--hero-pill-color);
   background: var(--hero-pill-bg);
   border: 1px solid var(--hero-pill-border);
-  padding: 0.35rem 1.15rem;
+  padding: 0.4rem 1.25rem;
   border-radius: var(--radius-full);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   transition: all var(--transition-theme);
 }
 
 .overview-main-title {
   font-family: var(--font-sans);
-  font-size: clamp(2.25rem, 5vw, 3.25rem);
-  font-weight: 600;
+  font-size: clamp(2.2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
   letter-spacing: -0.025em;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--foreground);
   margin: 0;
+  max-width: 980px;
+  text-align: center;
   transition: color var(--transition-theme);
 }
 
 .overview-lead-paragraph {
-  max-width: 820px;
-  font-size: 1.12rem;
-  line-height: 1.65;
+  max-width: 860px;
+  font-size: 1.15rem;
+  line-height: 1.75;
   color: var(--foreground-muted);
-  margin-top: 1.25rem;
+  margin-top: 1.35rem;
   margin-bottom: 0;
   text-align: center;
 }
 
-/* 2. Two Equal Large Panels Grid */
+/* ========================================================= */
+/* 2. Dual Gateway Panels (Capstone vs Research)            */
+/* ========================================================= */
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2.25rem;
+  gap: 2rem;
   width: 100%;
   align-items: stretch;
+  margin-bottom: 2rem;
 }
 
-/* 3. Individual Editorial Panel */
 .overview-panel {
   position: relative;
   background-color: var(--surface);
@@ -95,7 +102,7 @@
 .overview-panel:hover,
 .overview-panel:focus-visible {
   border-color: var(--border-strong);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
 }
 
@@ -104,13 +111,11 @@
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
 }
 
-/* Subtle focus ring for accessibility */
 .overview-panel:focus-visible {
   outline: 2px solid var(--accent-lime);
   outline-offset: 2px;
 }
 
-/* 4. Large Visual Area */
 .overview-panel-visual {
   position: relative;
   width: 100%;
@@ -134,7 +139,7 @@
 }
 
 .overview-panel:hover .overview-visual-wrapper {
-  transform: scale(1.025);
+  transform: scale(1.02);
 }
 
 .overview-svg-graphic {
@@ -142,9 +147,8 @@
   height: 100%;
 }
 
-/* 5. Editorial Content Area */
 .overview-panel-body {
-  padding: 1.75rem 2rem 1.5rem 2rem;
+  padding: 1.85rem 2rem 1.65rem 2rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -158,45 +162,37 @@
 .overview-eyebrow {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-lime);
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.65rem;
   transition: color var(--transition-theme);
-}
-
-.overview-panel:hover .overview-eyebrow {
-  opacity: 0.9;
 }
 
 .overview-panel-title {
   font-family: var(--font-sans);
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
   color: var(--foreground);
-  margin: 0 0 0.85rem 0;
-  min-height: 3.5rem;
-  display: flex;
-  align-items: flex-start;
+  margin: 0 0 0.75rem 0;
   transition: color var(--transition-theme);
 }
 
 .overview-panel-features {
   font-family: var(--font-sans);
-  font-size: 0.92rem;
-  line-height: 1.55;
+  font-size: 0.94rem;
+  line-height: 1.6;
   color: var(--foreground-muted);
   margin: 0;
   transition: color var(--transition-theme);
 }
 
-/* 6. Action Button (EXPLORE →) */
 .overview-panel-footer {
-  padding-top: 1.5rem;
+  padding-top: 1.35rem;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -209,9 +205,9 @@
   align-items: center;
   gap: 0.65rem;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--foreground);
   background: transparent;
@@ -230,72 +226,68 @@
 }
 
 .overview-panel:hover .overview-cta-arrow {
-  transform: translateX(5px);
+  transform: translateY(4px);
   color: var(--accent-lime);
 }
 
-/* 7. Research Conclusion Banner */
-.overview-research-verdict-card {
-  width: 100%;
-  margin-top: 3.5rem;
-  background-color: var(--surface);
-  border: 1.5px solid var(--border-strong);
-  border-radius: var(--radius-lg, 14px);
-  padding: 2.25rem 2.5rem;
-  transition: background-color var(--transition-theme), border-color var(--transition-theme);
-}
-
-.verdict-card-inner {
+/* ========================================================= */
+/* 3. Section Navigation Jump Bar                           */
+/* ========================================================= */
+.overview-nav-bar {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.verdict-badge {
-  display: inline-flex;
-  align-self: flex-start;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent-emerald);
-  background-color: color-mix(in srgb, var(--accent-emerald) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-emerald) 30%, transparent);
-  padding: 0.3rem 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin: 1.5rem 0 3.5rem 0;
+  padding: 0.65rem 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
+  position: sticky;
+  top: 76px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-theme);
 }
 
-.verdict-title {
-  margin: 0;
-  font-size: 1.4rem;
+.overview-nav-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--foreground-subtle);
+  font-weight: 700;
+  align-self: center;
+  margin-right: 0.4rem;
+  letter-spacing: 0.08em;
+}
+
+.overview-nav-item {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
   font-weight: 600;
-  color: var(--foreground);
-}
-
-.verdict-statement {
-  margin: 0;
-  font-size: 1.15rem;
-  line-height: 1.6;
-  font-weight: 500;
-  color: var(--foreground);
-  font-style: italic;
-  border-left: 3px solid var(--accent-emerald);
-  padding-left: 1.25rem;
-}
-
-.verdict-subtext {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
   color: var(--foreground-muted);
+  background: none;
+  border: none;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
 }
 
-/* 8. Shared Section Headers & Structural Styles */
+.overview-nav-item:hover {
+  color: var(--foreground);
+  background-color: var(--surface-raised);
+}
+
+/* ========================================================= */
+/* 4. Editorial Vertical Section Layout                     */
+/* ========================================================= */
 .overview-full-section {
   width: 100%;
-  scroll-margin-top: 88px;
-  margin-top: 4.5rem;
+  scroll-margin-top: 96px;
+  margin-top: 4rem;
   border-top: 1px solid var(--border);
   padding-top: 3.5rem;
   display: flex;
@@ -304,265 +296,491 @@
 
 .overview-full-section:first-of-type {
   border-top: none;
-  margin-top: 2rem;
+  margin-top: 0;
   padding-top: 0;
 }
 
-.section-header-centered {
-  text-align: center;
-  max-width: 780px;
-  margin: 0 auto 2.5rem auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-}
-
 .section-kicker {
+  display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.80rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--foreground-subtle);
+  margin-bottom: 0.5rem;
 }
 
 .section-heading {
-  margin: 0;
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--foreground);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .section-subheading {
-  margin: 0.5rem 0 2rem 0;
-  font-size: 1.02rem;
-  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-family: var(--font-sans);
+  font-size: 1.08rem;
+  line-height: 1.65;
   color: var(--foreground-muted);
-  max-width: 860px;
+  max-width: 920px;
 }
 
-/* Capability Cards */
-.capability-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+/* Editorial Narrative Prose */
+.editorial-prose {
+  font-family: var(--font-sans);
+  font-size: 1.04rem;
+  line-height: 1.8;
+  color: var(--foreground-muted);
+  margin: 0 0 1.5rem 0;
 }
 
-.capability-card {
+.editorial-prose strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+/* Clean Editorial Text Block */
+.editorial-text-panel {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md, 10px);
-  padding: 1.5rem;
+  padding: 2rem 2.25rem;
+  margin-bottom: 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  transition: border-color var(--transition-theme), transform 180ms ease;
-}
-
-.capability-card:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-}
-
-.capability-icon-wrap {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-sm);
-  background-color: var(--surface-raised);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Technical Approach Box (Level 3 depth) */
-.technical-approach-box {
-  background-color: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md, 10px);
-  padding: 1.25rem 1.5rem;
-  margin-top: 1.25rem;
-}
-
-.technical-approach-title {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--foreground-subtle);
-  margin-bottom: 0.65rem;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-/* 9. Visual Walkthrough Grid */
-.overview-walkthrough-section {
-  width: 100%;
-  margin-top: 4.5rem;
-}
-
-.overview-walkthrough-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
 }
 
-.walkthrough-step-card {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md, 10px);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  transition: all 200ms ease;
-}
-
-.walkthrough-step-card:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-}
-
-.step-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.step-number {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--foreground-subtle);
-}
-
-.step-icon-box {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-sm);
-  background-color: var(--surface-raised);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-emerald);
-}
-
-.step-title {
+.editorial-panel-title {
   margin: 0;
-  font-size: 1.02rem;
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ========================================================= */
+/* 5. System Workflow Diagram (Flowchart)                    */
+/* ========================================================= */
+.flowchart-container {
+  width: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 14px);
+  padding: 2rem 2.25rem;
+  margin: 1.5rem 0 2.5rem 0;
+  box-sizing: border-box;
+}
+
+.flowchart-header {
+  margin-bottom: 1.75rem;
+}
+
+.flowchart-title {
+  margin: 0 0 0.35rem 0;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--foreground);
 }
 
-.step-desc {
+.flowchart-subtitle {
   margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.55;
+  font-size: 0.94rem;
   color: var(--foreground-muted);
+  line-height: 1.5;
 }
 
-/* 10. System Metrics Grid */
-.overview-metrics-section {
+.pipeline-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
   width: 100%;
-  margin-top: 4.5rem;
 }
 
-.overview-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.pipeline-node {
+  width: 100%;
+  max-width: 820px;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 1.25rem;
+  box-sizing: border-box;
+  transition: border-color var(--transition-theme);
 }
 
-.metric-box {
+.pipeline-node-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pipeline-step-badge {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.pipeline-node-title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.pipeline-node-detail {
+  font-size: 0.88rem;
+  color: var(--foreground-muted);
+  margin: 0.2rem 0 0 0;
+}
+
+.pipeline-node-tag {
+  font-family: var(--font-mono);
+  font-size: 0.80rem;
+  color: var(--foreground-subtle);
   background-color: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md, 10px);
-  padding: 1.5rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.pipeline-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground-subtle);
+  height: 20px;
+}
+
+/* Parallel ML Models Box */
+.pipeline-parallel-group {
+  width: 100%;
+  max-width: 820px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.pipeline-parallel-card {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  text-align: left;
 }
 
-.metric-val-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+.pipeline-parallel-card.forecasting {
+  border-top: 3px solid var(--accent-emerald);
 }
 
-.metric-val {
-  font-family: var(--font-mono);
-  font-size: 1.85rem;
-  font-weight: 700;
-  color: var(--foreground);
+.pipeline-parallel-card.segmentation {
+  border-top: 3px solid var(--accent-blue);
 }
 
-.metric-unit {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--accent-emerald);
-  text-transform: uppercase;
+.pipeline-parallel-card.anomalies {
+  border-top: 3px solid var(--accent-rose);
 }
 
-.metric-label {
-  font-size: 0.95rem;
+.pipeline-card-title {
+  font-size: 0.98rem;
   font-weight: 600;
   color: var(--foreground);
+  margin: 0;
 }
 
-.metric-desc {
-  font-size: 0.84rem;
+.pipeline-card-engine {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--foreground-subtle);
+  margin: 0;
+}
+
+.pipeline-card-desc {
+  font-size: 0.86rem;
+  color: var(--foreground-muted);
   line-height: 1.5;
+  margin: 0.35rem 0 0 0;
+}
+
+/* ========================================================= */
+/* 6. Capabilities Horizontal Stack                          */
+/* ========================================================= */
+.capability-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1.75rem;
+}
+
+.capability-row {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.35rem;
+  transition: border-color var(--transition-theme);
+}
+
+.capability-row:hover {
+  border-color: var(--border-strong);
+}
+
+.capability-row-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.capability-row-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.capability-row-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.capability-row-desc {
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.65;
   color: var(--foreground-muted);
 }
 
-/* 11. Responsive Media Queries */
+/* ========================================================= */
+/* 7. Archetypes Layout (2x2 Clean Panels)                  */
+/* ========================================================= */
+.archetypes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.archetype-panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.archetype-badge {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.archetype-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.archetype-timing {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  color: var(--foreground-subtle);
+  margin: 0;
+}
+
+.archetype-description {
+  margin: 0.35rem 0 0 0;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--foreground-muted);
+}
+
+/* ========================================================= */
+/* 8. Technical Approach Callouts                           */
+/* ========================================================= */
+.technical-callout-panel {
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  padding: 1.65rem 2rem;
+  margin: 1.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.technical-callout-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--foreground-subtle);
+}
+
+.technical-callout-content {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--foreground-muted);
+  margin: 0;
+}
+
+.technical-callout-content strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+/* ========================================================= */
+/* 9. Research Conclusion Banner                            */
+/* ========================================================= */
+.overview-research-verdict-card {
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-lg, 14px);
+  padding: 2.5rem 2.75rem;
+  transition: background-color var(--transition-theme), border-color var(--transition-theme);
+}
+
+.verdict-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.verdict-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-indigo);
+  background-color: color-mix(in srgb, var(--accent-indigo) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-indigo) 30%, transparent);
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-full);
+}
+
+.verdict-title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.35;
+}
+
+.verdict-statement {
+  margin: 0;
+  font-size: 1.18rem;
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--foreground);
+  font-style: italic;
+  border-left: 3px solid var(--accent-indigo);
+  padding-left: 1.35rem;
+}
+
+.verdict-subtext {
+  margin: 0;
+  font-size: 1.0rem;
+  line-height: 1.7;
+  color: var(--foreground-muted);
+}
+
+/* ========================================================= */
+/* 10. Responsive Media Queries                             */
+/* ========================================================= */
 @media (max-width: 1024px) {
   .overview-grid {
+    grid-template-columns: 1fr;
     gap: 1.75rem;
   }
-  .overview-panel-body {
-    padding: 1.75rem;
+
+  .archetypes-grid {
+    grid-template-columns: 1fr;
   }
-  .overview-panel-title {
-    font-size: 1.35rem;
-    min-height: auto;
-  }
-  .overview-walkthrough-grid,
-  .overview-metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
+
+  .pipeline-parallel-group {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .overview-page-container {
-    padding: 2.5rem 1.25rem 4rem 1.25rem;
+    padding: 2rem 1.25rem 4rem 1.25rem;
   }
+
   .overview-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
-  .overview-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+
+  .overview-main-title {
+    font-size: 2.1rem;
   }
+
+  .overview-lead-paragraph {
+    font-size: 1.05rem;
+  }
+
   .overview-panel-visual {
-    height: 220px;
+    height: 190px;
   }
-  .overview-panel-title {
-    min-height: auto;
-  }
-  .overview-walkthrough-grid,
-  .overview-metrics-grid {
-    grid-template-columns: 1fr;
-  }
+
+  .editorial-text-panel,
+  .flowchart-container,
   .overview-research-verdict-card {
-    padding: 1.75rem 1.25rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .pipeline-node {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .capability-row {
+    flex-direction: column;
   }
 }
-

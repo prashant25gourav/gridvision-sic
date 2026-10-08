@@ -116,20 +116,20 @@ export const LoadChart: React.FC<LoadChartProps> = ({
           gap: '0.75rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.82rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.88rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span
               style={{
-                width: '12px',
-                height: '3px',
+                width: '14px',
+                height: '2.5px',
                 backgroundColor: 'var(--accent-emerald)',
-                borderRadius: '2px',
+                borderRadius: '1px',
               }}
             />
             <span style={{ color: 'var(--foreground)', fontWeight: 600 }}>{actualLabel}</span>
           </div>
           {hasBaseline && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span
                 style={{
                   width: '14px',
@@ -144,11 +144,11 @@ export const LoadChart: React.FC<LoadChartProps> = ({
 
         <div
           style={{
-            fontSize: '0.76rem',
+            fontSize: '0.84rem',
             fontFamily: 'var(--font-mono)',
             color: 'var(--foreground-subtle)',
             backgroundColor: 'var(--surface-raised)',
-            padding: '0.2rem 0.55rem',
+            padding: '0.25rem 0.65rem',
             borderRadius: 'var(--radius-sm)',
             border: '1px solid var(--border)',
           }}
@@ -168,7 +168,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
         >
           <defs>
             <linearGradient id="loadAreaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity="0.28" />
+              <stop offset="0%" stopColor="var(--accent-emerald)" stopOpacity="0.08" />
               <stop offset="100%" stopColor="var(--accent-emerald)" stopOpacity="0.0" />
             </linearGradient>
           </defs>
@@ -178,7 +178,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
             x={padding.left}
             y={padding.top - 8}
             fill="var(--foreground-subtle)"
-            fontSize="10"
+            fontSize="12"
             fontFamily="var(--font-mono)"
             textAnchor="start"
           >
@@ -196,14 +196,15 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                   x2={padding.left + chartW}
                   y2={y}
                   stroke="var(--border)"
-                  strokeDasharray="4 4"
+                  strokeDasharray="3 3"
                   strokeWidth="1"
+                  opacity="0.65"
                 />
                 <text
                   x={padding.left - 8}
                   y={y + 4}
                   fill="var(--foreground-subtle)"
-                  fontSize="11"
+                  fontSize="12"
                   textAnchor="end"
                   fontFamily="var(--font-mono)"
                 >
@@ -220,7 +221,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
             x2={padding.left + chartW}
             y2={padding.top + chartH}
             stroke="var(--border-strong)"
-            strokeWidth="1.5"
+            strokeWidth="1"
           />
 
           {/* Area fill */}
@@ -232,9 +233,9 @@ export const LoadChart: React.FC<LoadChartProps> = ({
               d={baselinePath}
               fill="none"
               stroke="var(--accent-amber)"
-              strokeWidth="2"
-              strokeDasharray="5 4"
-              opacity="0.9"
+              strokeWidth="1.75"
+              strokeDasharray="4 3"
+              opacity="0.85"
             />
           )}
 
@@ -243,7 +244,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
             d={actualPath}
             fill="none"
             stroke="var(--accent-emerald)"
-            strokeWidth="2.5"
+            strokeWidth="1.9"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -276,9 +277,9 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                 {showTick && (
                   <text
                     x={x}
-                    y={padding.top + chartH + 18}
+                    y={padding.top + chartH + 20}
                     fill="var(--foreground-subtle)"
-                    fontSize="11"
+                    fontSize="12"
                     textAnchor="middle"
                     fontFamily="var(--font-mono)"
                   >
@@ -295,13 +296,13 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                       x2={x}
                       y2={padding.top + chartH}
                       stroke="var(--border-strong)"
-                      strokeWidth="1.5"
+                      strokeWidth="1"
                       strokeDasharray="3 3"
                     />
                     <circle
                       cx={x}
                       cy={actualY}
-                      r="5.5"
+                      r="4.5"
                       fill="var(--accent-emerald)"
                       stroke="var(--surface)"
                       strokeWidth="2"
@@ -310,7 +311,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                       <circle
                         cx={x}
                         cy={baselineY}
-                        r="4.5"
+                        r="4"
                         fill="var(--accent-amber)"
                         stroke="var(--surface)"
                         strokeWidth="2"
@@ -337,12 +338,12 @@ export const LoadChart: React.FC<LoadChartProps> = ({
               backgroundColor: 'var(--surface-raised)',
               border: '1px solid var(--border-strong)',
               borderRadius: 'var(--radius-sm)',
-              padding: '0.55rem 0.85rem',
+              padding: '0.65rem 0.95rem',
               boxShadow: 'var(--shadow-md)',
               pointerEvents: 'none',
               zIndex: 10,
-              fontSize: '0.8rem',
-              minWidth: '170px',
+              fontSize: '0.86rem',
+              minWidth: '180px',
             }}
           >
             <div
@@ -351,8 +352,8 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 borderBottom: '1px solid var(--border)',
-                paddingBottom: '0.3rem',
-                marginBottom: '0.4rem',
+                paddingBottom: '0.35rem',
+                marginBottom: '0.45rem',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 600,
                 color: 'var(--foreground)',
@@ -364,8 +365,8 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                   style={{
                     backgroundColor: 'rgba(245, 158, 11, 0.15)',
                     color: 'var(--accent-amber)',
-                    fontSize: '0.68rem',
-                    padding: '0.1rem 0.35rem',
+                    fontSize: '0.74rem',
+                    padding: '0.12rem 0.4rem',
                     borderRadius: '2px',
                     fontWeight: 700,
                   }}
@@ -375,7 +376,7 @@ export const LoadChart: React.FC<LoadChartProps> = ({
               )}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
                 <span style={{ color: 'var(--foreground-muted)' }}>{actualLabel}:</span>
                 <strong style={{ color: 'var(--accent-emerald)', fontFamily: 'var(--font-mono)' }}>
@@ -396,11 +397,11 @@ export const LoadChart: React.FC<LoadChartProps> = ({
                     display: 'flex',
                     justifyContent: 'space-between',
                     gap: '0.75rem',
-                    fontSize: '0.74rem',
+                    fontSize: '0.80rem',
                     color: 'var(--foreground-subtle)',
                     borderTop: '1px dashed var(--border)',
-                    paddingTop: '0.25rem',
-                    marginTop: '0.15rem',
+                    paddingTop: '0.3rem',
+                    marginTop: '0.2rem',
                   }}
                 >
                   <span>Absolute Error:</span>
