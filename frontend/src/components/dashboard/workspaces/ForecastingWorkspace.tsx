@@ -6,7 +6,6 @@ import {
   Info,
   User,
   Users,
-  ArrowRight,
 } from 'lucide-react';
 import { LoadChart } from '../../charts/LoadChart';
 import {
@@ -34,9 +33,7 @@ function formatConsumerId(rawId: string): string {
   return `Consumer ${rawId}`;
 }
 
-export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = ({
-  onNavigateOverview,
-}) => {
+export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = () => {
   const [portalData, setPortalData] = useState<ForecastPortalData | null>(null);
   const [households, setHouseholds] = useState<HouseholdSummary[]>([]);
   const [viewMode, setViewMode] = useState<'consumer' | 'cohort'>('consumer');
@@ -189,19 +186,6 @@ export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = ({
               Day-ahead demand predictions, forecast error, and peak timing.
             </p>
           </div>
-
-          {onNavigateOverview && (
-            <button
-              type="button"
-              className="workspace-link-btn"
-              onClick={() => onNavigateOverview('overview-forecasting')}
-              style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
-              title="Learn how demand forecasting works on the Overview page"
-            >
-              <span>Learn about demand forecasting</span>
-              <ArrowRight size={14} />
-            </button>
-          )}
         </div>
       </header>
 

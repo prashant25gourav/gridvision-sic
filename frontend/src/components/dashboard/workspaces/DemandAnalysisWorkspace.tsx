@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { ArrowRight } from 'lucide-react';
 import { LoadChart } from '../../charts/LoadChart';
 import {
   fetchDemandAnalysis,
@@ -34,9 +33,7 @@ const AVAILABLE_WINDOWS = [
 /** Default viewport width in days */
 const DEFAULT_VIEWPORT_DAYS = 7;
 
-export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = ({
-  onNavigateOverview,
-}) => {
+export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = () => {
   const [selectedWindow, setSelectedWindow] = useState<string>('W14');
   const [data, setData] = useState<DemandAnalysisData | null>(null);
   const [activeTab, setActiveTab] = useState<'load_curve' | 'daily' | 'weekly' | 'longitudinal' | 'seasonal'>('daily');
@@ -276,20 +273,6 @@ export const DemandAnalysisWorkspace: React.FC<DemandAnalysisWorkspaceProps> = (
                 ))}
               </select>
             </div>
-
-            {/* Consistent top-right Overview link matching AI Copilot / Forecast */}
-            {onNavigateOverview && (
-              <button
-                type="button"
-                className="workspace-link-btn"
-                onClick={() => onNavigateOverview('overview-demand')}
-                style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
-                title="Learn how demand analysis works on the Overview page"
-              >
-                <span>Learn about demand analysis</span>
-                <ArrowRight size={14} />
-              </button>
-            )}
           </div>
         </div>
       </header>

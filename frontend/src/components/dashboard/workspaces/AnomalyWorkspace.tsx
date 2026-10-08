@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { fetchAnomaliesAnalysis, type AnomaliesAnalysisData } from '../../../services/api';
 import './Workspaces.css';
 
@@ -69,9 +69,7 @@ function getWhatWasDetected(pattern: string, triggeringStat?: string): string {
   return 'The consumer exhibited an unusual demand pattern compared with its historical consumption baseline.';
 }
 
-export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
-  onNavigateOverview,
-}) => {
+export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = () => {
   const [data, setData] = useState<AnomaliesAnalysisData | null>(null);
   const [selectedWindow, setSelectedWindow] = useState<string>('W14');
   const [severityFilter, setSeverityFilter] = useState<'all' | 'extreme' | 'elevated' | 'mild'>('all');
@@ -214,20 +212,6 @@ export const AnomalyWorkspace: React.FC<AnomalyWorkspaceProps> = ({
                 ))}
               </select>
             </div>
-
-            {/* Consistent top-right Overview link matching other workspaces */}
-            {onNavigateOverview && (
-              <button
-                type="button"
-                className="workspace-link-btn"
-                onClick={() => onNavigateOverview('overview-anomalies')}
-                style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
-                title="Learn how anomaly detection works on the Overview page"
-              >
-                <span>Learn about anomaly analysis</span>
-                <ArrowRight size={14} />
-              </button>
-            )}
           </div>
         </div>
       </header>

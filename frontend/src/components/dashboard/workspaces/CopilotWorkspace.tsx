@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, ArrowRight, Sparkles, CheckCircle2, Bot } from 'lucide-react';
+import { Send, Sparkles, CheckCircle2, Bot } from 'lucide-react';
 import { sendChatMessage, fetchHouseholds, type HouseholdSummary, type ToolCall } from '../../../services/api';
 import './Workspaces.css';
 
@@ -27,9 +27,7 @@ function formatConsumerId(rawId: string): string {
   return `Consumer ${rawId}`;
 }
 
-export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
-  onNavigateOverview,
-}) => {
+export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = () => {
   const [messages, setMessages] = useState<ExtendedCopilotMessage[]>([
     {
       id: 'initial-1',
@@ -171,19 +169,6 @@ export const CopilotWorkspace: React.FC<CopilotWorkspaceProps> = ({
               Intelligent energy analytics assistant answering questions about demand, forecasts, consumer profiles, and anomalies.
             </p>
           </div>
-
-          {onNavigateOverview && (
-            <button
-              type="button"
-              className="workspace-link-btn"
-              onClick={() => onNavigateOverview('overview-copilot')}
-              style={{ fontSize: '0.82rem', alignSelf: 'flex-start' }}
-              title="Learn how the AI Copilot works on the Overview page"
-            >
-              <span>Learn about AI Copilot</span>
-              <ArrowRight size={14} />
-            </button>
-          )}
         </div>
       </header>
 

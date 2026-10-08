@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, ArrowRight, Search } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 import {
   fetchConsumerRankings,
   fetchConsumerProfile,
@@ -57,7 +57,6 @@ function formatConsumerId(rawId: string): string {
 
 export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspaceProps> = ({
   initialTab = 'rankings',
-  onNavigateOverview,
 }) => {
   const [selectedWindow, setSelectedWindow] = useState<string>('W14');
   const [activeTab, setActiveTab] = useState<TabType>(
@@ -291,20 +290,6 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                 ))}
               </select>
             </div>
-
-            {/* Consistent top-right Overview link matching AI Copilot / Forecast */}
-            {onNavigateOverview && (
-              <button
-                type="button"
-                className="workspace-link-btn"
-                onClick={() => onNavigateOverview('overview-segmentation')}
-                style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
-                title="Learn how consumer intelligence and segmentation work on the Overview page"
-              >
-                <span>Learn about consumer intelligence</span>
-                <ArrowRight size={14} />
-              </button>
-            )}
           </div>
         </div>
       </header>

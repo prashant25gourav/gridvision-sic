@@ -4,7 +4,6 @@ import {
   Activity,
   TrendingUp,
   Clock,
-  ArrowRight,
 } from 'lucide-react';
 import { LoadChart } from '../../charts/LoadChart';
 import {
@@ -41,9 +40,7 @@ const AVAILABLE_WINDOWS = [
   { id: 'W14', label: 'W14' },
 ];
 
-export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProps> = ({
-  onNavigateOverview,
-}) => {
+export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProps> = () => {
   const [selectedWindow, setSelectedWindow] = useState<string>('W14');
   const [overview, setOverview] = useState<GridOverviewData | null>(null);
   const [demandAnalysis, setDemandAnalysis] = useState<DemandAnalysisData | null>(null);
@@ -225,19 +222,6 @@ export const DashboardOverviewWorkspace: React.FC<DashboardOverviewWorkspaceProp
                 ))}
               </select>
             </div>
-
-            {onNavigateOverview && (
-              <button
-                type="button"
-                className="workspace-link-btn"
-                onClick={() => onNavigateOverview('overview-demand')}
-                style={{ fontSize: '0.82rem', padding: '0.35rem 0.65rem' }}
-                title="Learn how demand analytics and diurnal profiles work on the Overview page"
-              >
-                <span>Learn about demand analytics</span>
-                <ArrowRight size={14} />
-              </button>
-            )}
           </div>
         </div>
       </header>

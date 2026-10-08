@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { DashboardSection } from '../../types/dashboard';
 import './OverviewGateway.css';
 
@@ -34,7 +34,7 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
     <article className="overview-page-container">
       <div className="overview-inner">
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION                                                           */}
+        {/* 1. HERO SECTION (CLEAN & EDITORIAL, NO CTA BUTTONS)                       */}
         {/* ========================================================================= */}
         <header className="overview-hero">
           <span className="overview-brand-kicker">GRIDVISION</span>
@@ -51,25 +51,6 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
             and a grounded AI Copilot to help users understand electricity consumption across households
             and over time.
           </p>
-
-          <div className="overview-hero-actions">
-            <button
-              type="button"
-              className="overview-btn-primary"
-              onClick={onLaunchDashboard}
-            >
-              <span>Launch Dashboard</span>
-              <ArrowRight size={16} />
-            </button>
-            <button
-              type="button"
-              className="overview-btn-text"
-              onClick={() => scrollTo('overview-intro')}
-            >
-              <span>Learn How It Works</span>
-              <ArrowDown size={14} />
-            </button>
-          </div>
         </header>
 
         {/* ========================================================================= */}
@@ -105,7 +86,7 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
 
           <p className="overview-prose">
             Smart meters generate large volumes of electricity readings every day. The challenge is not
-            simply collecting those measurements — it is turning them into information that people can
+            simply collecting those measurements, but turning them into information that people can
             understand and act on.
           </p>
 
@@ -278,8 +259,8 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
               </button>
             </div>
             <p className="overview-prose">
-              Demand Analysis shows how electricity consumption changes throughout the day, across weekdays
-              and weekends, and across the available observation windows.
+              Explore how electricity demand changes throughout the day, compare weekday and weekend behavior,
+              and examine longer-term patterns across the observation windows.
             </p>
             <div className="overview-feature-pills">
               <span className="overview-pill">48 Half-Hour Slots / Day</span>
@@ -303,8 +284,8 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
               </button>
             </div>
             <p className="overview-prose">
-              GridVision groups households with similar electricity-consumption behavior using K-Means clustering (K = 4).
-              Households are characterized across 8 standardized behavioral dimensions:
+              Understand household consumption behavior through rankings, individual profiles, load characteristics,
+              and behavioral segmentation. Households are grouped using K-Means clustering (K = 4) across 8 standardized dimensions:
             </p>
             <ul className="overview-feature-list" style={{ marginTop: '0.25rem' }}>
               <li>
@@ -324,31 +305,38 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
                 <span><strong>Weekday/weekend contrast &amp; peak timing:</strong> Workday differential and typical time of day for peak usage.</span>
               </li>
             </ul>
-            <p className="overview-prose" style={{ marginTop: '0.4rem' }}>
-              The workspace includes cluster archetype comparisons, consumer rankings by load factor and peak intensity,
-              and individual household profile searches.
-            </p>
+            <div className="overview-feature-pills" style={{ marginTop: '0.65rem' }}>
+              <span className="overview-pill">Cohort Load Rankings</span>
+              <span className="overview-pill">Load Factor Analysis</span>
+              <span className="overview-pill">Peak-to-Average Distribution</span>
+              <span className="overview-pill">Individual Meter Profiles</span>
+            </div>
           </div>
 
-          {/* 3. Anomaly Detection */}
+          {/* 3. Anomaly Analysis */}
           <div className="overview-workspace-item">
             <div className="overview-workspace-header">
-              <h3 className="overview-workspace-title">Anomaly Detection</h3>
+              <h3 className="overview-workspace-title">Anomaly Analysis</h3>
               <button
                 type="button"
                 className="overview-open-btn"
                 onClick={() => handleOpenSection('anomalies')}
               >
-                <span>Open Anomaly Detection</span>
+                <span>Open Anomaly Analysis</span>
                 <ArrowRight size={14} />
               </button>
             </div>
             <p className="overview-prose">
-              GridVision uses Isolation Forest to identify unusual electricity-consumption patterns.
-              Across the verified analytical windows, <strong>310 anomalies</strong> were detected.
-              Unusual observations are surfaced for further investigation, helping analysts spot unexpected
-              demand surges or departures from baseline behavior.
+              Investigate unusual consumption patterns identified by the anomaly detection pipeline and examine
+              where attention may be needed. GridVision uses Isolation Forest to screen multidimensional feature departures,
+              surfacing <strong>310 detected anomalies</strong> across the analyzed observation windows.
             </p>
+            <div className="overview-feature-pills">
+              <span className="overview-pill">Isolation Forest Algorithm</span>
+              <span className="overview-pill">310 Detected Anomalies</span>
+              <span className="overview-pill">Household Anomaly Scores</span>
+              <span className="overview-pill">Window Distribution Tracking</span>
+            </div>
           </div>
 
           {/* 4. Demand Forecasting */}
@@ -365,46 +353,48 @@ export const OverviewGateway: React.FC<OverviewGatewayProps> = ({
               </button>
             </div>
             <p className="overview-prose">
-              GridVision uses a global gradient-boosted forecasting model to predict future half-hour electricity
-              demand from historical consumption patterns, benchmarked against seasonal-naive baselines.
+              Explore predicted electricity demand, forecast performance, peak demand behavior, and the relationship
+              between actual and predicted consumption. GridVision uses a global gradient-boosted forecasting model
+              to predict half-hour electricity demand, benchmarked against seasonal-naive baselines.
             </p>
             <div className="overview-feature-pills">
               <span className="overview-pill">Forecast MAE: 0.081 kW</span>
               <span className="overview-pill">14,805,504 Half-Hour Predictions Generated</span>
               <span className="overview-pill">Day-Ahead Half-Hourly Dispatch Horizon</span>
+              <span className="overview-pill">Actual vs. Predicted Evaluation</span>
+            </div>
+          </div>
+
+          {/* 5. AI Copilot */}
+          <div id="overview-copilot" className="overview-workspace-item">
+            <div className="overview-workspace-header">
+              <h3 className="overview-workspace-title">AI Copilot</h3>
+              <button
+                type="button"
+                className="overview-open-btn"
+                onClick={() => handleOpenSection('copilot')}
+              >
+                <span>Open AI Copilot</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <p className="overview-prose">
+              Ask GridVision questions in natural language and receive answers grounded in the platform&apos;s
+              analytical results and project knowledge. The Copilot combines verified data lookups with interactive
+              assistance so analysts can query aggregate statistics, compare behavioral clusters, check anomaly counts,
+              or examine specific observation windows.
+            </p>
+            <div className="overview-feature-pills">
+              <span className="overview-pill">Grounded Analytical Responses</span>
+              <span className="overview-pill">Natural-Language Queries</span>
+              <span className="overview-pill">Deterministic Metric Lookups</span>
+              <span className="overview-pill">Interactive Exploration</span>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. AI COPILOT                                                             */}
-        {/* ========================================================================= */}
-        <section id="overview-copilot" className="overview-section" aria-label="AI Copilot">
-          <h2 className="overview-section-title">AI Copilot</h2>
-
-          <p className="overview-prose">
-            Ask GridVision questions in natural language. The Copilot combines project knowledge with
-            deterministic analytical tools so that numerical answers are grounded in the system&apos;s computed results.
-          </p>
-
-          <p className="overview-prose">
-            Analysts can query aggregate demand statistics, compare behavioral clusters, check anomaly counts,
-            or inspect specific observation windows without writing database queries.
-          </p>
-
-          <button
-            type="button"
-            className="overview-btn-primary"
-            onClick={() => handleOpenSection('copilot')}
-            style={{ alignSelf: 'flex-start', marginTop: '0.25rem' }}
-          >
-            <span>Open AI Copilot</span>
-            <ArrowRight size={15} />
-          </button>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 8. OPEN DASHBOARD CALL TO ACTION                                          */}
+        {/* 7. OPEN DASHBOARD CALL TO ACTION                                          */}
         {/* ========================================================================= */}
         <section className="overview-bottom-cta">
           <h3 className="overview-bottom-title">Explore the Live Platform</h3>
