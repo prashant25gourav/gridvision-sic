@@ -1,6 +1,6 @@
-"""Household metadata loader and tariff validation (P1).
+"""Household metadata loader and tariff validation.
 
-Authoritative source: GridVision Master Plan v4 §3.1-3.3.
+Dataset metadata counts:
 Expected counts:
 - 5,566 total households
 - 4,443 flat-rate (stdorToU == 'Std') households

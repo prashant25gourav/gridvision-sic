@@ -1,7 +1,7 @@
-"""Integration tests for GridVision FastAPI backend and RAG Copilot (P4).
+"""Integration tests for GridVision FastAPI backend and RAG Copilot.
 
 Validates:
-- Blueprint v2 §F API contracts (/overview, /household/..., /chat)
+- API endpoint contracts (/overview, /household/..., /chat)
 - 404 error handling for unknown households
 - Tool execution and numeric traceability grounding checks
 """
@@ -33,7 +33,7 @@ def test_health_check(client):
 
 
 def test_overview_endpoint(client):
-    """Verify GET /overview schema matching Blueprint v2 §F.1."""
+    """Verify GET /overview schema."""
     res = client.get("/overview")
     assert res.status_code == 200
     data = res.json()
@@ -79,7 +79,7 @@ def test_households_list_endpoint(client):
 
 
 def test_household_segment_endpoint(client):
-    """Verify GET /household/{id}/segment matching Blueprint v2 §F.3."""
+    """Verify GET /household/{id}/segment schema."""
     known_hhs = store.get_known_households()
     assert len(known_hhs) > 0
     test_hh = known_hhs[0]
@@ -99,7 +99,7 @@ def test_household_segment_endpoint(client):
 
 
 def test_household_instability_endpoint(client):
-    """Verify GET /household/{id}/instability matching Blueprint v2 §F.4."""
+    """Verify GET /household/{id}/instability schema."""
     known_hhs = store.get_known_households()
     test_hh = known_hhs[0]
 
@@ -122,7 +122,7 @@ def test_household_instability_endpoint(client):
 
 
 def test_household_anomaly_endpoint(client):
-    """Verify GET /household/{id}/anomaly matching Blueprint v2 §F.5."""
+    """Verify GET /household/{id}/anomaly schema."""
     known_hhs = store.get_known_households()
     test_hh = known_hhs[0]
 
@@ -145,7 +145,7 @@ def test_household_anomaly_endpoint(client):
 
 
 def test_household_forecast_endpoint(client):
-    """Verify GET /household/{id}/forecast matching Blueprint v2 §F.2."""
+    """Verify GET /household/{id}/forecast schema."""
     known_hhs = store.get_known_households()
     test_hh = known_hhs[0]
 
@@ -173,7 +173,7 @@ def test_household_forecast_endpoint(client):
 
 
 def test_copilot_chat_endpoint(client):
-    """Verify POST /chat matching Blueprint v2 §F.6."""
+    """Verify POST /chat endpoint."""
     known_hhs = store.get_known_households()
     test_hh = known_hhs[0]
 

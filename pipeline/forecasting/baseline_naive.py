@@ -1,8 +1,6 @@
-"""Seasonal-naive baseline forecaster module for GridVision (P2).
+"""Seasonal-naive baseline forecaster module for GridVision.
 
-Implements the locked sanity floor baseline forecaster specified in:
-- Master Plan v4 §8.7 / §11 / §20 (Definition of Done)
-- Implementation Blueprint v2 §C / §D
+Implements the baseline benchmark forecaster:
 
 Definition of Seasonal-Naive Baseline:
 For each household h and calendar transition w -> w+1, the seasonal-naive prediction

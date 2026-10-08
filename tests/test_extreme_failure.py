@@ -1,4 +1,4 @@
-"""Tests for extreme-failure threshold derivation and acyclic dependency (P2)."""
+"""Tests for extreme-failure threshold derivation and acyclic dependency."""
 
 import json
 from pathlib import Path
@@ -8,7 +8,7 @@ from pipeline.research.extreme_failure import derive_extreme_failure_threshold
 
 
 def test_extreme_failure_threshold_artifact():
-    """Verify extreme_failure_threshold.json matches Contract §3 schema."""
+    """Verify extreme_failure_threshold.json matches expected schema."""
     latest = get_artifacts_dir("latest")
     json_path = latest / "extreme_failure_threshold.json"
     assert json_path.exists(), "extreme_failure_threshold.json does not exist!"

@@ -1,4 +1,4 @@
-"""Integration tests verifying generated artifacts against Blueprint v2 and Contract §3."""
+"""Integration tests verifying generated artifacts against pipeline schemas."""
 
 from pathlib import Path
 import pandas as pd

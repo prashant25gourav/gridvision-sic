@@ -1,9 +1,9 @@
-"""Instability and volatility metrics module for GridVision (P1).
+"""Instability and volatility metrics module for GridVision.
 
 Calculates persistence, behavioral instability, and consumption volatility (CV)
 for Analysis windows.
 
-Locked Metric Formulations (Master Plan v4 §8.4/§8.5 & Blueprint v2 §C.6/§D.3):
+Metric Formulations:
 - Grain: Analysis windows ONLY. Calibration windows and Holdout windows do not
   produce rows in this table.
 - Transition counting:

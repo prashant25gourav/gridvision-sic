@@ -1,7 +1,7 @@
-"""Quality report generation for GridVision (P1).
+"""Quality report generation for GridVision.
 
 Produces data_quality_report.json recording dataset health, window usability,
-and stratification counts matching Master Plan v4 §3.
+and stratification counts.
 """
 
 from pathlib import Path

@@ -330,9 +330,9 @@ def run_pipeline(
             output_dir=run_dir,
         )
 
-        # 18. Holdout Evaluation (Governance Guard: Issue 3 / DEC-010 / DEC-015)
+        # 18. Holdout Evaluation
         if not skip_holdout:
-            logger.info("Stage 17: Forward-only holdout evaluation (Day 19 protocol)...")
+            logger.info("Stage 17: Forward-only holdout evaluation...")
             try:
                 evaluate_holdout(
                     research_table_df=res_table,

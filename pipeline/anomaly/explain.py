@@ -1,8 +1,8 @@
-"""Feature-based anomaly explanation module for GridVision (P3).
+"""Feature-based anomaly explanation module for GridVision.
 
 Implements statistical deviation explanations for behavioral anomalies.
 
-Locked Architectural Rules (Master Plan v4 §10 & Blueprint v2 §F.5):
+Architectural Rules:
 - Scoped strictly to feature-based deviation (NOT SHAP).
   SHAP is reserved strictly for global forecaster explainability.
 - Identifies the primary triggering statistic, baseline statistics,

@@ -26,7 +26,7 @@ def artifacts_dir():
 
 
 def test_anomaly_flags_artifact_schema(artifacts_dir):
-    """Verify anomaly_flags.parquet schema and constraints (Blueprint v2 §C/§F.5)."""
+    """Verify anomaly_flags.parquet schema and constraints."""
     path = artifacts_dir / "anomaly_flags.parquet"
     assert path.exists(), "anomaly_flags.parquet not found"
 
@@ -132,7 +132,7 @@ def test_anomaly_benchmark_artifact(artifacts_dir):
 
 
 def test_shap_explanations_artifact(artifacts_dir):
-    """Verify shap_explanations.parquet schema and global forecaster scoping (Blueprint v2 §C)."""
+    """Verify shap_explanations.parquet schema and global forecaster scoping."""
     path = artifacts_dir / "shap_explanations.parquet"
     assert path.exists(), "shap_explanations.parquet not found"
 

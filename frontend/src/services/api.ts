@@ -1,7 +1,7 @@
 /**
- * GridVision API Client (P4).
+ * GridVision API Client.
  *
- * Connects React frontend views to FastAPI endpoints matching Blueprint v2 §F.
+ * Connects React frontend views to FastAPI endpoints.
  * Includes graceful fallbacks in case the backend server is temporarily starting up.
  */
 

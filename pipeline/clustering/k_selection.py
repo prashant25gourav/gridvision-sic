@@ -1,9 +1,9 @@
-"""K Selection module for GridVision clustering (P1).
+"""K Selection module for GridVision clustering.
 
 Performs silhouette sweep (k=3..8) on behavioral features pooled across every
 household's own calibration windows (Calibration Window 1 and 2).
 
-Locked Research Rules (Master Plan v4 §8.3 & Blueprint v2 §D):
+Research Rules:
 - Calibration windows ONLY: Features from Analysis or Holdout periods must NEVER
   be seen during K selection.
 - Fixed globally: K is fixed once from calibration features and reused forward.

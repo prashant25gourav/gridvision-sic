@@ -1,10 +1,10 @@
-"""Per-household calibration forecaster module for GridVision (P2).
+"""Per-household calibration forecaster module for GridVision.
 
 Trains a lightweight model on exactly ONE household's Calibration Window 1,
 predicts that household's Calibration Window 2, and derives its calibration
 residual distribution (Median AE, MAD, MAD-effective).
 
-Locked Research Rules (Master Plan v4 §4.3/§8.5 & Blueprint v2 §C/§D.4):
+Calibration Rules:
 - Per-household ONLY: Trained strictly on one household's own Cal-W1 data.
   Never pooled across households.
 - Leakage isolation: Never receives or imports anything from global_forecaster.py.

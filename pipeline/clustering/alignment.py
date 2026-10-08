@@ -1,9 +1,9 @@
-"""Hungarian algorithm cluster alignment module for GridVision (P1).
+"""Hungarian algorithm cluster alignment module for GridVision.
 
 Chains cluster label alignment across a household's entire usable-window sequence,
 starting from its own first calibration window (Calibration Window 1).
 
-Locked Alignment Design (Master Plan v4 §8.4 & Blueprint v2 §C.5/§D.2):
+Alignment Design:
 - Household isolation: Alignment NEVER crosses households; each household's trajectory
   is aligned strictly against its own preceding usable window.
 - Sequence starts at Calibration Window 1:

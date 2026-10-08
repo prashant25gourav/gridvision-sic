@@ -1,11 +1,11 @@
-"""Forward-only holdout evaluation module for GridVision (P2).
+"""Forward-only holdout evaluation module for GridVision.
 
 Applies the fixed primary statistical model and fixed extreme-failure threshold
 to each eligible household's holdout window (its own LAST usable window).
 
-Locked Research Rules (Master Plan v4 §4.5/§9 & Blueprint v2 §C.12/§D.8):
+Evaluation Rules:
 - Forward-Only: Strictly no fitting or re-tuning.
-- Gate G7 Code Guard: Zero calls to .fit(), .fit_predict(), or any training routine.
+- Guard: Zero calls to .fit(), .fit_predict(), or any training routine.
 - Predecessor Usability Rule: Only households whose immediately preceding calendar
   window was usable are evaluated in the holdout. Ineligible households are tracked.
 - Output Artifact:
@@ -87,7 +87,7 @@ def evaluate_holdout(
     holdout_event_rate = float(holdout_df["is_extreme_failure"].mean())
 
     logger.info(
-        f"Evaluating holdout observations (Day 19 protocol):\n"
+        f"Evaluating holdout observations:\n"
         f"  Total Sampled Households: {total_sampled:,}\n"
         f"  Eligible Holdout Observations: {n_eligible_holdout:,}\n"
         f"  Ineligible Holdout Households (Unusable Calendar Predecessor): {n_ineligible_holdout:,}\n"

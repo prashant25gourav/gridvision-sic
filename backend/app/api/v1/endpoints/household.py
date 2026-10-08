@@ -1,10 +1,10 @@
-"""Household Endpoints (P4).
+"""Household Endpoints.
 
 Implements:
-- GET /household/{household_id}/forecast  (Blueprint v2 §F.2)
-- GET /household/{household_id}/segment   (Blueprint v2 §F.3)
-- GET /household/{household_id}/instability (Blueprint v2 §F.4)
-- GET /household/{household_id}/anomaly   (Blueprint v2 §F.5)
+- GET /household/{household_id}/forecast
+- GET /household/{household_id}/segment
+- GET /household/{household_id}/instability
+- GET /household/{household_id}/anomaly
 - GET /households (Portfolio list for UI search and dropdowns)
 """
 

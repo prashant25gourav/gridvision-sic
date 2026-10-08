@@ -1,6 +1,6 @@
-"""Numeric Traceability and Grounding Enforcement (P4).
+"""Numeric Traceability and Grounding Enforcement.
 
-Implements the strict numeric traceability check specified in Blueprint v2 §F.6 and §H:
+Implements the strict numeric traceability check:
 Every numeric token in the Copilot's answer must trace to a tool-call result
 or retrieved knowledge base passage from the current turn.
 If any unsupported number is introduced, the response is downgraded to grounded: false.

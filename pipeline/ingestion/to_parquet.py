@@ -1,6 +1,6 @@
 """Ingestion module: Converts raw CSV blocks to typed, flat-rate Parquet files.
 
-Master Plan v4 §3 & Blueprint v2 §C/§D:
+Processing rules:
 - Filters households to flat-rate standard tariff only (stdorToU == 'Std').
 - Validates that half-hourly readings are non-negative.
 - Writes partitioned interim Parquet files in data/interim/blocks/block_{i}.parquet.

@@ -1,10 +1,10 @@
-"""Per-cluster forecaster module for GridVision (P2 - Capstone Only).
+"""Per-cluster forecaster module for GridVision.
 
 Trains a separate gradient boosting forecaster for each behavioral cluster
 at calendar window w across all sampled households assigned to that cluster,
 and predicts half-hourly load for window w+1.
 
-Locked Architecture Rules (Master Plan v4 §8.5 & Blueprint v2 §C.11/§D.5):
+Architecture Rules:
 - Capstone Only: Per-cluster forecaster is strictly for the engineering dashboard/UI
   comparison against the global baseline forecaster.
 - ZERO Research Contamination: NEVER feeds the research outcome variable (Extreme Failure).

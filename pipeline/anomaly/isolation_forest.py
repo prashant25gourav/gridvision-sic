@@ -1,9 +1,9 @@
-"""Isolation Forest anomaly detection module for GridVision (P3).
+"""Isolation Forest anomaly detection module for GridVision.
 
 Detects behavioral anomalies across smart meter consumption features using
 unsupervised Isolation Forest and attaches feature-based statistical explanations.
 
-Locked Rules (Master Plan v4 §10 & Contract §3 / Blueprint v2 §C):
+Operational Rules:
 - Unsupervised anomaly detection across 8 behavioral features.
 - Explanation is feature-based deviation (NOT SHAP).
 - Produces:

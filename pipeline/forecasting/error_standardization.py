@@ -1,9 +1,9 @@
-"""Forecast error standardization module for GridVision (P2).
+"""Forecast error standardization module for GridVision.
 
 Standardizes raw absolute forecast errors against each household's own
 calibration residual distribution.
 
-Locked Research Formulations (Master Plan v4 §8.5 & Blueprint v2 §C):
+Research Formulations:
 - Formula:
     StdError(h, w) = (AE(h, w) - calibration_median_ae_h) / mad_effective_h
 - MAD Effective Floor:

@@ -1,6 +1,6 @@
-"""Chat Copilot Endpoint (P4).
+"""Chat Copilot Endpoint.
 
-Implements POST /chat matching Blueprint v2 §F.6.
+Implements POST /chat.
 """
 
 from typing import Any, Dict, List, Optional

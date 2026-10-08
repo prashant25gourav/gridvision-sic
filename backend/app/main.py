@@ -29,11 +29,11 @@ def health():
     return {"status": "ok"}
 
 
-# Include modular v1 API router under /api/v1 and directly at root for Blueprint v2 compatibility
+# Include modular v1 API router under /api/v1 and directly at root for compatibility
 app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(api_router)
 
-# Mount frontend static build if present (per v4 §13 single-container deployment)
+# Mount frontend static build if present (for single-container deployment)
 static_candidates = [
     Path(os.getenv("STATIC_DIR", "")) if os.getenv("STATIC_DIR") else None,
     Path(__file__).resolve().parent.parent.parent / "frontend" / "dist",

@@ -1,6 +1,6 @@
-"""Overview Endpoint (P4).
+"""Overview Endpoint.
 
-Implements GET /overview matching Blueprint v2 §F.1.
+Implements GET /overview.
 """
 
 from fastapi import APIRouter

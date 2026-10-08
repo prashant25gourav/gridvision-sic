@@ -18,14 +18,14 @@ def test_raw_metadata_counts_and_schema():
 
 
 def test_flat_rate_tariff_filtering():
-    """Verify flat-rate tariff filtering against Master Plan v4 §3.2."""
+    """Verify flat-rate tariff filtering."""
     df = get_flat_rate_metadata()
     assert len(df) == 4443
     assert (df["stdorToU"] == "Std").all()
 
 
 def test_acorn_grouped_distribution():
-    """Verify ACORN stratification counts for flat-rate households against Master Plan v4 §3.3."""
+    """Verify ACORN stratification counts for flat-rate households."""
     df = get_flat_rate_metadata()
     counts = df["Acorn_grouped"].value_counts().to_dict()
     assert counts.get("Affluent") == 1702

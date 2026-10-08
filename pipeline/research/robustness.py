@@ -1,6 +1,6 @@
-"""Pre-registered Robustness Suite for GridVision (P2).
+"""Robustness Suite for GridVision.
 
-Implements the pre-registered robustness checks per Master Plan v4 §8.8:
+Implements statistical robustness checks:
 1. Bivariate specification: Failure ~ Instability alone
    (tests whether cluster transitions predict failure without controlling for volatility;
     demonstrates seasonal omitted variable bias).
@@ -10,7 +10,6 @@ Implements the pre-registered robustness checks per Master Plan v4 §8.8:
 3. Documentation of deprioritized checks:
    - Full window-fixed-effects sweep (encounters quasi-complete separation on W04/W05).
    - Placebo and window-length sweeps.
-   Both are deprioritized per the locked Contingency Plan (v4 §17, "cut second").
 
 Outputs:
     data/artifacts/latest/robustness_results.json
@@ -191,7 +190,7 @@ def run_robustness_suite(
             "specification": "y ~ volatility_cv + instability + C(window_w_plus_1)",
             "status": "DEPRIORITIZED",
             "justification": (
-                "Contingency Plan (Master Plan v4 §17, 'cut second'): The 14-window categorical "
+                "The 14-window categorical "
                 "fixed-effects model encounters quasi-complete separation on summer windows (e.g. W04, W05) "
                 "which exhibit zero or near-zero extreme failure events. The is_winter indicator specification "
                 "above provides the robust, non-separated seasonal control."
@@ -200,9 +199,8 @@ def run_robustness_suite(
         "placebo_and_window_length_sweeps": {
             "status": "DEPRIORITIZED",
             "justification": (
-                "Contingency Plan (Master Plan v4 §17, 'cut second'): Additional robustness checks "
-                "beyond the volatility-removed comparison and seasonal control are formally deferred "
-                "under time constraints."
+                "Additional robustness checks "
+                "beyond the volatility-removed comparison and seasonal control are formally deferred."
             ),
         },
     }

@@ -1,4 +1,4 @@
-"""Comprehensive unit tests for P2 Research Pipeline, Gates G4-G7, and Isolation rules."""
+"""Unit tests for Research Pipeline and Isolation rules."""
 
 import ast
 from pathlib import Path
@@ -12,7 +12,7 @@ from pipeline.forecasting.error_standardization import standardize_error, label_
 
 
 def test_static_isolation_research_table():
-    """Gate G5/Blueprint §D.5: build_research_table.py must NEVER import cluster_forecaster."""
+    """Verify build_research_table.py must NEVER import cluster_forecaster."""
     root = get_project_root()
     table_file = root / "pipeline" / "research" / "build_research_table.py"
     assert table_file.exists()

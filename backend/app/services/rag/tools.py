@@ -1,9 +1,9 @@
-"""RAG Copilot Tools (P4).
+"""RAG Copilot Tools.
 
-Implements deterministic tool functions bound to pipeline artifacts matching Blueprint v2 §F/§H.
+Implements deterministic tool functions bound to pipeline artifacts.
 These tools are callable by the Copilot service to retrieve factual household metrics.
 
-Locked Rules (Blueprint v2 §H, Handoff §11):
+Operational Rules:
 - What the Copilot IS allowed to do: retrieve precomputed metrics via tools.
 - What the Copilot is NOT allowed to do: recompute ML models, forecasts, or clusters dynamically.
 """

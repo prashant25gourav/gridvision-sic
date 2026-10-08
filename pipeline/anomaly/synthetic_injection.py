@@ -1,10 +1,10 @@
-"""Synthetic anomaly injection and benchmark evaluation module for GridVision (P3).
+"""Synthetic anomaly injection and benchmark evaluation module for GridVision.
 
 Evaluates Isolation Forest anomaly detection performance using synthetic
 perturbations (spikes, drops/vacations, erratic shifts, flatlines) on real
 smart meter behavioral feature distributions.
 
-Locked Contract Rules (Contract §2/§5 Milestone M9):
+Evaluation Rules:
 - Injects controlled synthetic anomalies with ground truth labels.
 - Evaluates and reports Precision, Recall, F1-score, ROC-AUC, and confusion matrix.
 - Produces:

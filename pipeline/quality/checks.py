@@ -1,6 +1,6 @@
-"""Data quality checks module for GridVision (P1).
+"""Data quality checks module for GridVision.
 
-Enforces locked quality rules from Master Plan v4 §3:
+Enforces data quality rules:
 1. No negative half-hourly readings.
 2. 56-day common-calendar window completeness:
    - >= 95% slot fill (at least 2,554 of 2,688 half-hour slots).

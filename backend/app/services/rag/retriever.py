@@ -1,9 +1,9 @@
-"""RAG Retriever Service (P4).
+"""RAG Retriever Service.
 
 Indexes domain markdown documents in knowledge_base/ and provides
 top-k cosine similarity retrieval over passage chunks.
 
-Runs entirely local and offline (Blueprint v2 §H, Handoff §11).
+Runs entirely local and offline.
 """
 
 from pathlib import Path

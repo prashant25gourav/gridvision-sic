@@ -1,7 +1,7 @@
-"""RAG Copilot Agent Orchestrator (P4).
+"""RAG Copilot Agent Orchestrator.
 
 Orchestrates tool invocation, passage retrieval, answer synthesis,
-and numeric grounding enforcement matching Blueprint v2 §F.6, §H, and Copilot requirements.
+and numeric grounding enforcement.
 """
 
 from typing import Any, Dict, List, Optional

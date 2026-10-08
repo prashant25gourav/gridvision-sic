@@ -1,9 +1,9 @@
-"""K-Means clustering module for GridVision (P1).
+"""K-Means clustering module for GridVision.
 
 Fits K-Means (fixed K=4, random_state=42, n_init=10) on behavioral features
 for every usable window, including calibration windows.
 
-Locked Research Rules (Master Plan v4 §8.3 & Blueprint v2 §C.5/§D):
+Research Rules:
 - Fixed K: Reuses the K selected from the calibration sweep (K=4).
 - Every usable window: Produces raw cluster labels for calibration, analysis, and holdout windows.
 - Role annotation: Assigns window_role as "calibration_1", "calibration_2", "analysis", or "holdout".
@@ -102,8 +102,7 @@ def fit_kmeans_per_window(
     assignments_list: List[pd.DataFrame] = []
     centroids_dict: Dict[str, np.ndarray] = {}
 
-    # Standardize features globally or per window?
-    # Master Plan §8.3 / Blueprint C.5: standardized feature space
+    # Standardized feature space
     # One .fit_predict call per calendar window
     for w_id, w_group in df.groupby("window_id"):
         w_df = w_group.copy().reset_index(drop=True)

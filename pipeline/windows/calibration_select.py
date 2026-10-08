@@ -1,9 +1,9 @@
-"""Calibration window selection module for GridVision (P1).
+"""Calibration window selection module for GridVision.
 
 Identifies each sampled household's own first 2 usable windows as its calibration pair,
 its first Analysis window, and its final usable window (Holdout target).
 
-Locked Calibration Design (Master Plan v4 §5 & Blueprint v2 §D.1):
+Calibration Design:
 - Calibration is per-household: own first 2 usable windows in chronological order.
 - Guarantees n_analysis_windows >= 4 for every qualifying household.
 - Avoids the rolling-enrollment failure mode where a global W01-W02 calibration

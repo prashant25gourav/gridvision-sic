@@ -1,8 +1,8 @@
-"""SHAP explainability module for GridVision (P3).
+"""SHAP explainability module for GridVision.
 
 Computes TreeSHAP feature attributions on the global demand forecaster predictions.
 
-Locked Architectural Rules (Master Plan v4 §10 & Contract §3 / Blueprint v2 §C):
+Architectural Rules:
 - Scoped strictly to the GLOBAL forecaster only.
 - Anomaly explanations are separate (feature-based deviation).
 - Generates feature attribution values (base_value, shap_half_hour, shap_day_of_week,
@@ -25,7 +25,7 @@ from pipeline.windows.calendar import get_calendar_windows
 
 logger = logging.getLogger(__name__)
 
-# Scoped explainability features per Blueprint v2 §C.15 / Master Plan v4 §10
+# Scoped explainability features
 SHAP_FEATURE_COLS = ["half_hour", "day_of_week", "is_weekend", "mean_load", "peak_load", "std_load"]
 
 

@@ -1,5 +1,5 @@
 # GridVision Pipeline Configuration
-# Locked specifications from Master Plan v4 and Implementation Blueprint v2
+# Specifications for data pipeline and artifact generation
 
 project:
   name: "GridVision"

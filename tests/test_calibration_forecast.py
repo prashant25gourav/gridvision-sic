@@ -1,4 +1,4 @@
-"""Tests for per-household calibration forecasting and isolation (P2)."""
+"""Tests for per-household calibration forecasting and isolation."""
 
 import ast
 from pathlib import Path
@@ -10,7 +10,7 @@ from pipeline.forecasting.calibration_forecast import calibrate_household, MAD_F
 
 
 def test_static_import_isolation():
-    """Verify that calibration_forecast.py does not import global_forecaster (Blueprint §D.4)."""
+    """Verify that calibration_forecast.py does not import global_forecaster."""
     root = get_project_root()
     cal_file = root / "pipeline" / "forecasting" / "calibration_forecast.py"
     with open(cal_file, "r", encoding="utf-8") as f:

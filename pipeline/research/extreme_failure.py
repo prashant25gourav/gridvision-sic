@@ -1,9 +1,9 @@
-"""Extreme-failure threshold module for GridVision (P2).
+"""Extreme-failure threshold module for GridVision.
 
 Derives the fixed extreme-failure threshold strictly from the pooled calibration
 standardized error distribution.
 
-Locked Research Rules (Master Plan v4 §8.5 & Blueprint v2 §C/§D):
+Research Rules:
 - Calibration ONLY: Threshold is fixed strictly from calibration residuals.
   Analysis or Holdout residuals must NEVER be seen or used to compute or tune this threshold.
 - Acyclic dependency: Must be computed and fixed BEFORE research table outcomes are labeled.
@@ -73,7 +73,7 @@ def derive_extreme_failure_threshold(
         output_path: Destination path for extreme_failure_threshold.json.
         
     Returns:
-        Dict matching Contract §3 schema.
+        Dict matching threshold schema.
     """
     latest_artifacts = get_artifacts_dir("latest")
 

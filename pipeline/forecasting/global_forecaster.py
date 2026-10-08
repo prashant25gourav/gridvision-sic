@@ -1,9 +1,9 @@
-"""Global pooled forecaster module for GridVision (P2).
+"""Global pooled forecaster module for GridVision.
 
 Trains a pooled gradient boosting forecaster per calendar window w across all sampled
 households, and predicts half-hourly load for window w+1.
 
-Locked Research Rules (Master Plan v4 §8.5 & Blueprint v2 §C.9/§C.11/§D.5):
+Forecaster Specifications:
 - Research Sole Source: The global forecaster is the SOLE source of forecast errors (AE)
   that feed the research outcome variable (Extreme Failure).
 - Strictly Prospective / No Future Leakage:

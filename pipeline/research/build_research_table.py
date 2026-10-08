@@ -1,14 +1,14 @@
-"""Research table assembly module for GridVision (P2).
+"""Research table assembly module for GridVision.
 
 Constructs research_table.parquet by joining:
-- P1's instability_volatility.parquet (at predictor window w)
-- P2's forecast_global_summary.parquet (at outcome window w+1, trained up to w)
-- P2's calibration_summary.parquet (for standardization)
-- P2's extreme_failure_threshold.json (fixed threshold)
-- P1's households_sampled.parquet (for acorn_grouped)
-- P1's window_eligibility.parquet & calibration_assignment.parquet (for row eligibility)
+- instability_volatility.parquet (at predictor window w)
+- forecast_global_summary.parquet (at outcome window w+1, trained up to w)
+- calibration_summary.parquet (for standardization)
+- extreme_failure_threshold.json (fixed threshold)
+- households_sampled.parquet (for acorn_grouped)
+- window_eligibility.parquet & calibration_assignment.parquet (for row eligibility)
 
-Locked Research Rules (Master Plan v4 §8.5 & Blueprint v2 §C.9/§C.14/§D.5):
+Research Rules:
 - Sole Source: GLOBAL forecaster only.
 - Static Isolation: NEVER imports cluster_forecaster.py (enforced by runtime/static check).
 - Literal Calendar Adjacency: window_w_plus_1 == calendar_successor(window_w).

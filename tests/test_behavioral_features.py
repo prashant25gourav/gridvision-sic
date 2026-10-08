@@ -37,7 +37,7 @@ def test_extract_features_with_nans_interpolation():
 
 
 def test_behavioral_features_artifact_contract():
-    """Verify that behavioral_features.parquet adheres to Contract §3 and Blueprint §C.4."""
+    """Verify that behavioral_features.parquet adheres to schema and expected shape."""
     latest = get_artifacts_dir("latest")
     bf_path = latest / "behavioral_features.parquet"
     if not bf_path.exists():

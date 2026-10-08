@@ -1,10 +1,10 @@
-"""Statistical modeling module for GridVision (P2).
+"""Statistical modeling module for GridVision.
 
-Implements cluster-robust logistic regression testing the core hypothesis H1:
+Implements cluster-robust logistic regression testing the core hypothesis:
   "Does temporal behavioral cluster instability predict subsequent extreme load-forecast
    failures after controlling for intrinsic consumption volatility?"
 
-Locked Research Rules (Master Plan v4 §8.6/§9 & Blueprint v2 §C.12/§D.6):
+Research Rules:
 - Scope: Evaluated strictly on Analysis rows (is_holdout == False).
 - Predictors:
     - Primary Model (H1): is_extreme_failure ~ volatility_cv + instability
@@ -80,8 +80,7 @@ def fit_statistical_models(
     fallback_recommended = event_rate < 0.02
     if fallback_recommended:
         logger.warning(
-            f"Gate G6 Alert: Realized positive-event rate ({event_rate:.2%}) is below 2.0%. "
-            f"Consider 90th percentile fallback per Master Plan v4 §9."
+            f"Alert: Realized positive-event rate ({event_rate:.2%}) is below 2.0%."
         )
 
     # Cast boolean to int for statsmodels

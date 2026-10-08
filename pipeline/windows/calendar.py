@@ -1,6 +1,5 @@
-"""14 Fixed Common-Calendar Window Definitions (P1).
+"""14 Fixed Common-Calendar Window Definitions.
 
-Authoritative source: GridVision Master Plan v4 §3.5, Blueprint v2 §C.2.
 All 14 windows are 56 days (8 weeks), non-overlapping, common-calendar-aligned.
 """
 
