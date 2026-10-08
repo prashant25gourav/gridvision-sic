@@ -39,10 +39,10 @@ const AVAILABLE_WINDOWS = [
 ];
 
 const CLUSTER_COLORS = [
-  '#f59e0b', // Cluster 1: Evening Peaker (amber)
-  '#06b6d4', // Cluster 2: Baseload Steady (cyan)
-  '#10b981', // Cluster 3: Daytime Active (emerald)
-  '#a855f7', // Cluster 4: Dual Peaker (purple)
+  '#d97706', // Cluster 1: Evening Peaker (muted amber)
+  '#64748b', // Cluster 2: Baseload Steady (slate / gray neutral)
+  '#059669', // Cluster 3: Daytime Active (muted energy green)
+  '#0f766e', // Cluster 4: Dual Peaker (deep muted teal)
 ];
 
 // Formatting helper: "MAC000045" -> "Consumer 045"
@@ -446,25 +446,25 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                 style={{
                   width: '100%',
                   borderCollapse: 'collapse',
-                  fontSize: '0.84rem',
+                  fontSize: '0.94rem',
                   textAlign: 'left',
                 }}
               >
                 <thead>
                   <tr
                     style={{
-                      borderBottom: '1px solid var(--border)',
+                      borderBottom: '1.5px solid var(--border)',
                       color: 'var(--foreground-subtle)',
-                      fontSize: '0.75rem',
+                      fontSize: '0.86rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <th style={{ padding: '0.75rem 1rem', width: '80px' }}>Rank</th>
-                    <th style={{ padding: '0.75rem 1rem' }}>Consumer</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Average Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Cluster</th>
+                    <th style={{ padding: '0.95rem 1.15rem', width: '90px' }}>Rank</th>
+                    <th style={{ padding: '0.95rem 1.15rem' }}>Consumer</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Average Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Cluster</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -473,7 +473,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       key={item.household_id}
                       onClick={() => setDetailConsumerId(item.household_id)}
                       style={{
-                        borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
+                        borderBottom: '1px solid var(--border)',
                         cursor: 'pointer',
                         transition: 'background-color 120ms ease',
                       }}
@@ -487,22 +487,23 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                     >
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--foreground-subtle)',
                           fontWeight: 600,
+                          fontSize: '0.95rem',
                         }}
                       >
                         #{idx + 1}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
-                        <div style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
+                        <div style={{ fontWeight: 600, fontSize: '1.02rem', color: 'var(--foreground)' }}>
                           {formatConsumerId(item.household_id)}
                         </div>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
+                            fontSize: '0.80rem',
                             color: 'var(--foreground-subtle)',
                           }}
                         >
@@ -511,10 +512,11 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                           color: 'var(--foreground)',
                         }}
                       >
@@ -522,21 +524,22 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                           color: 'var(--accent-amber)',
                         }}
                       >
                         {item.peak_load.toFixed(3)} kW
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                      <td style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.74rem',
-                            padding: '0.2rem 0.55rem',
+                            fontSize: '0.82rem',
+                            padding: '0.25rem 0.65rem',
                             borderRadius: 'var(--radius-sm)',
                             backgroundColor: 'var(--surface-raised)',
                             border: '1px solid var(--border)',
@@ -665,25 +668,25 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                 style={{
                   width: '100%',
                   borderCollapse: 'collapse',
-                  fontSize: '0.84rem',
+                  fontSize: '0.94rem',
                   textAlign: 'left',
                 }}
               >
                 <thead>
                   <tr
                     style={{
-                      borderBottom: '1px solid var(--border)',
+                      borderBottom: '1.5px solid var(--border)',
                       color: 'var(--foreground-subtle)',
-                      fontSize: '0.75rem',
+                      fontSize: '0.86rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <th style={{ padding: '0.75rem 1rem', width: '80px' }}>Rank</th>
-                    <th style={{ padding: '0.75rem 1rem' }}>Consumer</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Average Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Load Factor</th>
+                    <th style={{ padding: '0.95rem 1.15rem', width: '90px' }}>Rank</th>
+                    <th style={{ padding: '0.95rem 1.15rem' }}>Consumer</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Average Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Load Factor</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -692,7 +695,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       key={item.household_id}
                       onClick={() => setDetailConsumerId(item.household_id)}
                       style={{
-                        borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
+                        borderBottom: '1px solid var(--border)',
                         cursor: 'pointer',
                         transition: 'background-color 120ms ease',
                       }}
@@ -706,22 +709,23 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                     >
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--foreground-subtle)',
                           fontWeight: 600,
+                          fontSize: '0.95rem',
                         }}
                       >
                         #{idx + 1}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
-                        <div style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
+                        <div style={{ fontWeight: 600, fontSize: '1.02rem', color: 'var(--foreground)' }}>
                           {formatConsumerId(item.household_id)}
                         </div>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
+                            fontSize: '0.80rem',
                             color: 'var(--foreground-subtle)',
                           }}
                         >
@@ -730,32 +734,35 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--foreground)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                         }}
                       >
                         {item.mean_load.toFixed(3)} kW
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--accent-amber)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                         }}
                       >
                         {item.peak_load.toFixed(3)} kW
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 700,
+                          fontSize: '1.02rem',
                           color: 'var(--accent-emerald)',
                         }}
                       >
@@ -904,25 +911,25 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                 style={{
                   width: '100%',
                   borderCollapse: 'collapse',
-                  fontSize: '0.84rem',
+                  fontSize: '0.94rem',
                   textAlign: 'left',
                 }}
               >
                 <thead>
                   <tr
                     style={{
-                      borderBottom: '1px solid var(--border)',
+                      borderBottom: '1.5px solid var(--border)',
                       color: 'var(--foreground-subtle)',
-                      fontSize: '0.75rem',
+                      fontSize: '0.86rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <th style={{ padding: '0.75rem 1rem', width: '80px' }}>Rank</th>
-                    <th style={{ padding: '0.75rem 1rem' }}>Consumer</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Average Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
-                    <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak-to-Average</th>
+                    <th style={{ padding: '0.95rem 1.15rem', width: '90px' }}>Rank</th>
+                    <th style={{ padding: '0.95rem 1.15rem' }}>Consumer</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Average Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak Demand</th>
+                    <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak-to-Average</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -931,7 +938,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       key={item.household_id}
                       onClick={() => setDetailConsumerId(item.household_id)}
                       style={{
-                        borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
+                        borderBottom: '1px solid var(--border)',
                         cursor: 'pointer',
                         transition: 'background-color 120ms ease',
                       }}
@@ -945,22 +952,23 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                     >
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--foreground-subtle)',
                           fontWeight: 600,
+                          fontSize: '0.95rem',
                         }}
                       >
                         #{idx + 1}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
-                        <div style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                      <td style={{ padding: '0.95rem 1.15rem' }}>
+                        <div style={{ fontWeight: 600, fontSize: '1.02rem', color: 'var(--foreground)' }}>
                           {formatConsumerId(item.household_id)}
                         </div>
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
+                            fontSize: '0.80rem',
                             color: 'var(--foreground-subtle)',
                           }}
                         >
@@ -969,32 +977,35 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--foreground)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                         }}
                       >
                         {item.mean_load.toFixed(3)} kW
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--accent-amber)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                         }}
                       >
                         {item.peak_load.toFixed(3)} kW
                       </td>
                       <td
                         style={{
-                          padding: '0.75rem 1rem',
+                          padding: '0.95rem 1.15rem',
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 700,
+                          fontSize: '1.02rem',
                           color: 'var(--accent-amber)',
                         }}
                       >
@@ -1034,66 +1045,95 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
       {/* TAB 4: CONSUMER CLUSTERS / CLUSTER INTELLIGENCE */}
       {activeTab === 'clusters' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {/* Main Card */}
           <section className="workspace-card" aria-label="Cluster Intelligence">
-            <div className="workspace-card-header" style={{ marginBottom: '0.25rem', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
+            {/* Header */}
+            <div className="workspace-card-header" style={{ marginBottom: '0.75rem', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
               <div>
                 <h2 className="workspace-card-title">Cluster Intelligence</h2>
-                <p className="workspace-card-subtitle" style={{ fontSize: '0.98rem' }}>
+                <p className="workspace-card-subtitle" style={{ fontSize: '1.02rem', lineHeight: 1.6 }}>
                   Households are grouped by recurring electricity-consumption behavior across 8 standardized features (K = 4).
                 </p>
               </div>
 
-              {/* Filter Toggles */}
-              <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+              {/* Reset Filter Button */}
+              {activeClusterFilter !== null && (
                 <button
                   type="button"
                   onClick={() => setActiveClusterFilter(null)}
                   style={{
-                    padding: '0.35rem 0.75rem',
-                    fontSize: '0.78rem',
-                    fontWeight: activeClusterFilter === null ? 700 : 500,
+                    padding: '0.45rem 0.95rem',
+                    fontSize: '0.86rem',
+                    fontWeight: 600,
                     borderRadius: 'var(--radius-sm)',
                     border: '1px solid var(--border)',
-                    backgroundColor: activeClusterFilter === null ? 'var(--surface-raised)' : 'transparent',
-                    color: activeClusterFilter === null ? 'var(--foreground)' : 'var(--foreground-muted)',
+                    backgroundColor: 'var(--surface-raised)',
+                    color: 'var(--foreground)',
                     cursor: 'pointer',
+                    transition: 'all 150ms ease',
                   }}
                 >
-                  All Clusters
+                  Clear Filter (Show All 4 Archetypes)
                 </button>
-                {clustersList.map((c) => {
-                  const isSelected = activeClusterFilter === c.cluster_id;
-                  const color = CLUSTER_COLORS[c.cluster_id % 4];
-                  return (
-                    <button
-                      key={c.cluster_id}
-                      type="button"
-                      onClick={() => setActiveClusterFilter(isSelected ? null : c.cluster_id)}
-                      style={{
-                        padding: '0.35rem 0.75rem',
-                        fontSize: '0.78rem',
-                        fontWeight: isSelected ? 700 : 500,
-                        borderRadius: 'var(--radius-sm)',
-                        border: `1px solid ${isSelected ? color : 'var(--border)'}`,
-                        backgroundColor: isSelected ? `color-mix(in srgb, ${color} 15%, transparent)` : 'transparent',
-                        color: isSelected ? color : 'var(--foreground-muted)',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Cluster {c.cluster_id + 1} ({c.archetype})
-                    </button>
-                  );
-                })}
-              </div>
+              )}
+            </div>
+
+            {/* Interactive Archetype Summary Strip */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem', marginBottom: '0.75rem' }}>
+              {clustersList.map((c) => {
+                const isSelected = activeClusterFilter === c.cluster_id;
+                const color = CLUSTER_COLORS[c.cluster_id % 4];
+                return (
+                  <div
+                    key={c.cluster_id}
+                    onClick={() => setActiveClusterFilter(isSelected ? null : c.cluster_id)}
+                    style={{
+                      padding: '1.15rem 1.25rem',
+                      borderRadius: 'var(--radius-sm)',
+                      backgroundColor: isSelected ? 'var(--surface-raised)' : 'var(--surface)',
+                      border: `1.5px solid ${isSelected ? color : 'var(--border)'}`,
+                      borderLeft: `4px solid ${color}`,
+                      cursor: 'pointer',
+                      transition: 'all 150ms ease',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.55rem',
+                    }}
+                    title={`Click to filter by Cluster ${c.cluster_id + 1} (${c.archetype})`}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem', fontWeight: 700, color: color, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        Cluster {c.cluster_id + 1}
+                      </span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.98rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                        {c.percentage}% <span style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--foreground-muted)' }}>({c.household_count} HH)</span>
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '1.08rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                      {c.archetype}
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', color: 'var(--foreground-muted)', borderTop: '1px solid var(--border)', paddingTop: '0.45rem' }}>
+                      <span>Peak: <strong style={{ color: 'var(--accent-amber)', fontFamily: 'var(--font-mono)' }}>{c.features.peak_load.toFixed(3)} kW</strong></span>
+                      <span>Window: <strong style={{ color: 'var(--foreground)' }}>{c.peak_window}</strong></span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Primary Visualization: Diurnal Archetype Profiles */}
-            <div style={{ padding: '0.5rem 0 1rem 0' }}>
-              <div style={{ marginBottom: '0.65rem' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground-muted)' }}>
-                  Typical 24-Hour Diurnal Demand Profiles (48 half-hour intervals &bull; 00:00 &rarr; 23:30)
-                </span>
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', paddingBottom: '1rem' }}>
+              <div style={{ marginBottom: '0.85rem' }}>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: 'var(--foreground)' }}>
+                  Diurnal Demand Archetypes (24-Hour Profiles)
+                </h3>
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.95rem', color: 'var(--foreground-muted)' }}>
+                  Average half-hourly electricity demand in kW per consumer across 48 observation slots (00:00 to 23:30) for observation window {selectedWindow}.
+                </p>
               </div>
+
               {isLoadingSegmentation ? (
                 <div style={{ padding: '3.5rem', textAlign: 'center', color: 'var(--foreground-muted)' }}>
                   Loading cluster profiles...
@@ -1111,24 +1151,28 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
             </div>
 
             {/* Analytical Cluster Comparison Table */}
-            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
-              <div style={{ marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--foreground-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: 'var(--foreground)' }}>
                   Analytical Comparison Across Archetypes
-                </span>
+                </h3>
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.95rem', color: 'var(--foreground-muted)' }}>
+                  Detailed behavioral metrics characterizing each consumption segment across the cohort.
+                </p>
               </div>
+
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', textAlign: 'left' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--foreground-subtle)', fontSize: '0.76rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      <th style={{ padding: '0.75rem 1rem' }}>Cluster</th>
-                      <th style={{ padding: '0.75rem 1rem' }}>Archetype</th>
-                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Cohort Share</th>
-                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Mean Demand</th>
-                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak Demand</th>
-                      <th style={{ padding: '0.75rem 1rem' }}>Peak Window</th>
-                      <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Peak / Avg</th>
-                      <th style={{ padding: '0.75rem 1rem' }}>Characteristic Consumption Pattern</th>
+                    <tr style={{ borderBottom: '1.5px solid var(--border)', color: 'var(--foreground-subtle)', fontSize: '0.88rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <th style={{ padding: '0.95rem 1.15rem' }}>Cluster</th>
+                      <th style={{ padding: '0.95rem 1.15rem' }}>Archetype</th>
+                      <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Cohort Share</th>
+                      <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Mean Demand</th>
+                      <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak Demand</th>
+                      <th style={{ padding: '0.95rem 1.15rem' }}>Peak Window</th>
+                      <th style={{ padding: '0.95rem 1.15rem', textAlign: 'right' }}>Peak / Avg</th>
+                      <th style={{ padding: '0.95rem 1.15rem' }}>Characteristic Consumption Pattern</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1140,37 +1184,43 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           key={c.cluster_id}
                           onClick={() => setActiveClusterFilter(activeClusterFilter === c.cluster_id ? null : c.cluster_id)}
                           style={{
-                            borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
-                            backgroundColor: isSelected ? `color-mix(in srgb, ${color} 10%, transparent)` : 'transparent',
+                            borderBottom: '1px solid var(--border)',
+                            backgroundColor: isSelected ? `color-mix(in srgb, ${color} 12%, transparent)` : 'transparent',
                             cursor: 'pointer',
                             transition: 'background-color 120ms ease',
                           }}
+                          onMouseEnter={(e) => {
+                            if (!isSelected) e.currentTarget.style.backgroundColor = 'var(--surface-raised)';
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
                         >
-                          <td style={{ padding: '0.85rem 1rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
-                              <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--foreground)' }}>Cluster {c.cluster_id + 1}</strong>
+                          <td style={{ padding: '1.15rem 1.15rem', borderLeft: `3px solid ${color}` }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                              <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                              <strong style={{ fontFamily: 'var(--font-mono)', fontSize: '0.98rem', color: 'var(--foreground)' }}>Cluster {c.cluster_id + 1}</strong>
                             </div>
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', fontWeight: 600, color: 'var(--foreground)' }}>
+                          <td style={{ padding: '1.15rem 1.15rem', fontWeight: 700, fontSize: '1.05rem', color: 'var(--foreground)' }}>
                             {c.archetype}
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
-                            <strong>{c.percentage}%</strong> <span style={{ color: 'var(--foreground-muted)', fontSize: '0.78rem' }}>({c.household_count} HH)</span>
+                          <td style={{ padding: '1.15rem 1.15rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '1.02rem' }}>
+                            <strong style={{ color: 'var(--foreground)' }}>{c.percentage}%</strong> <span style={{ color: 'var(--foreground-muted)', fontSize: '0.88rem' }}>({c.household_count} HH)</span>
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                          <td style={{ padding: '1.15rem 1.15rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '1.02rem', fontWeight: 600, color: 'var(--foreground)' }}>
                             {c.features.mean_load.toFixed(3)} kW
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--accent-amber)' }}>
+                          <td style={{ padding: '1.15rem 1.15rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '1.02rem', fontWeight: 600, color: 'var(--accent-amber)' }}>
                             {c.features.peak_load.toFixed(3)} kW
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', color: 'var(--foreground-muted)' }}>
+                          <td style={{ padding: '1.15rem 1.15rem', color: 'var(--foreground)', fontSize: '0.96rem' }}>
                             {c.peak_window}
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                          <td style={{ padding: '1.15rem 1.15rem', textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '1.02rem', fontWeight: 600, color: 'var(--foreground)' }}>
                             {c.features.peak_to_average_ratio.toFixed(2)}&times;
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', color: 'var(--foreground-muted)', fontSize: '0.84rem', maxWidth: '300px' }}>
+                          <td style={{ padding: '1.15rem 1.15rem', color: 'var(--foreground-muted)', fontSize: '0.95rem', lineHeight: 1.55, maxWidth: '360px' }}>
                             {c.description}
                           </td>
                         </tr>
@@ -1182,19 +1232,22 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
             </div>
 
             {/* Behavioral Features Specification Reference */}
-            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', backgroundColor: 'var(--surface-raised)', margin: '0 -1.5rem -1.35rem -1.5rem', padding: '1.25rem 1.5rem', borderRadius: '0 0 var(--radius-md) var(--radius-md)' }}>
-              <div style={{ fontSize: '0.76rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-                Standardized Behavioral Feature Set (K = 4)
+            <div style={{ borderTop: '1px solid var(--border)', marginTop: '1.5rem', paddingTop: '1.5rem', backgroundColor: 'var(--surface-raised)', margin: '1.5rem -1.5rem -1.35rem -1.5rem', padding: '1.5rem 1.75rem', borderRadius: '0 0 var(--radius-md) var(--radius-md)' }}>
+              <div style={{ fontSize: '0.92rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '0.35rem' }}>
+                Standardized Behavioral Dimensions (K = 4 Feature Vector)
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.65rem', fontSize: '0.82rem' }}>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Mean load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Average overall consumption baseline</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Maximum half-hour demand point</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak-to-average ratio:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Volatility and peaking intensity</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Variability (Std Dev):</strong> <span style={{ color: 'var(--foreground-muted)' }}>Dispersion of load across intervals</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Ramp-rate behavior:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Average rate of change between intervals</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Day/night consumption:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Ratio of daytime to overnight demand</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Weekday/weekend contrast:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Difference between workdays and weekends</span></div>
-                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak timing:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Modal half-hour interval of daily peak</span></div>
+              <p style={{ margin: '0 0 1rem 0', fontSize: '0.90rem', color: 'var(--foreground-muted)' }}>
+                The 8 electrical features extracted from 56-day observation windows used for unsupervised K-Means clustering:
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.85rem', fontSize: '0.92rem' }}>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Mean load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Baseline overall consumption (kW)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak load:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Maximum half-hour demand point (kW)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak-to-average ratio:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Volatility and peaking intensity (ratio)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Variability (&sigma;):</strong> <span style={{ color: 'var(--foreground-muted)' }}>Dispersion of load across intervals (kW)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Ramp-rate behavior:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Average rate of change between intervals (kW/slot)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Day/night consumption:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Ratio of daytime to overnight demand (ratio)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Weekday/weekend contrast:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Difference between workdays and weekends (diff)</span></div>
+                <div><strong style={{ color: 'var(--foreground)' }}>&bull; Peak timing:</strong> <span style={{ color: 'var(--foreground-muted)' }}>Modal half-hour interval of daily peak (hr)</span></div>
               </div>
             </div>
           </section>
@@ -1305,26 +1358,26 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                   width: '100%',
                   minWidth: '920px',
                   borderCollapse: 'collapse',
-                  fontSize: '0.90rem',
+                  fontSize: '0.95rem',
                   textAlign: 'left',
                 }}
               >
                 <thead>
                   <tr
                     style={{
-                      borderBottom: '1px solid var(--border)',
+                      borderBottom: '1.5px solid var(--border)',
                       color: 'var(--foreground-subtle)',
-                      fontSize: '0.78rem',
+                      fontSize: '0.86rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <th style={{ padding: '0.90rem 1.25rem', width: '22%' }}>Meter ID</th>
-                    <th style={{ padding: '0.90rem 1.25rem', width: '22%' }}>Consumer</th>
-                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Avg Demand</th>
-                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Peak Demand</th>
-                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Load Factor</th>
-                    <th style={{ padding: '0.90rem 1.25rem', textAlign: 'right', width: '14%' }}>Cluster</th>
+                    <th style={{ padding: '0.95rem 1.25rem', width: '22%' }}>Meter ID</th>
+                    <th style={{ padding: '0.95rem 1.25rem', width: '22%' }}>Consumer</th>
+                    <th style={{ padding: '0.95rem 1.25rem', textAlign: 'right', width: '14%' }}>Avg Demand</th>
+                    <th style={{ padding: '0.95rem 1.25rem', textAlign: 'right', width: '14%' }}>Peak Demand</th>
+                    <th style={{ padding: '0.95rem 1.25rem', textAlign: 'right', width: '14%' }}>Load Factor</th>
+                    <th style={{ padding: '0.95rem 1.25rem', textAlign: 'right', width: '14%' }}>Cluster</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1333,7 +1386,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                       key={item.household_id}
                       onClick={() => setDetailConsumerId(item.household_id)}
                       style={{
-                        borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))',
+                        borderBottom: '1px solid var(--border)',
                         cursor: 'pointer',
                         transition: 'background-color 120ms ease',
                       }}
@@ -1350,13 +1403,14 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           padding: '0.95rem 1.25rem',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '0.95rem',
                           color: 'var(--foreground)',
                         }}
                       >
                         {item.household_id}
                       </td>
                       <td style={{ padding: '0.95rem 1.25rem' }}>
-                        <div style={{ fontWeight: 600, color: 'var(--foreground)' }}>
+                        <div style={{ fontWeight: 600, fontSize: '1.02rem', color: 'var(--foreground)' }}>
                           {formatConsumerId(item.household_id)}
                         </div>
                       </td>
@@ -1366,6 +1420,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                           color: 'var(--foreground)',
                         }}
                       >
@@ -1377,6 +1432,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                           color: 'var(--accent-amber)',
                         }}
                       >
@@ -1388,6 +1444,7 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                           textAlign: 'right',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
+                          fontSize: '1.0rem',
                           color: 'var(--accent-emerald)',
                         }}
                       >
@@ -1397,8 +1454,8 @@ export const ConsumerIntelligenceWorkspace: React.FC<ConsumerIntelligenceWorkspa
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.76rem',
-                            padding: '0.22rem 0.6rem',
+                            fontSize: '0.82rem',
+                            padding: '0.25rem 0.65rem',
                             borderRadius: 'var(--radius-sm)',
                             backgroundColor: 'var(--surface-raised)',
                             border: '1px solid var(--border)',
@@ -1680,12 +1737,12 @@ const ClusterDailyProfilesSvg: React.FC<{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '0.65rem',
+          marginBottom: '0.85rem',
           flexWrap: 'wrap',
-          gap: '0.75rem',
+          gap: '1rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.78rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontSize: '0.90rem' }}>
           {lines.map((l) => {
             const isDimmed = activeClusterFilter !== null && activeClusterFilter !== l.id;
             return (
@@ -1694,19 +1751,29 @@ const ClusterDailyProfilesSvg: React.FC<{
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem',
+                  gap: '0.5rem',
                   opacity: isDimmed ? 0.35 : 1,
                   transition: 'opacity 150ms ease',
                 }}
               >
-                <div style={{ width: '14px', height: '3px', backgroundColor: l.color, borderRadius: '2px' }} />
+                <div style={{ width: '16px', height: '3.5px', backgroundColor: l.color, borderRadius: '2px' }} />
                 <span style={{ color: 'var(--foreground)', fontWeight: 600 }}>{l.label}</span>
               </div>
             );
           })}
         </div>
-        <span style={{ fontSize: '0.84rem', fontFamily: 'var(--font-mono)', color: 'var(--foreground-subtle)' }}>
-          Unit: kW / consumer
+        <span
+          style={{
+            fontSize: '0.86rem',
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--foreground-muted)',
+            backgroundColor: 'var(--surface-raised)',
+            padding: '0.2rem 0.6rem',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--border)',
+          }}
+        >
+          Unit: <strong>kW / consumer</strong>
         </span>
       </div>
 
@@ -1734,7 +1801,7 @@ const ClusterDailyProfilesSvg: React.FC<{
                 x={padding.left - 10}
                 y={y + 4}
                 textAnchor="end"
-                fontSize={11}
+                fontSize={12}
                 fontFamily="var(--font-mono)"
                 fill="var(--foreground-subtle)"
               >
@@ -1754,7 +1821,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               x={x}
               y={padding.top + chartH + 20}
               textAnchor="middle"
-              fontSize={11}
+              fontSize={12}
               fontFamily="var(--font-mono)"
               fill="var(--foreground-subtle)"
             >
@@ -1772,7 +1839,7 @@ const ClusterDailyProfilesSvg: React.FC<{
               d={l.path}
               fill="none"
               stroke={l.color}
-              strokeWidth={isDimmed ? 1.0 : activeClusterFilter === l.id ? 2.2 : 1.5}
+              strokeWidth={isDimmed ? 1.0 : activeClusterFilter === l.id ? 2.5 : 1.75}
               opacity={isDimmed ? 0.2 : 1}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1840,18 +1907,18 @@ const ClusterDailyProfilesSvg: React.FC<{
             backgroundColor: 'var(--surface-raised)',
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius-sm)',
-            padding: '0.65rem 0.85rem',
+            padding: '0.75rem 0.95rem',
             boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
             pointerEvents: 'none',
-            fontSize: '0.78rem',
+            fontSize: '0.86rem',
             zIndex: 10,
             whiteSpace: 'nowrap',
           }}
         >
-          <div style={{ fontWeight: 700, color: 'var(--foreground)', marginBottom: '0.35rem', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ fontWeight: 700, color: 'var(--foreground)', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>
             {hoveredItem.time}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             {lines.map((l) => (
               <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: l.color, fontWeight: 600 }}>{l.label}:</span>
