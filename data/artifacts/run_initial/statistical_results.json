@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-10-02T12:51:29.776045+00:00",
+  "sample": {
+    "n_observations": 3682,
+    "n_households": 620,
+    "n_extreme_failures": 893,
+    "positive_event_rate": 0.2425,
+    "cov_type": "cluster",
+    "cluster_variable": "household_id"
+  },
+  "gate_g6_check": {
+    "positive_event_rate_pct": 24.25,
+    "fallback_90th_recommended": false,
+    "gate_status": "PASSED"
+  },
+  "hypothesis_h1_result": {
+    "verdict": "NOT_SUPPORTED",
+    "research_question": "Does temporal instability predict extreme forecast failure after controlling for volatility?",
+    "instability_odds_ratio": 1.1519,
+    "instability_95_ci": [
+      0.7357,
+      1.8035
+    ],
+    "instability_p_value": 0.536405,
+    "interpretation": "Each 1.0 increase in cluster instability multiplies the odds of extreme forecast failure by 1.1519 (95% CI [0.7357, 1.8035], p=5.3641e-01), controlling for baseline consumption volatility."
+  },
+  "nested_model_comparison_h3": {
+    "comparison": "Restricted (volatility only) vs Full (volatility + instability)",
+    "lr_statistic": 1.1625,
+    "degrees_of_freedom": 1,
+    "lr_p_value": 0.280937,
+    "delta_roc_auc": 0.0006,
+    "delta_pr_auc": -0.0,
+    "incremental_information_significant": false
+  },
+  "primary_model": {
+    "formula": "y ~ volatility_cv + instability",
+    "log_likelihood": -1855.5134299104639,
+    "aic": 3717.0268598209277,
+    "bic": 3735.660493906307,
+    "roc_auc": 0.6906,
+    "pr_auc": 0.4714,
+    "brier_score": 0.16342,
+    "coefficients": {
+      "Intercept": -3.37985,
+      "volatility_cv": 2.00144,
+      "instability": 0.14142
+    },
+    "robust_std_errors": {
+      "Intercept": 0.28408,
+      "volatility_cv": 0.23068,
+      "instability": 0.22874
+    },
+    "z_statistics": {
+      "Intercept": -11.8976,
+      "volatility_cv": 8.6762,
+      "instability": 0.6183
+    },
+    "p_values": {
+      "Intercept": 0.0,
+      "volatility_cv": 0.0,
+      "instability": 0.536405
+    },
+    "odds_ratios": {
+      "Intercept": 0.0341,
+      "volatility_cv": 7.3997,
+      "instability": 1.1519
+    },
+    "conf_int_95": {
+      "Intercept": [
+        0.0195,
+        0.0594
+      ],
+      "volatility_cv": [
+        4.7082,
+        11.6297
+      ],
+      "instability": [
+        0.7357,
+        1.8035
+      ]
+    }
+  },
+  "restricted_model": {
+    "formula": "y ~ volatility_cv",
+    "log_likelihood": -1856.094704659138,
+    "aic": 3716.189409318276,
+    "bic": 3728.611832041862,
+    "roc_auc": 0.6899,
+    "pr_auc": 0.4715,
+    "brier_score": 0.16348,
+    "coefficients": {
+      "Intercept": -3.35383,
+      "volatility_cv": 2.01729
+    },
+    "robust_std_errors": {
+      "Intercept": 0.27707,
+      "volatility_cv": 0.23086
+    },
+    "z_statistics": {
+      "Intercept": -12.1046,
+      "volatility_cv": 8.7382
+    },
+    "p_values": {
+      "Intercept": 0.0,
+      "volatility_cv": 0.0
+    },
+    "odds_ratios": {
+      "Intercept": 0.035,
+      "volatility_cv": 7.5179
+    },
+    "conf_int_95": {
+      "Intercept": [
+        0.0203,
+        0.0602
+      ],
+      "volatility_cv": [
+        4.7818,
+        11.8197
+      ]
+    }
+  }
+}

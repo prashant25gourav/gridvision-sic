@@ -1,0 +1,40 @@
+# Git & IDE
+.git
+.gitignore
+.vscode
+.idea
+.agents
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+venv
+.venv
+env
+.pytest_cache
+.coverage
+htmlcov
+
+# Node & Frontend Build
+frontend/node_modules
+frontend/dist
+dist
+
+# Large local raw datasets (only data/artifacts is needed in production)
+data/raw
+data/interim
+data/processed
+data/models
+data/predictions
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Temporary & OS
+*.log
+.DS_Store
+Thumbs.db

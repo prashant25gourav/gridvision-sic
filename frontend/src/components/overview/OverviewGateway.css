@@ -1,0 +1,399 @@
+/* OverviewGateway.css — Clean, Educational Product Introduction for GridVision */
+
+.overview-page-container {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  background-color: var(--background);
+  color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem 5rem 2rem;
+  box-sizing: border-box;
+  transition: background-color var(--transition-theme), color var(--transition-theme);
+}
+
+.overview-inner {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3.25rem;
+}
+
+/* ========================================================= */
+/* 1. HERO SECTION (EDITORIAL & CLEAN, NO CTA BUTTONS)       */
+/* ========================================================= */
+.overview-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-brand-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-emerald, #059669);
+  margin-bottom: 0.75rem;
+}
+
+.overview-hero-title {
+  font-family: var(--font-sans);
+  font-size: clamp(2.3rem, 4vw, 3.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--foreground);
+  margin: 0 0 0.65rem 0;
+}
+
+.overview-hero-tagline {
+  font-family: var(--font-sans);
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+  margin: 0 0 1.15rem 0;
+}
+
+.overview-hero-lede {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  max-width: 820px;
+  margin: 0;
+}
+
+/* ========================================================= */
+/* 2. SUB-NAVIGATION BAR                                     */
+/* ========================================================= */
+.overview-subnav {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--foreground-muted);
+  flex-wrap: wrap;
+}
+
+.overview-subnav button {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  padding: 0.25rem 0.45rem;
+  border-radius: var(--radius-sm);
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.overview-subnav button:hover {
+  color: var(--accent-emerald, #059669);
+}
+
+.overview-subnav-divider {
+  color: var(--border-strong);
+}
+
+/* ========================================================= */
+/* 3. SECTION CONTENT                                        */
+/* ========================================================= */
+.overview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  padding-bottom: 2.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.overview-section-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.overview-prose {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--foreground-muted);
+  margin: 0;
+}
+
+.overview-prose strong {
+  color: var(--foreground);
+}
+
+/* Clean, un-carded bullet lists */
+.overview-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.overview-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--foreground-muted);
+}
+
+.overview-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald, #059669);
+  margin-top: 0.55rem;
+  flex-shrink: 0;
+}
+
+.overview-feature-list li strong {
+  color: var(--foreground);
+}
+
+/* ========================================================= */
+/* 4. DATASET STATS LINE                                     */
+/* ========================================================= */
+.overview-data-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  margin: 0.75rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.overview-stat-number {
+  font-family: var(--font-mono);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.overview-stat-label {
+  font-size: 0.82rem;
+  color: var(--foreground-subtle);
+  line-height: 1.35;
+}
+
+/* ========================================================= */
+/* 5. HOW GRIDVISION WORKS — CLEAN WORKFLOW DIAGRAM          */
+/* ========================================================= */
+.workflow-pipeline-wrapper {
+  margin: 0.75rem 0;
+  width: 100%;
+}
+
+.workflow-pipeline-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.workflow-step-box {
+  width: 100%;
+  max-width: 520px;
+  padding: 0.85rem 1.25rem;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  transition: border-color 150ms ease;
+}
+
+.workflow-step-box:hover {
+  border-color: var(--accent-emerald, #059669);
+}
+
+.workflow-step-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--foreground);
+  margin-bottom: 0.2rem;
+}
+
+.workflow-step-desc {
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+}
+
+.workflow-arrow-down {
+  color: var(--foreground-subtle);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.workflow-models-grid {
+  width: 100%;
+  max-width: 620px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .workflow-models-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workflow-model-item {
+  padding: 0.65rem 0.85rem;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--foreground);
+  text-align: center;
+}
+
+.workflow-model-item strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent-emerald, #059669);
+  margin-bottom: 0.15rem;
+}
+
+/* ========================================================= */
+/* 6. WHAT YOU CAN EXPLORE — WORKSPACE ENTRIES               */
+/* ========================================================= */
+.overview-workspace-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.overview-workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.overview-workspace-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.overview-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--accent-emerald, #059669);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.overview-open-btn:hover {
+  background-color: var(--surface-raised);
+  border-color: var(--accent-emerald, #059669);
+}
+
+.overview-feature-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.overview-pill {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--foreground-muted);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================================= */
+/* 7. BOTTOM CALL TO ACTION                                  */
+/* ========================================================= */
+.overview-bottom-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 2.25rem 0 1rem 0;
+  border-top: 1px solid var(--border-strong);
+}
+
+.overview-bottom-title {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.overview-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--accent-emerald, #059669);
+  color: #ffffff;
+  border: 1px solid var(--accent-emerald, #059669);
+  cursor: pointer;
+  transition: all 160ms ease;
+  text-decoration: none;
+}
+
+.overview-btn-primary:hover {
+  background-color: #047857;
+  border-color: #047857;
+}

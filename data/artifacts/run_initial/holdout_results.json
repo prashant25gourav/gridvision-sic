@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-10-02T12:51:53.043089+00:00",
+  "holdout_protocol": {
+    "forward_only": true,
+    "refit_performed": false,
+    "gate_g7_guard": "PASSED (Zero training or tuning routines executed)"
+  },
+  "sample": {
+    "total_sampled_households": 620,
+    "eligible_holdout_evaluated": 612,
+    "ineligible_holdout_predecessor_gap": 8,
+    "holdout_extreme_failures": 183,
+    "holdout_event_rate": 0.299
+  },
+  "fixed_model_performance": {
+    "primary_model_roc_auc": 0.701,
+    "primary_model_pr_auc": 0.5375,
+    "restricted_model_roc_auc": 0.7016,
+    "restricted_model_pr_auc": 0.5404,
+    "delta_roc_auc": -0.0006,
+    "brier_score": 0.1876,
+    "log_loss": 0.5598
+  },
+  "coefficients_applied": {
+    "intercept": -3.37985,
+    "volatility_cv": 2.00144,
+    "instability": 0.14142
+  },
+  "status": "COMPLETED"
+}
