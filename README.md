@@ -1,5 +1,7 @@
 # GridVision — Smart Energy Analytics & AI Copilot
 
+**Live Demo:** [https://gridvision-app.reddesert-e8b21085.centralindia.azurecontainerapps.io/](https://gridvision-app.reddesert-e8b21085.centralindia.azurecontainerapps.io/)
+
 GridVision is an intelligent smart energy analytics platform and load forecasting system designed for electrical utilities, distribution network operators, and energy data analysts. Built on real-world smart-meter telemetry from the UK Power Networks Low Carbon London dataset, GridVision couples an offline machine learning pipeline with an interactive web dashboard and a grounded AI Operations Copilot to deliver longitudinal consumption insights, behavioral segmentation, anomaly screening, and reliable day-ahead demand forecasts.
 
 ---
