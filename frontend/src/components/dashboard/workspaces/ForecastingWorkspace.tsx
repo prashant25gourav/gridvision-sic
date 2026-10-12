@@ -159,15 +159,17 @@ export const ForecastingWorkspace: React.FC<ForecastingWorkspaceProps> = () => {
 
     // All Consumers view: 48 half-hour intervals
     return (
-      portalData?.diurnal_series.map((pt) => {
-        const hr = Math.floor(pt.slot / 2);
+      portalData?.diurnal_series.map((pt: any) => {
+        const slot = pt.slot_index ?? pt.slot ?? 0;
+        const hr = pt.hour ?? Math.floor(slot / 2);
+        const timeLabel = pt.label ?? pt.time ?? `${hr.toString().padStart(2, '0')}:${slot % 2 === 1 ? '30' : '00'}`;
         return {
-          timestamp: pt.time,
+          timestamp: pt.timestamp ?? timeLabel,
           hour: hr,
-          label: pt.time,
-          actualKw: pt.actual_kw,
-          baselineKw: pt.predicted_kw,
-          isPeak: pt.is_peak,
+          label: timeLabel,
+          actualKw: pt.actualKw ?? pt.actual_kw ?? 0,
+          baselineKw: pt.baselineKw ?? pt.predicted_kw ?? 0,
+          isPeak: pt.isPeak ?? pt.is_peak ?? (hr >= 18 && hr <= 21),
         };
       }) ?? []
     );
