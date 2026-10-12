@@ -637,30 +637,20 @@ class ArtifactStore:
         if hasattr(self, "_cluster_daily_profiles_cache") and self._cluster_daily_profiles_cache is not None:
             return self._cluster_daily_profiles_cache
 
-        p = self.artifacts_dir / "forecast_percluster.parquet"
-        cache: Dict[str, List[Dict[str, Any]]] = {}
-        if p.exists():
+        # Check for precomputed lightweight JSON first (instant load, zero memory overhead)
+        json_p = self.artifacts_dir / "cluster_daily_profiles.json"
+        if json_p.exists():
             try:
-                df = pd.read_parquet(p, columns=["cluster_id", "half_hour", "actual", "window_id"])
-                # Overall profile across all observations
-                overall = df.groupby(["cluster_id", "half_hour"])["actual"].mean().unstack(level=0)
-                cache["all"] = self._format_daily_profile_rows(overall)
-
-                # Window-specific profiles
-                grouped = df.groupby(["window_id", "cluster_id", "half_hour"])["actual"].mean()
-                for wid in df["window_id"].unique():
-                    try:
-                        w_unstacked = grouped.loc[wid].unstack(level=0)
-                        cache[str(wid)] = self._format_daily_profile_rows(w_unstacked)
-                    except Exception:
-                        pass
+                with open(json_p, "r", encoding="utf-8") as f:
+                    cache = json.load(f)
+                if cache and "all" in cache:
+                    self._cluster_daily_profiles_cache = cache
+                    return cache
             except Exception as e:
-                logger.warning(f"Could not compute cluster daily profiles: {e}")
+                logger.warning(f"Failed to read cluster_daily_profiles.json: {e}")
 
-        if not cache or "all" not in cache:
-            # Fallback baseline profiles
-            cache["all"] = self._fallback_cluster_profiles()
-
+        # Fallback baseline profiles (instant load, safe for memory-constrained cloud environments)
+        cache = {"all": self._fallback_cluster_profiles()}
         self._cluster_daily_profiles_cache = cache
         return cache
 
